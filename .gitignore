@@ -1,0 +1,34 @@
+# Secrets
+.env
+.env.*
+!.env.example
+secrets/
+*.key
+*.pem
+
+# Python (Core runtime: 3.12, Quant R&D: 3.11)
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node / TypeScript (Command Center)
+node_modules/
+dist/
+.next/
+
+# Data & runtime artifacts
+storage/
+tmp-storage/
+vault-trading/attachments/
+
+# Graphify: graph.json + wiki/ are committed; cache is not
+graphify-out/cache/
+
+# Editor
+.vscode/
+.idea/

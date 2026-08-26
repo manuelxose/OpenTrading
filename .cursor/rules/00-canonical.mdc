@@ -1,0 +1,35 @@
+---
+description: "OpenTrading canonical AI engineering layer: invariants, routing, review rules. Always apply in this repository."
+globs: "**/*"
+alwaysApply: true
+---
+
+# OpenTrading — canonical AI engineering layer
+
+Cursor rules here are intentionally thin. The source of truth is the vendor-neutral
+layer under `.ai/` plus `docs/ai-engineering/`.
+
+## Before working in this repo, read
+
+- `.ai/README.md`
+- `.ai/rules/architecture-invariants.md` (INV-1..INV-16 — non-negotiable)
+- `.ai/rules/cross-review-rules.md`
+- `.ai/context/repo-map.md` (PRE-00: docs only; no code yet)
+
+## Working rules
+
+- Route tasks via `docs/ai-engineering/ROUTING_RULES.md`: one primary specialist
+  (`.ai/agents/`) + mandatory reviewers for the change class.
+- Graphify first for codebase questions; run `graphify update .` after structural
+  changes.
+- Definition of Done: `.ai/rules/definition-of-done.md`; substantial work requires an
+  adversarial Verification review (`.ai/workflows/verification-workflow.md`).
+- Hard boundaries: LLMs propose, deterministic code decides capital (INV-1);
+  point-in-time everywhere (INV-3); risk deterministic (INV-4); MT4 execution-only
+  (INV-5).
+- No orchestration frameworks (RuFlo, Claude Flow). No trading features during PRE-00.
+
+## UI work
+
+User-facing changes receive proportional UI review: existing tokens/components,
+browser and axe checks. See `.ai/agents/command-center.md`.
