@@ -1,0 +1,20 @@
+# Dependabot — automated dependency updates (ADR-0025, INV-14: pinned versions).
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      core-deps:
+        patterns: ["*"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "docker"
+    directory: "/infra/mlflow"
+    schedule:
+      interval: "weekly"

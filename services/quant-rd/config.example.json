@@ -1,0 +1,7 @@
+{
+  "dataset_ref": "ds://point-in-time-dataset/version",
+  "dataset_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "strategy_name": "rdagent-quant-candidate",
+  "context": {"universe": "configure-me"},
+  "experiment": {"as_of": "2026-01-01T00:00:00Z", "seed": 42, "purge_days": 5, "embargo_days": 5, "costs_enabled": true}
+}

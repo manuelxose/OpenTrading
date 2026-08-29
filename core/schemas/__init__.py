@@ -1,0 +1,166 @@
+"""Canonical domain contracts (architecture §15) and the event envelope (§14).
+
+``CANONICAL_CONTRACTS`` is the programmatic catalog of every contract name to its
+Pydantic class — used by the API and tests to guarantee the full set exists.
+"""
+
+from core.schemas.base import SCHEMA_VERSION, BaseContractModel, DomainObject, Provenance
+from core.schemas.events import DomainEvent
+from core.schemas.execution import (
+    DeadManSwitchState,
+    EmergencyControlState,
+    EmergencyEvent,
+    ExecutionPosition,
+    OrderRecord,
+    ReconciliationEvent,
+    ReconciliationRun,
+    SafeModeAlert,
+    SafeModeEvent,
+    SafeModeRecord,
+    StartupOutcome,
+)
+from core.schemas.fusion import FusionInputs, MemoryContext, RegimeContext, ResearchBundle
+from core.schemas.market import Instrument, MarketSnapshot
+from core.schemas.memory import EntityRef, MemoryEpisode, RelationRef
+from core.schemas.pipeline import PaperAccountRecord, PipelineRunRecord, TradeLifecycle
+from core.schemas.posttrade import (
+    ExecutionQualityRecord,
+    PostTradeReviewRecord,
+    RiskQualityRecord,
+    SignalQualityRecord,
+    TradeContextRecord,
+    TradeMetrics,
+)
+from core.schemas.promotion import PromotionDecision
+from core.schemas.research import EvidenceRef, ResearchPacket, ResearchRequest
+from core.schemas.research_factory import (
+    ExperimentRun,
+    FactorCandidate,
+    ModelCandidate,
+    StrategyCandidate,
+)
+from core.schemas.risk import (
+    AccountState,
+    PortfolioExposure,
+    PortfolioState,
+    RiskPolicy,
+    StrategyConfiguration,
+)
+from core.schemas.signals import (
+    CommitteeMember,
+    DisagreementRecord,
+    FusedSignal,
+    LLMSignal,
+    QuantSignal,
+    SignalComponent,
+)
+from core.schemas.trading import (
+    ExecutionReport,
+    OrderIntent,
+    PositionSnapshot,
+    PostTradeReview,
+    RiskDecision,
+    TradeOutcome,
+    TradeProposal,
+)
+
+CANONICAL_CONTRACTS: dict[str, type[BaseContractModel]] = {
+    "Instrument": Instrument,
+    "MarketSnapshot": MarketSnapshot,
+    "ResearchRequest": ResearchRequest,
+    "ResearchPacket": ResearchPacket,
+    "QuantSignal": QuantSignal,
+    "LLMSignal": LLMSignal,
+    "FusedSignal": FusedSignal,
+    "TradeProposal": TradeProposal,
+    "RiskDecision": RiskDecision,
+    "OrderIntent": OrderIntent,
+    "ExecutionReport": ExecutionReport,
+    "PositionSnapshot": PositionSnapshot,
+    "TradeOutcome": TradeOutcome,
+    "PostTradeReview": PostTradeReview,
+    "MemoryEpisode": MemoryEpisode,
+    "FactorCandidate": FactorCandidate,
+    "ModelCandidate": ModelCandidate,
+    "StrategyCandidate": StrategyCandidate,
+    "ExperimentRun": ExperimentRun,
+    "PromotionDecision": PromotionDecision,
+    "RiskPolicy": RiskPolicy,
+    "AccountState": AccountState,
+    "PortfolioState": PortfolioState,
+    "StrategyConfiguration": StrategyConfiguration,
+    "ReconciliationEvent": ReconciliationEvent,
+    "SafeModeEvent": SafeModeEvent,
+    "EmergencyEvent": EmergencyEvent,
+    "EmergencyControlState": EmergencyControlState,
+    "DeadManSwitchState": DeadManSwitchState,
+    "ResearchBundle": ResearchBundle,
+    "TradeMetrics": TradeMetrics,
+    "SignalQualityRecord": SignalQualityRecord,
+    "RiskQualityRecord": RiskQualityRecord,
+    "ExecutionQualityRecord": ExecutionQualityRecord,
+    "DomainEvent": DomainEvent,
+}
+
+__all__ = [
+    "CANONICAL_CONTRACTS",
+    "SCHEMA_VERSION",
+    "AccountState",
+    "CommitteeMember",
+    "DeadManSwitchState",
+    "DisagreementRecord",
+    "DomainEvent",
+    "DomainObject",
+    "EmergencyControlState",
+    "EmergencyEvent",
+    "EntityRef",
+    "EvidenceRef",
+    "ExecutionPosition",
+    "ExecutionQualityRecord",
+    "ExecutionReport",
+    "ExperimentRun",
+    "FactorCandidate",
+    "FusedSignal",
+    "FusionInputs",
+    "Instrument",
+    "LLMSignal",
+    "MarketSnapshot",
+    "MemoryContext",
+    "MemoryEpisode",
+    "ModelCandidate",
+    "OrderIntent",
+    "OrderRecord",
+    "PaperAccountRecord",
+    "PipelineRunRecord",
+    "PortfolioExposure",
+    "PortfolioState",
+    "PositionSnapshot",
+    "PostTradeReview",
+    "PostTradeReviewRecord",
+    "PromotionDecision",
+    "Provenance",
+    "QuantSignal",
+    "ReconciliationEvent",
+    "ReconciliationRun",
+    "RegimeContext",
+    "RelationRef",
+    "ResearchBundle",
+    "ResearchPacket",
+    "ResearchRequest",
+    "RiskDecision",
+    "RiskPolicy",
+    "RiskQualityRecord",
+    "SafeModeAlert",
+    "SafeModeEvent",
+    "SafeModeRecord",
+    "SignalComponent",
+    "SignalQualityRecord",
+    "StartupOutcome",
+    "StrategyCandidate",
+    "StrategyConfiguration",
+    "TradeContextRecord",
+    "TradeLifecycle",
+    "TradeMetrics",
+    "TradeOutcome",
+    "TradeProposal",
+]

@@ -1,0 +1,66 @@
+groups:
+  - name: opentrading-critical
+    rules:
+      - alert: MT4HeartbeatMissing
+        expr: absent(opentrading_mt4_last_heartbeat_timestamp_seconds) == 1 or time() - opentrading_mt4_last_heartbeat_timestamp_seconds > 10
+        for: 30s
+        labels: {severity: page}
+        annotations:
+          summary: MT4 heartbeat is missing
+          runbook_url: docs/runbooks/observability-alerts.md#mt4-heartbeat-missing
+      - alert: StaleMarketData
+        expr: absent(opentrading_market_data_last_update_timestamp_seconds) == 1 or time() - opentrading_market_data_last_update_timestamp_seconds > 60
+        for: 2m
+        labels: {severity: page}
+        annotations:
+          summary: Market data is stale
+          runbook_url: docs/runbooks/observability-alerts.md#stale-market-data
+      - alert: UnexpectedBrokerPosition
+        expr: opentrading_unexpected_broker_positions > 0
+        for: 15s
+        labels: {severity: page}
+        annotations:
+          summary: Broker and platform positions diverge
+          runbook_url: docs/runbooks/observability-alerts.md#unexpected-broker-position
+      - alert: DailyLossThreshold
+        expr: opentrading_daily_loss >= opentrading_daily_loss_limit and opentrading_daily_loss_limit > 0
+        for: 15s
+        labels: {severity: page}
+        annotations:
+          summary: Daily loss limit reached
+          runbook_url: docs/runbooks/observability-alerts.md#daily-loss-threshold
+      - alert: DrawdownThreshold
+        expr: opentrading_drawdown_ratio >= opentrading_drawdown_limit_ratio and opentrading_drawdown_limit_ratio > 0
+        for: 1m
+        labels: {severity: page}
+        annotations:
+          summary: Portfolio drawdown exceeded its configured limit
+          runbook_url: docs/runbooks/observability-alerts.md#drawdown-threshold
+      - alert: QueueBacklog
+        expr: max(opentrading_redis_stream_lag) > 100
+        for: 5m
+        labels: {severity: ticket}
+        annotations:
+          summary: Redis Streams backlog is not draining
+          runbook_url: docs/runbooks/observability-alerts.md#queue-backlog
+      - alert: LLMProviderFailure
+        expr: sum(rate(opentrading_llm_requests_total{status="error"}[5m])) by (provider) / clamp_min(sum(rate(opentrading_llm_requests_total[5m])) by (provider), 0.001) > 0.20
+        for: 5m
+        labels: {severity: ticket}
+        annotations:
+          summary: LLM provider failure ratio exceeds 20 percent
+          runbook_url: docs/runbooks/observability-alerts.md#llm-provider-failure
+      - alert: PostgreSQLFailure
+        expr: up{job="postgres"} == 0
+        for: 1m
+        labels: {severity: page}
+        annotations:
+          summary: PostgreSQL exporter is unreachable
+          runbook_url: docs/runbooks/observability-alerts.md#postgresql-failure
+      - alert: RedisFailure
+        expr: up{job="redis"} == 0
+        for: 1m
+        labels: {severity: page}
+        annotations:
+          summary: Redis exporter is unreachable
+          runbook_url: docs/runbooks/observability-alerts.md#redis-failure

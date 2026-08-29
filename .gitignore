@@ -15,19 +15,35 @@ venv/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.hypothesis/
+.coverage
+htmlcov/
+
+# Backups & dumps (scripts/backup.sh / restore.sh)
+backups/
+*.dump
 
 # Node / TypeScript (Command Center)
 node_modules/
 dist/
 .next/
+*.tsbuildinfo
 
 # Data & runtime artifacts
 storage/
 tmp-storage/
 vault-trading/attachments/
 
-# Graphify: graph.json + wiki/ are committed; cache is not
+# Graphify: graph.json + wiki/ are committed; cache, HTML render and dated
+# snapshots are regenerable and stay local
 graphify-out/cache/
+graphify-out/graph.html
+graphify-out/20*/
+
+# Logs & OS
+*.log
+.DS_Store
+test-results/
 
 # Editor
 .vscode/

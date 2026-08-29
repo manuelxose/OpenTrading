@@ -1,0 +1,147 @@
+# external-lock.yaml — pinned dependencies (INV-14)
+
+# Production never follows `main` / `latest` / `HEAD`.
+# Exact versions of every Python runtime dependency are pinned by `uv.lock`
+# (reproducible resolution, verified by `uv lock --check` and `uv sync --locked` in CI).
+# Key pins as of 2026-08-26:
+#   pydantic 2.13.4, pydantic-settings 2.15.0, fastapi 0.141.1, uvicorn 0.52.4
+#   (dev) pytest 8.4.2, mypy 1.20.2, ruff 0.16.4, httpx 0.28.1
+
+python_runtime:
+  pin_authority: uv.lock
+  core_runtime_python: "3.12"
+  quant_rd_python: "3.11"
+
+# Docker infrastructure images (infra/compose) — exact pins, never `latest`.
+# Reviewed 2026-08-26 against Docker Hub / GHCR / upstream compose manifests.
+infrastructure_images:
+  - service: postgres
+    image: timescale/timescaledb:2.29.2-pg16
+    role: transactional source of truth (ADR-0010)
+  - service: redis
+    image: redis:7.4-alpine
+    role: cache, locks, streams
+  - service: minio
+    image: minio/minio:RELEASE.2025-09-07T16-13-09Z
+    role: S3-compatible object store
+  - service: minio-init
+    image: minio/mc:RELEASE.2025-08-13T08-35-41Z
+    role: one-shot bucket bootstrap
+  - service: falkordb
+    image: falkordb/falkordb:v4.20.4-alpine
+    role: graph store (Graphiti backend, Phase 3)
+  - service: clickhouse
+    image: clickhouse/clickhouse-server:25.12.11
+    role: Langfuse analytics backend
+  - service: langfuse
+    image: docker.langfuse.com/langfuse/langfuse:v4.19.0
+    role: LLM observability/evaluation (§22)
+  - service: langfuse-worker
+    image: docker.langfuse.com/langfuse/langfuse-worker:v4.19.0
+    role: Langfuse async worker
+  - service: mlflow
+    image: ghcr.io/mlflow/mlflow:v3.8.1
+    role: experiment tracking (custom image adds psycopg2-binary 2.9.12, boto3 1.43.80)
+  - service: prometheus
+    image: prom/prometheus:v3.14.0
+    role: metrics collection (§23)
+  - service: grafana
+    image: grafana/grafana:13.0.7
+    role: dashboards (§23)
+  - service: postgres-exporter
+    image: prometheuscommunity/postgres-exporter:v0.20.1
+    role: postgres metrics
+  - service: redis-exporter
+    image: oliver006/redis_exporter:v1.89.0-alpine
+    role: redis metrics
+
+# Upstream trading projects — status: NOT INTEGRATED in Phase 0.
+# Tags/commit SHAs are recorded at integration time (Phases 2+), per project.
+upstream_integrations:
+  - project: TradingAgents
+    repository: https://github.com/TauricResearch/TradingAgents
+    license: Apache-2.0
+    role: qualitative LLM committee behind an adapter (ADR-0004)
+    status: integrated
+    phase: 2
+    tag: v0.3.1
+    commit_sha: a33fd4c0f134485a43553a2c23a63cb14adbd88f
+    integration: read-only (MarketSnapshot → ResearchRequest → LLMSignal), no execution path
+    import_boundary: adapters/tradingagents only (enforced by tests/unit/tradingagents/test_boundary.py)
+    install:
+      - uv pip install "tradingagents @ git+https://github.com/TauricResearch/TradingAgents@a33fd4c0f134485a43553a2c23a63cb14adbd88f"
+    last_reviewed: 2026-08-26
+
+  - project: Graphiti
+    repository: https://github.com/getzep/graphiti
+    license: Apache-2.0
+    package: graphiti-core
+    version: 0.29.3
+    extras: falkordb
+    role: temporal semantic memory over FalkorDB (ADR-0008)
+    status: integrated
+    phase: 3
+    integration: adapters/graphiti — ingestion + point-in-time retrieval (INV-3)
+    import_boundary: adapters/graphiti only (enforced by tests/unit/graphiti/test_adapter_boundary.py)
+    install:
+      - uv pip install "graphiti-core[falkordb]==0.29.3"
+    last_reviewed: 2026-08-26
+
+  - project: Qlib
+    repository: https://github.com/microsoft/qlib
+    license: MIT
+    role: quantitative research platform (ADR-0005)
+    package: pyqlib
+    version: 0.9.7
+    status: integrated
+    phase: 9
+    tag: v0.9.7
+    commit_sha: da920b7f954f48ab1bb64117c976710de198373e
+    import_boundary: adapters/qlib inside services/quant-rd only
+    last_reviewed: 2026-08-28
+
+  - project: RD-Agent
+    repository: https://github.com/microsoft/RD-Agent
+    license: MIT
+    role: offline autonomous R&D factory (ADR-0006)
+    package: rdagent
+    version: 0.8.0
+    status: integrated
+    phase: 9
+    tag: v0.8.0
+    commit_sha: 274e274d5dbb72cc2ea139d1a7c93d73ce9b1198
+    import_boundary: adapters/rdagent inside services/quant-rd only
+    last_reviewed: 2026-08-28
+
+  - project: MLflow
+    repository: https://github.com/mlflow/mlflow
+    license: Apache-2.0
+    package: mlflow
+    version: 3.8.1
+    role: isolated Quant R&D experiment tracking
+    status: integrated
+    phase: 9
+    tag: v3.8.1
+    commit_sha: 4cc9d5bd7cd1962f7f34017e8d8f133f89ad8d69
+    import_boundary: services/quant_rd/tracking.py only
+    last_reviewed: 2026-08-28
+
+  - project: NautilusTrader
+    repository: https://github.com/nautechsystems/nautilus_trader
+    license: LGPL-3.0
+    role: "event-driven engine: backtesting + paper (ADR-0007, independent dependency)"
+    status: not-integrated
+    phase: 4
+    tag: TBD-at-integration
+    commit_sha: TBD-at-integration
+    last_reviewed: 2026-08-26
+
+  - project: Graphiti
+    repository: https://github.com/getzep/graphiti
+    license: Apache-2.0
+    role: temporal trading memory (ADR-0008)
+    status: not-integrated
+    phase: 3
+    tag: TBD-at-integration
+    commit_sha: TBD-at-integration
+    last_reviewed: 2026-08-26

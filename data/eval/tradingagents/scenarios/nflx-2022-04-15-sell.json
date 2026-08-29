@@ -1,0 +1,33 @@
+{
+  "scenario_id": "nflx-2022-04-15-sell",
+  "description": "NFLX April-2022: subscriber losses and revenue slowdown force an exit.",
+  "instrument_id": "NFLX",
+  "asset_type": "stock",
+  "as_of": "2022-04-15T16:00:00Z",
+  "source_timestamp": "2022-04-15T15:59:00Z",
+  "bid": "335.10",
+  "ask": "335.40",
+  "source": "eval-fixture",
+  "question": "Should we exit NFLX before the subscriber report?",
+  "hypotheses": [
+    "subscriber growth has stalled in mature markets",
+    "competitive pressure compresses pricing power"
+  ],
+  "expected_rating": "Sell",
+  "mock_decision": {
+    "scenario_id": "nflx-2022-04-15-sell",
+    "rating": "Sell",
+    "decision_markdown": "**Rating**: Sell\n\n**Executive Summary**: Exit the position ahead of the report; downside risk dominates.\n\n**Investment Thesis**: Subscriber growth has stalled in mature markets while competition compresses pricing power and content costs keep rising.\n\n**Time Horizon**: 1-3 months",
+    "investment_plan": "**Recommendation**: Sell\n\n**Rationale**: The bear case carried the debate decisively.\n\n**Strategic Actions**: Exit the full position before the next report.",
+    "trader_plan": "**Action**: Sell\n\n**Reasoning**: Fundamentals deteriorating; exit before the catalyst.\n\nFINAL TRANSACTION PROPOSAL: **SELL**",
+    "analyst_reports": {
+      "fundamentals_report": "Subscriber growth has stalled and free cash flow is under pressure from content spend.",
+      "market_report": "Stock is in a confirmed downtrend with bearish momentum and heavy resistance.",
+      "sentiment_report": "Overall sentiment is bearish.",
+      "news_report": "Competitive streaming pressure and churn headlines dominate the negative flow."
+    },
+    "bull_history": "Bull: ad-tier and password-sharing crackdowns could re-accelerate revenue.",
+    "bear_history": "Bear: the growth story is broken and competition keeps intensifying.",
+    "risk_history": "Aggressive: buy the dip. Conservative: exit now. Neutral: reduce sharply."
+  }
+}

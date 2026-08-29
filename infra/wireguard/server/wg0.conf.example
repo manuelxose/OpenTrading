@@ -1,0 +1,17 @@
+# WireGuard server (Linux Core host) — copy to /etc/wireguard/wg0.conf
+# Fill in the <...> placeholders; never commit the filled-in file (secrets/).
+[Interface]
+# Server private key (wg genkey)
+PrivateKey = <SERVER-PRIVATE-KEY>
+# Tunnel subnet: Core = .1, Windows MT4 peer = .2
+Address = 10.77.0.1/24
+ListenPort = 51820
+# Optional hardening: drop by default, allow only MT4 ZeroMQ and ICMP from peer
+# PostUp = iptables -A INPUT -i wg0 -p icmp -j ACCEPT
+# PostUp = iptables -A INPUT -i wg0 -p tcp --dport 5555:5557 -s 10.77.0.2 -j ACCEPT
+# PostUp = iptables -A INPUT -i wg0 -j DROP
+
+[Peer]
+# Windows MT4 host
+PublicKey = <PEER-PUBLIC-KEY>
+AllowedIPs = 10.77.0.2/32

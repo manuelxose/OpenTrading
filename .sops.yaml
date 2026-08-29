@@ -1,0 +1,16 @@
+# SOPS creation rules — production secrets are encrypted with age (ADRs, §29).
+#
+# Recipients are passed on the CLI (`--age <pubkey>`) by scripts/secrets/* so
+# this file carries no key material. Every value in secrets/*.env is encrypted
+# (the whole production env file is sensitive).
+#
+#   sops encrypt --age <age-public-key> --input-type dotenv --output-type dotenv -i secrets/.env.prod
+#   sops exec-env --input-type dotenv secrets/.env.prod 'uv run ...'
+#
+# Never commit real age keys; keep the identity in ~/.config/sops/age/keys.txt
+# (see scripts/secrets/setup-age.sh and docs/runbooks/secrets-management.md).
+
+creation_rules:
+  - path_regex: ^secrets/.*\.env$
+    encrypted_regex: ".*"
+    age: "PLACEHOLDER-REPLACE-WITH-YOUR-AGE-PUBLIC-KEY"

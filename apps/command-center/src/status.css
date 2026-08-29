@@ -1,0 +1,23 @@
+.sidebar-foot.offline {
+  color: var(--red);
+}
+
+.sidebar-foot.offline .live-dot {
+  background: var(--red);
+  box-shadow: none;
+}
+
+.stale-banner {
+  margin-bottom: 18px;
+  border: 1px solid color-mix(in srgb, var(--amber), transparent 55%);
+  border-radius: 8px;
+  padding: 11px 14px;
+  color: var(--amber);
+  background: color-mix(in srgb, var(--amber), transparent 92%);
+  font-size: 13px;
+}
+
+.definition.breached strong,
+.definition.breached small {
+  color: var(--red);
+}
