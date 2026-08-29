@@ -77,6 +77,7 @@ LLM direct control over capital**.
 | `docs/architecture/PHASE7_EXECUTION_STATE.md` | Broker reconciliation & Safe Mode record (INV-6) |
 | `docs/PRODUCTION_READINESS.md` | Production-readiness audit, verdict and open gates |
 | `docs/GUIA_INSTALACION_USO.md` | Guía completa de instalación y uso desde cero (español) |
+| `docs/runbooks/local-development-windows.md` | Windows + WSL2 setup with a real MT4 terminal installed |
 | `docs/KNOWN_LIMITATIONS.md` | Classified limitations (BLOCKING/MAJOR/MINOR/INFO) |
 | `docs/OPERATIONS_MANUAL.md` | How to run, monitor and operate every mode |
 | `docs/DISASTER_RECOVERY.md` | RPO/RTO targets, backups, restore and incident playbooks |
