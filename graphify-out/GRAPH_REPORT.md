@@ -1,142 +1,142 @@
 # Graph Report - OpenTrading  (2026-08-29)
 
 ## Corpus Check
-- 539 files · ~230,259 words
+- 540 files · ~233,498 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 6599 nodes · 18285 edges · 352 communities (276 shown, 76 thin omitted)
+- 6626 nodes · 18311 edges · 362 communities (285 shown, 77 thin omitted)
 - Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 1674 edges (avg confidence: 0.94)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `01462f84`
+- Built from commit: `70402ede`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- WireMessage
-- Clock
+- Mt4Emulator
+- enums.py
 - DomainEvent
 - InMemoryStreamBus
 - TradeLifecycle
 - make_market_snapshot
-- OrderType
+- protocol.py
 - TradeProposal
 - mapping.py
 - test_hashing.py
-- tradingagents/client.py
-- bootstrap.py
-- enums.py
+- make_submit
+- workflows.py
+- repository.py
 - FusionInputs
 - evaluate
-- Memory
+- LiveGraphitiStore
 - mapper.py
 - test_export.py
 - OrderRecord
-- market_data/pipeline.py
-- Stack
+- LayerName
+- FakeReconcileClient
 - normalization.py
 - PaperLedger
 - make_record
 - Timeframe
-- graphiti/memory.py
-- OrderState
+- Memory
+- InMemoryExecutionStateStore
+- QuantResearchWorkflows
+- health.py
+- test_contracts.py
 - ExperimentRun
-- main.py
-- factories.py
-- StrategyCandidate
-- assert_valid_trade_transition
+- test_paper_contracts.py
 - devDependencies
 - make_order_intent
-- schemas/__init__.py
-- HumanApprovalGate
-- quality.py
-- stages/posttrade.py
-- test_memory.py
-- worker_helpers.py
+- analysis.py
+- OperatingMode
+- Bar
+- PostTradeReviewRecord
+- schemas/memory.py
+- worker/cli.py
 - test_paper_ledger.py
-- MinioArtifactStore
+- test_posttrade_integration.py
 - test_client.py
 - NautilusPaperExecutor
 - NautilusRouterStrategy
 - StrategyState
-- LiveAutoRegistry
+- LiveAutoStrategyRecord
 - MemoryRecord
 - test_command_center_api.py
-- calibration.py
-- risk/engine.py
+- BaseContractModel
+- SystemClock
 - domain/__init__.py
 - EmergencyControlState
 - make_bar
 - App.tsx
-- _sizing_probe.py
-- TestBlockingInvariants
-- MarketSnapshot
+- market_data/pipeline.py
+- test_invariants.py
+- LLMSignal
 - ScriptedRedis
 - evaluate_cases
 - CalibrationStore
 - make_risk_policy
 - Target Architecture — Autonomous Quantitative Trading & Research Platform
 - Settings
-- test_workflows.py
+- EmergencyController
 - architecture.md
-- make_memory_episode
+- build_memory
 - risk_helpers.py
 - 5. Scenario playbooks
-- OperatingMode
-- worker/ledger.py
-- ConnectionMonitor
+- stages/posttrade.py
+- KillScope
+- signal_fusion/fusion.py
 - PositionSnapshot
-- DomainObject
+- schemas/__init__.py
 - 32. Roadmap definitivo
-- Mt4ExecutionClient
-- Instrument
+- OrderType
+- factories.py
 - TokenUsageCollector
-- ._require_calibrated_version
+- FusionConfig
 - redact
-- backtest/conftest.py
+- nautilus/__init__.py
 - nautilus/engine.py
 - compilerOptions
-- test_execution_boundary.py
-- compute_trade_metrics
+- OrderState
+- test_versioning.py
 - strategy.py
-- PortfolioState
+- ._check_loss_streak
 - Agent details
 - 3. Classification against the requested axes
-- test_resize.py
+- TestExposureResize
 - test_live_infra_restart.py
 - test_registry.py
-- GraphitiConfig
+- LiveAutoRegistry
 - 5. Controls
-- RiskPolicy
+- Decimal
 - Architecture Invariants
 - VirtualClock
-- LangfuseTracer
-- synthetic_dataset
-- test_posttrade_metrics.py
+- OperationalMetrics
+- Instrument
+- Guía Completa de Instalación y Uso — OpenTrading
 - Operations Manual — OpenTrading
 - test_live_auto_api.py
 - Known Limitations — OpenTrading
-- QlibAdapter
+- EvaluationResult
 - _build_platform_with_poison
 - StageWorker
 - OrderRejectionSim
 - NativeRDAgentQlibBackend
-- SignalDirection
+- signals.py
 - Any
 - test_paper_executor.py
 - Phase 0 — Foundations: Implementation Record
 - Runbook — Infrastructure
-- window_blind_store
-- producers.py
+- command_center.py
+- MarketSnapshot
 - Domain Glossary (OpenTrading)
 - Detail
 - Product
 - NautilusBacktestRunner
-- Self
+- make_intent
 - SequenceTracker
-- ensure_utc
+- infra_health.py
 - Task Routing Workflow
 - Observability alert runbook
 - mt4/protocol — MT4 execution protocol v1.0 (ADR-0020, §34.18)
@@ -158,9 +158,9 @@
 - 1. What was built
 - Phase 5 — Deterministic Risk & Policy Engine (implementation record)
 - Runbook — Local Development
-- FakeGraph
+- _WindowBlindStore
 - 19. Validation Factory
-- Bar
+- MarketDataRepository
 - .ai — Canonical AI Engineering Layer (OpenTrading)
 - LLM Agent Evaluation
 - ADR Management
@@ -200,8 +200,8 @@
 - compilerOptions
 - Runbook — Secrets management (SOPS + age)
 - _validate_lineage
-- brier_error
-- allows_order_submission
+- test_posttrade_notes.py
+- model_validator
 - Quant R&D Runtime Specification
 - Postmortem — EURUSD LONG
 - env.py
@@ -209,7 +209,7 @@
 - adapters/graphiti — temporal semantic memory (Phase 3)
 - adapters/tradingagents — TradingAgents behind a strict boundary (ADR-0004)
 - .store
-- TestResizeShape
+- SignalDirection
 - ADR-0001: Python as the quantitative backend language
 - ADR-0002: TypeScript for the Command Center
 - ADR-0003: MQL4 exists only in the MT4 execution bridge
@@ -238,15 +238,15 @@
 - Runbook — Autonomous PAPER pipeline
 - engines/signal_fusion — Signal Fusion Engine (Phase 7, INV-16)
 - OpenTrading — GitHub Copilot instructions
-- test_reject.py
-- ._check_low_high
+- signal_fusion/config.py
+- build_domain_event
 - adapters/mt4 — MT4 execution protocol (Phase 6, ADR-0020)
 - adapters/nautilus — NautilusTrader event-driven backtest engine (ADR-0007)
 - Research context — $instrument_id @ $as_of
 - AGENTS.md — OpenTrading (Codex & generic agent adapters)
 - Repository Map (OpenTrading)
 - Definition of Done
-- TestApprovedRiskInvariant
+- test_adapter_boundary.py
 - Routing Rules — OpenTrading
 - 10. Kill switch y Dead Man Switch
 - Inspiración FinMem
@@ -256,8 +256,8 @@
 - Phase 7 — Execution state: broker reconciliation & Safe Mode (implemented)
 - engines/risk — Deterministic Risk & Policy Engine (Phase 5)
 - OpenTrading — Autonomous Quantitative Trading & Research Platform
-- SafeModeViolation
-- RDAgentBackend
+- Stack
+- PostgresAuditSink
 - test_import_guard.py
 - Trade — 2c7c2d4f-fec5-5bdb-a428-4ebde0e0f237
 - Cross-Review Rules
@@ -283,6 +283,7 @@
 - tsconfig.json
 - restore.sh
 - ADR-0026 — LIVE_AUTO governance: automated live trading, disabled by default
+- .__init__
 - 29. Seguridad
 - 4. Qlib + RD-Agent: fábrica cuantitativa autónoma
 - 5. NautilusTrader: columna vertebral del trading
@@ -348,13 +349,22 @@
 - opentrading
 - opentrading-quant-rd
 - ADR-0025 — Security hardening milestone: trust zones, least privilege, secret lifecycle
-- PortfolioExposure
+- RiskReasonCode
 - ExecutionService
+- .from_episode
 - test-postgres-roles.sh
+- assert_llm_process_cannot_execute
 - 002-roles.sh
 - entrypoint-acl.sh
-- infra_health.py
+- test_live_auto.py
+- test_infra_smoke.py
+- live_auto.py
+- test_settings.py
 - .canonical_dict
+- test_end_to_end.py
+- ._check_temporal_order
+- TestWorkerHasNoExecutionCapability
+- TestSeparationFromTrading
 
 ## God Nodes (most connected - your core abstractions)
 1. `VirtualClock` - 172 edges
@@ -373,189 +383,193 @@
   tests/backtest/test_costs.py → core/domain/enums.py
 - `test_trade_outcomes_are_internally_consistent()` --uses--> `SignalDirection`  [INFERRED]
   tests/backtest/test_position_accounting.py → core/domain/enums.py
-- `TestSearchResolution` --uses--> `GraphitiSearchError`  [INFERRED]
-  tests/unit/graphiti/test_live_store.py → adapters/graphiti/errors.py
-- `TestIngest` --uses--> `OntologyError`  [INFERRED]
-  tests/unit/graphiti/test_memory.py → adapters/graphiti/errors.py
-- `TestDefenseInDepth` --uses--> `FutureMemoryLeakageError`  [INFERRED]
-  tests/unit/graphiti/test_memory.py → adapters/graphiti/errors.py
+- `test_rating_profile_covers_all_tiers()` --uses--> `SignalDirection`  [INFERRED]
+  tests/unit/tradingagents/test_mapper.py → core/domain/enums.py
+- `test_live_store_never_leaks_upstream_errors()` --uses--> `GraphitiUnavailableError`  [INFERRED]
+  tests/unit/graphiti/test_adapter_boundary.py → adapters/graphiti/errors.py
+- `test_graphiti_can_disappear_and_the_domain_still_works()` --uses--> `GraphitiIngestError`  [INFERRED]
+  tests/unit/graphiti/test_adapter_boundary.py → adapters/graphiti/errors.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (352 total, 76 thin omitted)
+## Communities (362 total, 77 thin omitted)
 
-### Community 0 - "WireMessage"
-Cohesion: 0.04
-Nodes (77): Poll one pushed event (non-blocking by default)., Collect all currently queued events (used by lifecycle tests)., Python MT4 emulator — the bridge's stand-in before real MetaTrader (Phase 6).…, is_retryable(), Mt4ErrorCode, Mt4ProtocolError, ProtocolErrorDetail, BaseModel (+69 more)
-
-### Community 1 - "Clock"
+### Community 0 - "Mt4Emulator"
 Cohesion: 0.03
-Nodes (94): get_mt4_settings(), Mt4Settings, BaseSettings, MT4 execution settings (OT_MT4_* environment variables). Mirrors the pattern of…, Process-wide MT4 settings singleton (matching core get_settings)., build_emergency_router(), EmergencyBody, APIRouter (+86 more)
+Nodes (80): Core-side MT4 execution client (Phase 6, ADR-0020). The client is the Core's…, Send one command and await its reply (idempotent-safe retries OK). Raises…, Mt4Emulator, datetime, Python MT4 emulator — the bridge's stand-in before real MetaTrader (Phase 6).…, One serve iteration: handle a command (if any) + periodic work., The Python stand-in for QuantBridgeEA.mq4 + the broker. Serve loop runs in a…, Bind channels and (optionally) start the serve thread. Returns the actually… (+72 more)
+
+### Community 1 - "enums.py"
+Cohesion: 0.03
+Nodes (121): get_mt4_settings(), Mt4Settings, BaseSettings, MT4 execution settings (OT_MT4_* environment variables). Mirrors the pattern of…, Process-wide MT4 settings singleton (matching core get_settings)., Authenticated operator API for the emergency control system (INV-7). Mounts…, OpenTrading API service (core runtime, Python 3.12). Operational endpoints: -…, Paper ledger: authoritative position & account accounting for the PAPER venue… (+113 more)
 
 ### Community 2 - "DomainEvent"
-Cohesion: 0.04
-Nodes (78): new_trace_id(), UUID, Redis Streams event bus for the autonomous pipeline (INV-15, architecture §14).…, Convenience accessor for envelope correlation., trace_id_of(), Any, UUID, Trade lifecycle transition helpers (Phase 7). All lifecycle mutations flow… (+70 more)
+Cohesion: 0.05
+Nodes (71): Any, UUID, Trade lifecycle transition helpers (Phase 7). All lifecycle mutations flow…, Move the trace's lifecycle to ``target`` if the canonical machine allows it.…, Apply a sequence of transitions in order (each CAS-guarded)., transition(), transition_chain(), PaperPipeline (+63 more)
 
 ### Community 3 - "InMemoryStreamBus"
 Cohesion: 0.04
-Nodes (38): BusUnavailableError, _connection_factory(), InMemoryStreamBus, PendingMessage, Any, Protocol, RuntimeError, Redis Streams bus with reconnect and recovery semantics. (+30 more)
+Nodes (43): BusUnavailableError, _connection_factory(), InMemoryStreamBus, new_trace_id(), PendingMessage, Any, Protocol, RuntimeError (+35 more)
 
 ### Community 4 - "TradeLifecycle"
-Cohesion: 0.03
-Nodes (59): _account_from_row(), _account_values(), _context_from_row(), InMemoryPipelineStore, _lifecycle_from_row(), _lifecycle_values(), PipelineStore, PostgresPipelineStore (+51 more)
+Cohesion: 0.04
+Nodes (52): _account_from_row(), _account_values(), _context_from_row(), InMemoryPipelineStore, _lifecycle_from_row(), _lifecycle_values(), PipelineStore, PostgresPipelineStore (+44 more)
 
 ### Community 5 - "make_market_snapshot"
-Cohesion: 0.12
-Nodes (41): Translate a canonical request into the upstream ``propagate`` surface., request_to_upstream_input(), default_mock_scenario(), MockTradingAgentsAdapter, The built-in fallback: a balanced, evidence-carrying HOLD decision., Scenario-driven stand-in for the upstream committee. Scenario lookup: exact…, MockScenario, Deterministic scenario played back by :class:`MockTradingAgentsAdapter`. (+33 more)
+Cohesion: 0.09
+Nodes (47): Translate a canonical request into the upstream ``propagate`` surface., Translate a normalized upstream result into the canonical ``LLMSignal``.…, request_to_upstream_input(), result_to_signal(), make_market_snapshot(), build_research_request(), A valid ResearchRequest whose instrument/as_of live in ``context``., MonkeyPatch (+39 more)
 
-### Community 6 - "OrderType"
-Cohesion: 0.04
-Nodes (93): BrokerOutcome, AccountState, datetime, Decimal, model_validator, UUID, _quote(), QuoteEngine (+85 more)
+### Community 6 - "protocol.py"
+Cohesion: 0.05
+Nodes (57): BrokerOutcome, AccountState, datetime, Decimal, UUID, _quote(), QuoteEngine, Deterministic simulated broker for the MT4 emulator (Phase 6, ADR-0020). The… (+49 more)
 
 ### Community 7 - "TradeProposal"
-Cohesion: 0.18
-Nodes (21): Point-in-time strategy configuration snapshot. ``allowed_instruments=None``…, StrategyConfiguration, What the intelligence layer proposes. LLM sizing/stop values are advisory only…, TradeProposal, _broker_disconnected(), _daily_loss_reached(), _drawdown_reached(), _heartbeat_lost() (+13 more)
+Cohesion: 0.07
+Nodes (65): Portfolio view after the proposed exit: the closing instrument is excluded from…, AccountState, PortfolioState, Risk & Policy contracts consumed by the deterministic Risk Engine (INV-4).…, Point-in-time portfolio state: open positions, pending orders, exposure., Point-in-time account state (INV-3). All fields are Decimals — never floats., Point-in-time strategy configuration snapshot. ``allowed_instruments=None``…, Versioned risk policy. Every numeric limit is explicit — no implicit defaults.… (+57 more)
 
 ### Community 8 - "mapping.py"
-Cohesion: 0.08
-Nodes (41): Domain-side position accounting that mirrors the Nautilus venue ledger.…, _decimal(), provenance(), datetime, OrderAccepted, OrderDenied, OrderFilled, OrderRejected (+33 more)
+Cohesion: 0.12
+Nodes (33): Domain-side position accounting that mirrors the Nautilus venue ledger.…, _decimal(), provenance(), datetime, OrderAccepted, OrderDenied, OrderFilled, OrderRejected (+25 more)
 
 ### Community 9 - "test_hashing.py"
-Cohesion: 0.11
-Nodes (32): bar_checksum(), bar_row_key(), canonical_bar_bytes(), canonical_decimal(), canonical_timestamp(), dataset_hash(), _hash_stream(), partition_hash() (+24 more)
+Cohesion: 0.12
+Nodes (30): bar_checksum(), canonical_bar_bytes(), canonical_decimal(), canonical_timestamp(), dataset_hash(), _hash_stream(), partition_hash(), Any (+22 more)
 
-### Community 10 - "tradingagents/client.py"
-Cohesion: 0.07
-Nodes (21): _installed_version(), _installed_version_safely(), _load_graph_class(), _load_graph_class_safely(), datetime, UUID, Live TradingAgents adapter — the ONLY module allowed to import upstream.…, Execute the upstream committee for ``request`` and return a signal. Fails… (+13 more)
+### Community 10 - "make_submit"
+Cohesion: 0.06
+Nodes (65): BrokerConfig, BaseModel, model_validator, Broker-side symbol constraints the EA enforces before sending orders., Configuration of the simulated venue., SymbolSpec, CommandGate, Validates incoming commands: expiry → duplicates → sequence. (+57 more)
 
-### Community 11 - "bootstrap.py"
-Cohesion: 0.07
-Nodes (31): Validate untrusted upstream output before it enters a workflow., RDAgentAdapter, PermissionError, assert_runtime_version(), main(), Any, Fail-closed executable composition for autonomous canonical Quant R&D., INV-13: Quant R&D runs on Python 3.11 — the two runtimes are never merged. The… (+23 more)
+### Community 11 - "workflows.py"
+Cohesion: 0.06
+Nodes (48): QlibAdapter, Validate untrusted upstream output before it enters a workflow., RDAgentAdapter, PermissionError, assert_runtime_version(), main(), Any, Fail-closed executable composition for autonomous canonical Quant R&D. (+40 more)
 
-### Community 12 - "enums.py"
-Cohesion: 0.08
-Nodes (38): Catalog, MemoryCatalog, PostgresCatalog, datetime, Protocol, UUID, Market data catalog: PostgreSQL-backed (ADR-0010) or in-memory. The catalog…, Deterministic in-memory catalog (unit and leakage tests). (+30 more)
+### Community 12 - "repository.py"
+Cohesion: 0.05
+Nodes (61): Catalog, MemoryCatalog, PostgresCatalog, datetime, Protocol, UUID, Market data catalog: PostgreSQL-backed (ADR-0010) or in-memory. The catalog…, Deterministic in-memory catalog (unit and leakage tests). (+53 more)
 
 ### Community 13 - "FusionInputs"
-Cohesion: 0.04
-Nodes (85): paper_fusion_config(), Default calibrated fusion config for the paper pipeline. Equal weights over the…, _default_fusion(), FusionInputs, Signal Fusion input contracts (INV-16, Phase 7). The fusion engine fuses up to…, All fusion inputs for one instrument at one point in time. Any input may be…, Names of the inputs that are present, in canonical engine order., FusedSignal (+77 more)
+Cohesion: 0.11
+Nodes (29): FusionInputs, MemoryContext, Signal Fusion input contracts (INV-16, Phase 7). The fusion engine fuses up to…, Market-regime classifier output (architecture §16 regime testing).…, Memory-derived stance from the temporal memory (Graphiti, INV-3, INV-11). A…, All fusion inputs for one instrument at one point in time. Any input may be…, Names of the inputs that are present, in canonical engine order., RegimeContext (+21 more)
 
 ### Community 14 - "evaluate"
-Cohesion: 0.05
-Nodes (15): evaluate(), Evaluate a proposal against the baseline inputs with dict overrides.…, TestApproveVariants, TestBaselineApprove, For each soft limit: an adversarial proposal never bypasses the limit. Every…, approved quantity <= configured maximum (policy and instrument)., TestApprovedQuantityInvariant, TestDecisionShape (+7 more)
+Cohesion: 0.03
+Nodes (23): A Risk Decision is never a bare boolean (INV-4, architecture §7). ``RESIZE``…, RiskDecisionType, evaluate(), Evaluate a proposal against the baseline inputs with dict overrides.…, APPROVE paths: the engine accepts the proposal quantity unchanged., TestApproveVariants, TestBaselineApprove, For each soft limit: an adversarial proposal never bypasses the limit. Every… (+15 more)
 
-### Community 15 - "Memory"
-Cohesion: 0.08
-Nodes (35): LiveGraphitiStore, Close the underlying graph driver (idempotent)., Graphiti storage backed by FalkorDB (ADR-0008: FalkorDB first). Requires…, GraphitiIngestError, GraphitiUnavailableError, GraphitiVersionError, Upstream Graphiti (or FalkorDB) could not be reached or imported., The installed graphiti-core distribution does not match the pin (INV-14). (+27 more)
+### Community 15 - "LiveGraphitiStore"
+Cohesion: 0.07
+Nodes (39): _installed_version(), LiveGraphitiStore, UUID, Live Graphiti-over-FalkorDB store — the ONLY module allowed to import upstream.…, Close the underlying graph driver (idempotent)., Known envelopes (test/debug surface)., Distribution version of the installed upstream, or None if absent., Graphiti storage backed by FalkorDB (ADR-0008: FalkorDB first). Requires… (+31 more)
 
 ### Community 16 - "mapper.py"
-Cohesion: 0.06
-Nodes (60): Exception, TradingAgents adapter errors. Concrete error types so callers can distinguish…, Base class for every TradingAgents adapter error., The installed upstream version violates the pinned version/commit., The upstream run exceeded the adapter's timeout budget., A domain input could not be translated to upstream, or an upstream output could…, TradingAgentsError, TradingAgentsMappingError (+52 more)
+Cohesion: 0.05
+Nodes (75): _installed_version(), _installed_version_safely(), _load_graph_class(), _load_graph_class_safely(), Live TradingAgents adapter — the ONLY module allowed to import upstream.…, Distribution version of the installed upstream, or None if absent., Import the upstream graph class. The single upstream import seam., Exception (+67 more)
 
 ### Community 17 - "test_export.py"
-Cohesion: 0.05
-Nodes (47): _canonical_id(), ensure_secret_free(), initialize_vault(), MirroringEventBus, _note_path(), ObsidianExporter, Any, Path (+39 more)
+Cohesion: 0.07
+Nodes (37): _canonical_id(), initialize_vault(), _note_path(), ObsidianExporter, Path, ValueError, Best-effort Obsidian mirror of authoritative domain events. The event bus and…, Write a mirror note when ``event`` is exportable; otherwise return ``None``. (+29 more)
 
 ### Community 18 - "OrderRecord"
-Cohesion: 0.07
-Nodes (29): OrderRecord, The single authoritative persisted record for one ``order_intent_id``. Keyed by…, OrderStateApplier, datetime, Decimal, UUID, Persist the canonical crossing object (INV-2) as ORDER_INTENT., Persist SUBMITTED **before** the wire send (crash-after-submit safety). (+21 more)
+Cohesion: 0.05
+Nodes (33): OrderRecord, The single authoritative persisted record for one ``order_intent_id``. Keyed by…, OrderStateApplier, datetime, Decimal, UUID, Persist the canonical crossing object (INV-2) as ORDER_INTENT., Persist SUBMITTED **before** the wire send (crash-after-submit safety). (+25 more)
 
-### Community 19 - "market_data/pipeline.py"
-Cohesion: 0.06
-Nodes (36): _group_bars(), MarketDataPipeline, _merge_gold_rows(), datetime, Medallion ingestion pipeline: RAW → BRONZE → SILVER → GOLD. -…, Deterministic cross-run merge for gold: one row per bar identity. Identity:…, Deterministic raw→bronze→silver→gold pipeline (Phase 1 DoD)., Ingest one batch: raw storage, bronze normalization, silver quality. A single… (+28 more)
+### Community 19 - "LayerName"
+Cohesion: 0.09
+Nodes (15): LayerStore, MemoryLayerStore, MinioLayerStore, parquet_to_raw(), Any, Protocol, Deterministic in-memory store used by unit and leakage tests., S3-compatible object storage backed by MinIO (ADR-0011). (+7 more)
 
-### Community 20 - "Stack"
-Cohesion: 0.04
-Nodes (120): DeadManSwitchReason, EmergencyLevel, The four emergency-control levels (INV-7, architecture §10). Semantics frozen…, Why the dead man switch engaged (INV-7, architecture §10)., ExecutionDivergenceError, RuntimeError, A venue report contradicts authoritative state in a capital-relevant way., EmergencyPolicy (+112 more)
+### Community 20 - "FakeReconcileClient"
+Cohesion: 0.11
+Nodes (37): FakeReconcileClient, make_reconciliation_response(), not_connected_error(), Implements the service's ReconcileClient protocol without any sockets., heartbeat(), pending_order(), datetime, ExecutionService + EmergencyController integration DoD tests. Proves the… (+29 more)
 
 ### Community 21 - "normalization.py"
 Cohesion: 0.07
 Nodes (24): NormalizationError, A raw payload could not be mapped to a normalized record., BarPayloadMapper, build_bar_from_payload(), _epoch_to_utc(), normalize_timestamp(), parse_timeframe(), Any (+16 more)
 
 ### Community 22 - "PaperLedger"
-Cohesion: 0.12
-Nodes (13): LedgerPosition, PaperLedger, AccountState, datetime, Decimal, UUID, Canonical position snapshots with current marks (portfolio state)., Apply one FILLED/partial fill report; net the position; close on sign flip.… (+5 more)
+Cohesion: 0.10
+Nodes (17): FillApplication, LedgerPosition, PaperLedger, AccountState, datetime, Decimal, UUID, Append one observed price point to the open position's path. Bounded… (+9 more)
 
 ### Community 23 - "make_record"
 Cohesion: 0.06
-Nodes (27): Temporal window pushed down to the store as an optimization. The authoritative…, Temporal validity interval [``valid_from``, ``valid_until``].…, Duration in seconds, or None when open-ended., SearchWindow, Validity, InMemoryStore, Deterministic in-memory backend — same window semantics as the live store.…, _tokens() (+19 more)
+Nodes (30): Temporal window pushed down to the store as an optimization. The authoritative…, Temporal validity interval [``valid_from``, ``valid_until``].…, Duration in seconds, or None when open-ended., SearchWindow, Validity, InMemoryStore, Deterministic in-memory backend — same window semantics as the live store.…, _tokens() (+22 more)
 
 ### Community 24 - "Timeframe"
 Cohesion: 0.10
 Nodes (37): Timeframe, Leakage tests: future information must be impossible to retrieve (INV-3). Phase…, DoD: (instrument X, dataset version Y, as_of T) → same hash, always., TestDeterministicDoD, TestImmutabilityLeakage, ingest_and_seal(), make_minute_raw_records(), Platform (+29 more)
 
-### Community 25 - "graphiti/memory.py"
-Cohesion: 0.07
-Nodes (33): _installed_version(), Live Graphiti-over-FalkorDB store — the ONLY module allowed to import upstream.…, Distribution version of the installed upstream, or None if absent., FutureMemoryLeakageError, GraphitiError, GraphitiResolutionError, GraphitiSearchError, Exception (+25 more)
+### Community 25 - "Memory"
+Cohesion: 0.09
+Nodes (22): FutureMemoryLeakageError, INV-3 violation: an episode with available_time > as_of reached the query…, Memory, PointInTimeFilter, datetime, UUID, Write one episode into memory. ``available_time`` is the moment the system…, Point-in-time retrieval: what the system knew at ``as_of``. Never exposes an… (+14 more)
 
-### Community 26 - "OrderState"
+### Community 26 - "InMemoryExecutionStateStore"
 Cohesion: 0.05
-Nodes (89): DiscrepancyCode, OrderState, PositionSide, StrEnum, Canonical order lifecycle (INV-6, architecture §8)., Broker reconciliation discrepancy codes (INV-6, architecture §9). Severity is…, ExecutionContract, ExecutionPosition (+81 more)
+Nodes (40): Result of one mandatory reconciliation pass (INV-6, §9)., Persisted SAFE_MODE state (singleton row in PostgreSQL)., ReconciliationRun, SafeModeRecord, _empty_safe_mode(), InMemoryExecutionStateStore, datetime, Deterministic in-memory store with the exact same semantics as Postgres. (+32 more)
 
-### Community 27 - "ExperimentRun"
-Cohesion: 0.11
-Nodes (26): RD-Agent translation seam for the isolated Python 3.11 service., Typed boundary around Microsoft RD-Agent (offline research only)., Hypothesis, Implementation, BaseModel, Adapter-owned values; no RD-Agent class crosses this module boundary., CandidateStatus, ExperimentRun (+18 more)
+### Community 27 - "QuantResearchWorkflows"
+Cohesion: 0.12
+Nodes (19): Any, Protocol, RD-Agent translation seam for the isolated Python 3.11 service., RDAgentBackend, Typed boundary around Microsoft RD-Agent (offline research only)., Hypothesis, Implementation, BaseModel (+11 more)
 
-### Community 28 - "main.py"
-Cohesion: 0.08
-Nodes (37): check_falkordb(), check_minio(), check_postgres(), check_redis(), HealthCheckResult, CheckFunc, Dependency readiness checks backing ``GET /readyz`` (§31 observability). Each…, Run one probe with a hard timeout; never raise. (+29 more)
-
-### Community 29 - "factories.py"
-Cohesion: 0.06
-Nodes (72): A Risk Decision is never a bare boolean (INV-4, architecture §7). ``RESIZE``…, Canonical decision reason codes (architecture §7 controls, ADR-0018). Used both…, RiskDecisionType, RiskReasonCode, Payload for ``system.safe_mode.entered`` / ``system.safe_mode.exited``., SafeModeEvent, EvidenceRef, Pointer to an evidence source (document, memory episode, dataset, artifact). (+64 more)
-
-### Community 30 - "StrategyCandidate"
+### Community 28 - "health.py"
 Cohesion: 0.13
-Nodes (20): ExperimentStatus, A strategy under the INV-8 lifecycle. No RD-Agent -> LIVE edge exists., StrategyCandidate, Strategy promotion pipeline — deterministic validation gate (INV-8)., ExperimentRecorder, Any, datetime, Exception (+12 more)
+Nodes (18): check_falkordb(), check_minio(), check_postgres(), check_redis(), HealthCheckResult, CheckFunc, Dependency readiness checks backing ``GET /readyz`` (§31 observability). Each…, Run one probe with a hard timeout; never raise. (+10 more)
+
+### Community 29 - "test_contracts.py"
+Cohesion: 0.08
+Nodes (21): One fused input (quant / llm / regime / memory) with calibrated weight.…, SignalComponent, make_fused_signal(), make_risk_decision_approve(), datetime, parametrize, Schema validation tests: every contract validates, bad input is rejected., test_contract_constructs() (+13 more)
+
+### Community 30 - "ExperimentRun"
+Cohesion: 0.12
+Nodes (23): ExperimentStatus, ExperimentRun, Quant factory contracts: factor/model/strategy candidates and experiment runs…, One reproducible experiment (MLflow-native abstraction, architecture §10)., A strategy under the INV-8 lifecycle. No RD-Agent -> LIVE edge exists., StrategyCandidate, Strategy promotion pipeline — deterministic validation gate (INV-8)., ExperimentRecorder (+15 more)
+
+### Community 31 - "test_paper_contracts.py"
+Cohesion: 0.12
+Nodes (8): assert_valid_trade_transition(), is_valid_trade_transition(), Pipeline contract, state machine and registry tests (Phase 7)., TestEventRegistry, TestPaperAccountRecord, TestPipelineRunRecord, TestTradeLifecycle, TestTradeLifecycleMachine
 
 ### Community 32 - "devDependencies"
 Cohesion: 0.04
 Nodes (47): dependencies, lucide-react, react, react-dom, typescript, vite, @vitejs/plugin-react, devDependencies (+39 more)
 
 ### Community 33 - "make_order_intent"
-Cohesion: 0.08
-Nodes (32): instrument_to_nautilus(), order_intent_to_order(), CurrencyPair, Venue, Map the canonical domain ``Instrument`` to a Nautilus spot ``CurrencyPair``.…, Map the canonical ``OrderIntent`` to a native Nautilus order.…, LimitOrder, MarketOrder (+24 more)
+Cohesion: 0.10
+Nodes (29): instrument_to_nautilus(), order_intent_to_order(), CurrencyPair, Venue, Map the canonical domain ``Instrument`` to a Nautilus spot ``CurrencyPair``.…, Map the canonical ``OrderIntent`` to a native Nautilus order.…, LimitOrder, MarketOrder (+21 more)
 
-### Community 34 - "schemas/__init__.py"
-Cohesion: 0.08
-Nodes (44): BaseContractModel, BaseModel, Common configuration shared by all contracts and sub-models., MemoryContext, Market-regime classifier output (architecture §16 regime testing).…, Memory-derived stance from the temporal memory (Graphiti, INV-3, INV-11). A…, RegimeContext, Canonical domain contracts (architecture §15) and the event envelope (§14).… (+36 more)
-
-### Community 35 - "HumanApprovalGate"
+### Community 34 - "analysis.py"
 Cohesion: 0.06
-Nodes (37): DecisionBody, KillBody, BaseModel, Authenticated operator API for LIVE_GATED approval and emergency controls., _record(), ApprovalRecord, ApprovalStatus, ApprovalStore (+29 more)
+Nodes (55): ExecutionQualityRecord, PostTradeContract, Post-trade analysis contracts (Phase 7, architecture §15 "Post-trade learning…, Independent quality evaluation of one signal producer (INV-16). ``producer`` is…, Independent evaluation of the Risk Decision quality. ``limits_respected``…, Independent evaluation of execution quality (costs, slippage)., Frozen, closed, schema-version-pinned base for post-trade records., Canonical per-trade metrics (architecture §17). Semantics (documented in… (+47 more)
 
-### Community 36 - "quality.py"
-Cohesion: 0.17
-Nodes (11): DataQualityEngine, _next_bar_time(), datetime, timedelta, QualityOutcome, Silver-layer data quality: flags, duplicate handling, missing-bar detection.…, Deterministic duplicate resolution. Key: ``(instrument_id, timeframe,…, Interior gaps per (instrument, timeframe) against the bar grid. (+3 more)
-
-### Community 37 - "stages/posttrade.py"
-Cohesion: 0.05
-Nodes (65): PosttradeStage, Any, datetime, UUID, Post-trade stage: closed-and-reconciled trade → full postmortem (Phase 7).…, Idempotently finish lifecycle state after canonical persistence., Certify the trade is definitively closed-and-reconciled (INV-6)., The entry-side lifecycle matched by position id (INV-6 audit path). (+57 more)
-
-### Community 38 - "test_memory.py"
+### Community 35 - "OperatingMode"
 Cohesion: 0.08
-Nodes (31): OntologyError, An entity type or relation is not part of the frozen trading ontology., assert_known_entities(), assert_known_relations(), EntityType, _extraction_model(), BaseModel, StrEnum (+23 more)
+Nodes (45): build_live_gated_router(), DecisionBody, KillBody, APIRouter, BaseModel, OperatorResolver, Authenticated operator API for LIVE_GATED approval and emergency controls., Build the mutation API; callers must inject a real authentication dependency. (+37 more)
 
-### Community 39 - "worker_helpers.py"
+### Community 36 - "Bar"
+Cohesion: 0.14
+Nodes (15): DataQualityEngine, _next_bar_time(), datetime, timedelta, QualityOutcome, Silver-layer data quality: flags, duplicate handling, missing-bar detection.…, Deterministic duplicate resolution. Key: ``(instrument_id, timeframe,…, Interior gaps per (instrument, timeframe) against the bar grid. (+7 more)
+
+### Community 37 - "PostTradeReviewRecord"
+Cohesion: 0.09
+Nodes (21): PostTradeReviewRecord, model_validator, Self, Persisted canonical-metrics row (PostgreSQL, INV-10). One row per closed-and-…, PostgresPostTradeStore, PostTradeStore, Any, Protocol (+13 more)
+
+### Community 38 - "schemas/memory.py"
+Cohesion: 0.10
+Nodes (26): OntologyError, An entity type or relation is not part of the frozen trading ontology., assert_known_entities(), assert_known_relations(), _extraction_model(), BaseModel, Frozen trading ontology (ADR-0008, architecture §11). Seventeen entity types…, Ontology gate for a whole episode: every entity type and relation must be known. (+18 more)
+
+### Community 39 - "worker/cli.py"
 Cohesion: 0.05
-Nodes (55): PaperVenueConfig, BaseModel, Venue parameters for the Nautilus paper simulator. ``slippage_*`` and…, build_default_config(), _instrument(), main(), _parser(), ArgumentParser (+47 more)
+Nodes (57): PaperVenueConfig, BaseModel, Venue parameters for the Nautilus paper simulator. ``slippage_*`` and…, build_default_config(), _instrument(), main(), _parser(), ArgumentParser (+49 more)
 
 ### Community 40 - "test_paper_ledger.py"
-Cohesion: 0.15
-Nodes (13): _CrashOnAckBus, Simulates a worker killed after processing but before the ACK landed., account_record(), build_ledger(), make_fill_report(), make_intent(), Decimal, PaperLedger tests: netting, closes, outcomes, account/portfolio views. (+5 more)
+Cohesion: 0.19
+Nodes (11): account_record(), build_ledger(), make_fill_report(), make_intent(), Decimal, PaperLedger tests: netting, closes, outcomes, account/portfolio views., Minimal execution-store double recording only positions., _RecordingExecutionStore (+3 more)
 
-### Community 41 - "MinioArtifactStore"
-Cohesion: 0.14
-Nodes (7): ArtifactStore, MinioArtifactStore, Any, Protocol, Object-storage boundary for post-trade artifacts., S3-compatible artifact storage backed by MinIO (ADR-0011)., TestMinioArtifacts
+### Community 41 - "test_posttrade_integration.py"
+Cohesion: 0.09
+Nodes (22): artifact_key(), ArtifactStore, build_artifact(), MinioArtifactStore, Any, datetime, Protocol, UUID (+14 more)
 
 ### Community 42 - "test_client.py"
-Cohesion: 0.10
-Nodes (34): LiveTradingAgentsAdapter, Strict adapter boundary around ``TradingAgentsGraph.propagate``. Lifecycle per…, AdapterConfig, Explicit configuration for one adapter instance. Model choice is mandatory —…, fake_state(), FakeGraph, FakeResponse, Any (+26 more)
+Cohesion: 0.12
+Nodes (30): LiveTradingAgentsAdapter, Strict adapter boundary around ``TradingAgentsGraph.propagate``. Lifecycle per…, AdapterConfig, Explicit configuration for one adapter instance. Model choice is mandatory —…, fake_state(), FakeGraph, FakeResponse, Any (+22 more)
 
 ### Community 43 - "NautilusPaperExecutor"
-Cohesion: 0.07
-Nodes (25): Venue, Authoritative balances as tracked by the Nautilus venue (for cross-checks)., ConfigurableSlippageFillModel, NotionalCommissionFeeModel, Decimal, Realistic commission: ``rate_bps`` of trade notional per fill, floored. For FX…, Deterministic slippage by shifting the simulated order book away from best.…, The quote the most recent fill simulation used (for slippage accounting). (+17 more)
+Cohesion: 0.05
+Nodes (30): ConfigurableSlippageFillModel, NotionalCommissionFeeModel, Decimal, Realistic commission: ``rate_bps`` of trade notional per fill, floored. For FX…, Deterministic slippage by shifting the simulated order book away from best.…, The quote the most recent fill simulation used (for slippage accounting)., Return a book whose only levels sit ``ticks`` away from the touch., NautilusPaperExecutor (+22 more)
 
 ### Community 44 - "NautilusRouterStrategy"
 Cohesion: 0.10
@@ -565,165 +579,165 @@ Nodes (15): NautilusRouterStrategy, datetime, Decimal, OrderAccepted, OrderDenie
 Cohesion: 0.17
 Nodes (23): PromotionAction, Strategy lifecycle (INV-8, architecture §16). There is no ``RD-Agent -> LIVE``…, Outcome of a promotion review (INV-8). Approval is never an LLM action., StrategyState, PromotionDecision, Strategy promotion contract: ``PromotionDecision`` (INV-8, Phase 10+).…, PaperEligibility, The only deterministic check used before requesting PAPER promotion. (+15 more)
 
-### Community 46 - "LiveAutoRegistry"
-Cohesion: 0.05
-Nodes (36): LiveAutoViolation, RuntimeError, An automated order or a governance action violates LIVE_AUTO policy., Fail closed unless the capability is on AND every limit is explicit., LIVE_AUTO governance (Phase 11): deterministic, operator-controlled promotion…, _decode_strategy(), _encode_strategy(), PostgresLiveAutoStore (+28 more)
+### Community 46 - "LiveAutoStrategyRecord"
+Cohesion: 0.08
+Nodes (19): LIVE_AUTO governance (Phase 11): deterministic, operator-controlled promotion…, _decode_strategy(), _encode_strategy(), PostgresLiveAutoStore, Any, datetime, Decimal, UUID (+11 more)
 
 ### Community 47 - "MemoryRecord"
-Cohesion: 0.07
-Nodes (24): UUID, Known envelopes (test/debug surface)., LayerPolicyError, A tier policy parameter is inconsistent (e.g. overlapping reach windows)., MemoryRecord, One stored memory item: the ontology content plus the temporal envelope., Persist one memory record (idempotent per ``episode_id``)., Idempotent write keyed by ``episode_id`` (replays overwrite safely). (+16 more)
+Cohesion: 0.06
+Nodes (37): LayerPolicyError, A tier policy parameter is inconsistent (e.g. overlapping reach windows)., Graphiti adapter — Phase 3, temporal trading memory (ADR-0008, INV-3, INV-11).…, Domain-facing temporal memory (ADR-0008, INV-3) — the only query path.…, EntityType, StrEnum, The seventeen entity types of the trading ontology (architecture §11)., The eleven relations of the trading ontology (architecture §11). (+29 more)
 
 ### Community 48 - "test_command_center_api.py"
-Cohesion: 0.06
-Nodes (33): SQLAlchemy Core table definitions for the market data catalog. PostgreSQL is…, build_command_center_router(), CommandCenterDataSource, _json(), PostgresCommandCenterDataSource, Any, APIRouter, datetime (+25 more)
+Cohesion: 0.09
+Nodes (18): ensure_psycopg_dsn(), Force the psycopg (v3) SQLAlchemy dialect on PostgreSQL DSNs. The project pins…, client(), Connection, Engine, Any, datetime, TestClient (+10 more)
 
-### Community 49 - "calibration.py"
+### Community 49 - "BaseContractModel"
+Cohesion: 0.07
+Nodes (47): BaseContractModel, BaseModel, Common configuration shared by all contracts and sub-models., Calibrator, DataScope, datetime, Calibration: learn fusion weights and confidence maps from labeled history…, All compositions of ``units`` into ``n_components`` non-negative parts, in… (+39 more)
+
+### Community 50 - "SystemClock"
 Cohesion: 0.05
-Nodes (57): calibrate(), Calibrator, DataScope, Any, datetime, Calibration: learn fusion weights and confidence maps from labeled history…, All compositions of ``units`` into ``n_components`` non-negative parts, in…, Deterministic calibration from labeled cases (INV-16). (+49 more)
-
-### Community 50 - "risk/engine.py"
-Cohesion: 0.17
-Nodes (17): ValueError, Raised when engine inputs are structurally inconsistent. A hard ``REJECT``…, RiskEngineInputError, compute_inputs_hash(), _dedupe(), evaluate_proposal(), AccountState, datetime (+9 more)
+Nodes (49): Mt4Endpoints, BaseModel, The three ZeroMQ channel addresses. Defaults are private loopback. Production…, NoSnapshotError, Decimal, RuntimeError, Raised when no point-in-time snapshot is available for a cycle., Snapshots from the sealed market-data repository (INV-3 choke point). (+41 more)
 
 ### Community 51 - "domain/__init__.py"
-Cohesion: 0.11
-Nodes (17): is_live_mode(), True only for the two modes that send real orders to a broker venue., Domain layer: canonical enums and state machines (architecture §5-§18)., assert_valid_order_transition(), assert_valid_strategy_transition(), InvalidStateTransition, is_valid_order_transition(), is_valid_strategy_transition() (+9 more)
+Cohesion: 0.13
+Nodes (15): Domain layer: canonical enums and state machines (architecture §5-§18)., assert_valid_order_transition(), assert_valid_strategy_transition(), InvalidStateTransition, is_valid_order_transition(), is_valid_strategy_transition(), ValueError, Explicit state machines for the canonical lifecycles. The machines here are the… (+7 more)
 
 ### Community 52 - "EmergencyControlState"
-Cohesion: 0.05
-Nodes (31): build_provenance(), DeadManSwitchState, EmergencyControlState, OperationalAlert, model_validator, Self, Operational alert raised on SAFE_MODE and emergency-control transitions (§31)., Persisted state of one emergency control (INV-7, architecture §10). Keyed by… (+23 more)
+Cohesion: 0.08
+Nodes (18): DeadManSwitchState, EmergencyControlState, model_validator, Self, Persisted state of one emergency control (INV-7, architecture §10). Keyed by…, Persisted dead man switch state (singleton row in PostgreSQL).…, _control_values(), _dead_man_values() (+10 more)
 
 ### Community 53 - "make_bar"
-Cohesion: 0.14
-Nodes (12): parquet_to_bars(), Deserialize bars from Parquet bytes., DataQualityFlag, Row-level quality flags attached in the silver layer., make_bar(), _engine(), Unit tests: quality flags, duplicate handling, missing-bar detection., TestDuplicates (+4 more)
+Cohesion: 0.17
+Nodes (10): datetime, Derive the point-in-time snapshot for the latest bar visible at ``as_of``.…, snapshot_from_bar(), make_bar(), _engine(), Unit tests: quality flags, duplicate handling, missing-bar detection., TestDuplicates, TestFlags (+2 more)
 
 ### Community 54 - "App.tsx"
 Cohesion: 0.11
 Nodes (23): get(), App(), CollectionPage(), Icon, money(), OverviewPage(), RecordSummary(), RiskPage() (+15 more)
 
-### Community 55 - "_sizing_probe.py"
-Cohesion: 0.17
-Nodes (17): AccountState, Risk & Policy contracts consumed by the deterministic Risk Engine (INV-4).…, Point-in-time account state (INV-3). All fields are Decimals — never floats., compute_size_plan(), _currency_legs(), floor_to_step(), _max_currency_notional(), AccountState (+9 more)
+### Community 55 - "market_data/pipeline.py"
+Cohesion: 0.09
+Nodes (32): bar_row_key(), Deterministic ordering key for bars., _group_bars(), MarketDataPipeline, _merge_gold_rows(), datetime, Medallion ingestion pipeline: RAW → BRONZE → SILVER → GOLD. -…, Build one immutable gold dataset version from all silver runs. Deterministic by… (+24 more)
 
-### Community 57 - "MarketSnapshot"
-Cohesion: 0.08
+### Community 56 - "test_invariants.py"
+Cohesion: 0.11
+Nodes (10): _effective_budget(), Decimal, parametrize, Critical invariants of the Risk Engine (DoD: no tested path bypasses limits). -…, The three blocking invariants: daily loss, stale data, disabled strategy., approved risk <= policy risk — for every decision type, exactly., approved quantity <= configured maximum (policy and instrument)., TestApprovedQuantityInvariant (+2 more)
+
+### Community 57 - "LLMSignal"
+Cohesion: 0.10
 Nodes (36): EvalReport, evaluate(), evaluate_all(), fixture_to_mock_scenario(), fixture_to_request(), fixture_to_snapshot(), load_scenarios(), BaseModel (+28 more)
 
 ### Community 58 - "ScriptedRedis"
-Cohesion: 0.11
-Nodes (9): OperationalError, operational_error(), Any, datetime, Exception, UUID, A realistic PostgreSQL connectivity failure (server restart window)., Minimal faithful ``RedisConnection`` double for one RedisStreamBus. Streams and… (+1 more)
+Cohesion: 0.13
+Nodes (7): OperationalError, operational_error(), Any, Exception, A realistic PostgreSQL connectivity failure (server restart window)., Minimal faithful ``RedisConnection`` double for one RedisStreamBus. Streams and…, ScriptedRedis
 
 ### Community 59 - "evaluate_cases"
 Cohesion: 0.29
 Nodes (8): evaluate_cases(), datetime, Compare quant_only / llm_only / quant_plus_llm / baseline on ``cases``.…, _case(), make_config(), datetime, Research evaluation: Quant-only vs LLM-only vs Quant+LLM vs baseline., TestMandatoryComparison
 
 ### Community 60 - "CalibrationStore"
-Cohesion: 0.12
-Nodes (14): CalibrationArtifact, Complete, versioned output of a calibration run. Everything needed to reproduce…, EvaluationReport, Full comparison of the mandatory configurations on one case set., CalibrationStore, Any, Path, UUID (+6 more)
+Cohesion: 0.11
+Nodes (18): calibrate(), CalibrationArtifact, Any, Convenience wrapper around :class:`Calibrator`., Complete, versioned output of a calibration run. Everything needed to reproduce…, EvaluationReport, Full comparison of the mandatory configurations on one case set., CalibrationStore (+10 more)
 
 ### Community 61 - "make_risk_policy"
-Cohesion: 0.19
-Nodes (5): make_risk_policy(), datetime, TestAccountState, TestRiskDecisionResize, TestRiskPolicy
+Cohesion: 0.17
+Nodes (8): make_account_state(), make_risk_policy(), AccountState, datetime, Validation tests for the Risk & Policy contracts and the RESIZE decision shape., TestAccountState, TestRiskDecisionResize, TestRiskPolicy
 
 ### Community 62 - "Target Architecture — Autonomous Quantitative Trading & Research Platform"
 Cohesion: 0.07
 Nodes (28): 10. Point-in-Time rule (INV-3), 11. Data architecture (INV-10), 12. Event bus (INV-15), 13. Canonical domain objects (INV-2), 14. Signal Fusion (INV-16), 15. Post-trade learning loop, 16. Strategy lifecycle (INV-8), 17. LLM evaluation (+20 more)
 
 ### Community 63 - "Settings"
-Cohesion: 0.05
-Nodes (52): BaseSettings, field_validator, Runtime configuration (pydantic-settings). Environment variables use the…, Live-mode secrets must be at least 32 characters: an empty or weak operator…, Settings, assert_llm_process_cannot_execute(), ExecutionBoundaryViolation, RuntimeError (+44 more)
+Cohesion: 0.10
+Nodes (29): create_app(), CheckFunc, FastAPI, OperatorResolver, BaseSettings, field_validator, Live-mode secrets must be at least 32 characters: an empty or weak operator…, Settings (+21 more)
 
-### Community 64 - "test_workflows.py"
-Cohesion: 0.18
-Nodes (9): FailingQlib, FakeQlib, FakeRDAgent, MemoryStore, MemoryTracker, Any, Path, test_all_seven_workflow_stages_produce_canonical_outputs() (+1 more)
+### Community 64 - "EmergencyController"
+Cohesion: 0.08
+Nodes (21): build_emergency_router(), APIRouter, OperatorResolver, build_provenance(), Convenience provenance builder shared by the execution engine., EmergencyController, Any, datetime (+13 more)
 
 ### Community 65 - "architecture.md"
 Cohesion: 0.07
 Nodes (27): 12. Regla Point-in-Time, 14. Event Bus, 15. Objetos de dominio canónicos, 16. Signal Fusion Engine, 17. Post-trade learning loop, 18. Strategy Factory, 1. Visión final, 20. Métricas obligatorias (+19 more)
 
-### Community 66 - "make_memory_episode"
-Cohesion: 0.07
-Nodes (24): The temporal envelope is impossible: event_time <= available_time <=…, TemporalOrderingError, Write one episode into memory. ``available_time`` is the moment the system…, model_validator, Self, Map a domain :class:`MemoryEpisode` to the stored envelope. ``source`` /…, Map the stored record back to the domain contract., MemoryEpisode (+16 more)
+### Community 66 - "build_memory"
+Cohesion: 0.14
+Nodes (10): build_memory(), datetime, Test helpers for the graphiti adapter (mirrors ta_test_helpers.py)., A ready-to-query :class:`adapters.graphiti.memory.Memory` over the in-memory…, Memory service tests: point-in-time retrieval, invalidation, contradictions,…, test_search_returns_domain_episodes(), TestContradictions, TestHistoricalQueries (+2 more)
 
 ### Community 67 - "risk_helpers.py"
-Cohesion: 0.21
-Nodes (28): AssetClass, build_account(), build_instrument(), build_policy(), build_portfolio(), build_portfolio_with_exposure(), build_proposal(), build_snapshot() (+20 more)
+Cohesion: 0.14
+Nodes (32): AssetClass, PortfolioExposure, Pre-computed aggregate exposures of the current portfolio (engines/portfolio).…, build_account(), build_instrument(), build_policy(), build_portfolio(), build_portfolio_with_exposure() (+24 more)
 
 ### Community 68 - "5. Scenario playbooks"
 Cohesion: 0.12
 Nodes (16): 1. Objectives, 2. What is already built in, 3. Backups, 4. Restore, 5.1 Core crash mid-submit, 5.2 MT4 / broker unavailable, 5.3 Material divergence (unexpected broker position / quantity mismatch), 5.4 Postgres loss (volume corruption / deleted) (+8 more)
 
-### Community 69 - "OperatingMode"
-Cohesion: 0.21
-Nodes (18): OperatingMode, The only five operating modes (INV-8, architecture §5)., InMemoryApprovalStore, Thread-safe test/dev store. Production wiring should use transactional storage., _gate(), _price(), _service(), test_expired_approval_never_reaches_mt4() (+10 more)
+### Community 69 - "stages/posttrade.py"
+Cohesion: 0.13
+Nodes (25): ensure_secret_free(), Reject secret-like keys or credential values before a vault write., PostTradeReconciliationPendingError, PosttradeStage, Any, datetime, RuntimeError, UUID (+17 more)
 
-### Community 70 - "worker/ledger.py"
-Cohesion: 0.17
-Nodes (12): FillApplication, Paper ledger: authoritative position & account accounting for the PAPER venue…, Append one observed price point to the open position's path. Bounded…, The observed path for a (possibly closed) position., Outcome of applying one fill report to the ledger., _adverse_extreme(), _favorable_extreme(), PricePoint (+4 more)
+### Community 70 - "KillScope"
+Cohesion: 0.10
+Nodes (17): ApprovalStatus, ApprovalStore, KillScope, _decode(), _encode(), PostgresApprovalStore, Any, datetime (+9 more)
 
-### Community 71 - "ConnectionMonitor"
-Cohesion: 0.20
-Nodes (8): ConnectionMonitor, datetime, Tracks bridge liveness from the heartbeat stream (clock-injected)., ZeroMQ transport + connection health tests (no MetaTrader, no docker)., REQ/REP over inproc in one context — the command channel contract., test_connection_monitor_transitions(), test_inproc_req_rep_roundtrip(), test_monitor_rejects_bad_thresholds()
+### Community 71 - "signal_fusion/fusion.py"
+Cohesion: 0.08
+Nodes (31): DisagreementRecord, FusedSignal, model_validator, Self, Signal Fusion output (INV-16). Weights derive from historical calibration,…, One recorded conflict between directional inputs and the policy applied…, FusionConfigurationError, FusionError (+23 more)
 
 ### Community 72 - "PositionSnapshot"
 Cohesion: 0.11
 Nodes (13): _OpenPosition, PositionLedger, Decimal, OrderFilled, PositionChanged, PositionClosed, PositionOpened, Account-currency equity: quote cash + base cash at mid + unrealized. (+5 more)
 
-### Community 73 - "DomainObject"
-Cohesion: 0.04
-Nodes (69): build_domain_event(), deserialize_event(), Any, datetime, UUID, Envelope construction, serialization and validation (INV-15)., Build a standard envelope around a validated canonical payload. The payload…, Deterministic UTF-8 bytes for the event bus. (+61 more)
+### Community 73 - "schemas/__init__.py"
+Cohesion: 0.07
+Nodes (30): EventRegistry, ValueError, Event registry: canonical event names → payload contract classes (architecture…, Raised when an event name has no registered payload contract., Immutable name → payload contract registry used by producers and consumers., UnknownEventError, DomainObject, Any (+22 more)
 
 ### Community 74 - "32. Roadmap definitivo"
 Cohesion: 0.08
 Nodes (26): 32. Roadmap definitivo, Definition of Done, Definition of Done, Definition of Done, Definition of Done, Definition of Done, Definition of Done, Definition of Done (+18 more)
 
-### Community 75 - "Mt4ExecutionClient"
-Cohesion: 0.04
-Nodes (107): BrokerConfig, BaseModel, Configuration of the simulated venue., build_parser(), _collect_events(), main(), ArgumentParser, Command-line entrypoints for the MT4 execution protocol (Phase 6). - ``run`` —… (+99 more)
+### Community 75 - "OrderType"
+Cohesion: 0.06
+Nodes (49): build_parser(), _collect_events(), main(), ArgumentParser, Command-line entrypoints for the MT4 execution protocol (Phase 6). - ``run`` —…, Full lifecycle against the emulator over real loopback ZeroMQ sockets., run_emulator(), run_smoke() (+41 more)
 
-### Community 76 - "Instrument"
-Cohesion: 0.18
-Nodes (6): _instrument_from_row(), Any, Instrument, model_validator, Self, Static description of a tradable instrument (symbol rules, lot rules).
+### Community 76 - "factories.py"
+Cohesion: 0.25
+Nodes (32): make_dead_man_switch_state(), make_domain_event(), make_emergency_control_state(), make_emergency_event(), make_execution_quality(), make_execution_report(), make_experiment_run(), make_factor_candidate() (+24 more)
 
 ### Community 77 - "TokenUsageCollector"
-Cohesion: 0.17
-Nodes (9): Any, Duck-typed LangChain callback handler accumulating token usage. Deliberately…, Called by LangChain after each LLM generation completes., Trace the real provider invocation without exporting prompt contents., LangChain callback: start a Langfuse tool observation., Run propagate in a worker thread under the adapter timeout budget. Note: a…, TokenUsageCollector, BaseException (+1 more)
+Cohesion: 0.12
+Nodes (13): Any, datetime, UUID, Duck-typed LangChain callback handler accumulating token usage. Deliberately…, Called by LangChain after each LLM generation completes., Trace the real provider invocation without exporting prompt contents., LangChain callback: start a Langfuse tool observation., Execute the upstream committee for ``request`` and return a signal. Fails… (+5 more)
 
-### Community 78 - "._require_calibrated_version"
-Cohesion: 0.47
-Nodes (3): model_validator, Self, INV-16: weights must derive from historical calibration. A config that never…
+### Community 78 - "FusionConfig"
+Cohesion: 0.09
+Nodes (17): paper_fusion_config(), Default calibrated fusion config for the paper pipeline. Equal weights over the…, _default_fusion(), ComponentWeights, FusionConfig, model_validator, Self, Deterministic fusion configuration. - ``default_weights``: calibrated weights… (+9 more)
 
 ### Community 79 - "redact"
 Cohesion: 0.11
 Nodes (18): Security primitives for trust-zone enforcement (architecture §29, ADR-0025). -…, _attach_filter(), install_redacting_logging(), Log redaction — secrets must never reach logs (architecture §29, ADR-0025).…, Return ``text`` with every known secret pattern masked (``None`` → ``""``)., Masks secret patterns on the record itself, before any handler renders.…, Formatter that masks secret patterns (including exception text)., Install redaction process-wide: filter + redacting std handler. Idempotent… (+10 more)
 
-### Community 80 - "backtest/conftest.py"
-Cohesion: 0.09
-Nodes (34): build_config(), main(), Deterministic backtest CLI: prints the reproducibility fingerprints. Usage: uv…, BacktestConfig, BaselineSmaConfig, CommissionConfig, BaseModel, datetime (+26 more)
+### Community 80 - "nautilus/__init__.py"
+Cohesion: 0.10
+Nodes (39): build_config(), main(), Deterministic backtest CLI: prints the reproducibility fingerprints. Usage: uv…, BacktestConfig, BaselineSmaConfig, CommissionConfig, BaseModel, datetime (+31 more)
 
 ### Community 81 - "nautilus/engine.py"
-Cohesion: 0.16
-Nodes (23): code_sha(), Decimal, The BACKTEST runner: Nautilus ``BacktestEngine`` + virtual clock + domain…, Git HEAD SHA of the repository, or the adapter version outside a repo. The code…, NautilusTrader adapter — Phase 4, deterministic backtest/paper venue…, compute_metrics(), EquityPoint, _max_drawdown_pct() (+15 more)
+Cohesion: 0.13
+Nodes (24): code_sha(), Decimal, Venue, The BACKTEST runner: Nautilus ``BacktestEngine`` + virtual clock + domain…, Authoritative balances as tracked by the Nautilus venue (for cross-checks)., Git HEAD SHA of the repository, or the adapter version outside a repo. The code…, compute_metrics(), EquityPoint (+16 more)
 
 ### Community 82 - "compilerOptions"
 Cohesion: 0.08
 Nodes (23): compilerOptions, allowJs, allowSyntheticDefaultImports, esModuleInterop, forceConsistentCasingInFileNames, isolatedModules, jsx, lib (+15 more)
 
-### Community 83 - "test_execution_boundary.py"
-Cohesion: 0.33
-Nodes (7): assert_emergency_closure_matches_positions(), An emergency intent may only close a known open position (ADR-0025).…, make_closure(), make_position(), Decimal, Execution-boundary hardening (ADR-0025): emergency closures and order mutations…, TestEmergencyClosureMustMatchOpenPosition
+### Community 83 - "OrderState"
+Cohesion: 0.26
+Nodes (30): DiscrepancyCode, OrderState, Canonical order lifecycle (INV-6, architecture §8)., Broker reconciliation discrepancy codes (INV-6, architecture §9). Severity is…, get_order(), make_broker_view(), make_venue_view_position(), _live_order() (+22 more)
 
-### Community 84 - "compute_trade_metrics"
-Cohesion: 0.38
-Nodes (6): compute_trade_metrics(), MetricsInput, Derive the canonical :class:`TradeMetrics` block for one closed trade., Everything the metric computation reads (pure inputs, no IO)., long_outcome(), TestComputeMetrics
+### Community 84 - "test_versioning.py"
+Cohesion: 0.12
+Nodes (26): deserialize_event(), Any, Deserialize and fully validate an envelope (including its payload contract).…, Event layer: registry, payload versioning, standard envelope (INV-15)., _market_snapshot_0100_to_100(), _market_snapshot_090_to_0100(), Any, ValueError (+18 more)
 
 ### Community 85 - "strategy.py"
-Cohesion: 0.12
-Nodes (23): CurrencyPair, BaselineSmaStrategy, DomainStrategy, datetime, Decimal, Protocol, Domain-side strategy contract and the minimal deterministic baseline. The…, What a domain strategy may see at one bar (point-in-time, INV-3). Nothing… (+15 more)
-
-### Community 86 - "PortfolioState"
-Cohesion: 0.22
-Nodes (7): Portfolio view after the proposed exit: the closing instrument is excluded from…, PortfolioState, model_validator, Self, Point-in-time portfolio state: open positions, pending orders, exposure., _max_orders_reached(), _max_positions_reached()
+Cohesion: 0.19
+Nodes (18): BaselineSmaStrategy, datetime, Decimal, Domain-side strategy contract and the minimal deterministic baseline. The…, What a domain strategy may see at one bar (point-in-time, INV-3). Nothing…, Minimal deterministic baseline: SMA crossover, long-only, market orders. - LONG…, StrategyContext, _config() (+10 more)
 
 ### Community 87 - "Agent details"
 Cohesion: 0.10
@@ -733,85 +747,81 @@ Nodes (19): Agent details, Agent index, AI Engineering Team Architecture — Ope
 Cohesion: 0.10
 Nodes (19): 1. Snapshot facts (repository evidence), 2. Complete repository inventory, 3.10 Tests, 3.11 Configuration, 3.12 Secrets handling, 3.1 Existing trading code, 3.2 Experimental code, 3.3 Duplicated code (+11 more)
 
-### Community 89 - "test_resize.py"
-Cohesion: 0.13
-Nodes (6): _portfolio(), Decimal, RESIZE paths: the engine reduces the quantity to the binding soft limit. The…, TestExposureResize, TestLeverageMarginResize, TestRiskBudgetResize
+### Community 89 - "TestExposureResize"
+Cohesion: 0.31
+Nodes (3): _portfolio(), Decimal, TestExposureResize
 
 ### Community 90 - "test_live_infra_restart.py"
 Cohesion: 0.32
 Nodes (9): _compose(), _docker_available(), live_chaos(), _postgres_up(), fixture, Real container restarts (docker-gated; opt-in). These scenarios actually…, settings(), TestLiveRestarts (+1 more)
 
 ### Community 91 - "test_registry.py"
-Cohesion: 0.23
-Nodes (27): LiveAutoConfig, decision_for(), enabled_config(), intent_for(), make_registry(), price(), promote(), datetime (+19 more)
+Cohesion: 0.28
+Nodes (25): decision_for(), enabled_config(), intent_for(), make_registry(), price(), promote(), datetime, Decimal (+17 more)
 
-### Community 92 - "GraphitiConfig"
-Cohesion: 0.33
-Nodes (3): GraphitiConfig, Connection settings for the live Graphiti-over-FalkorDB store., TestSearchWindowAndConfig
+### Community 92 - "LiveAutoRegistry"
+Cohesion: 0.14
+Nodes (15): LiveAutoViolation, RuntimeError, An automated order or a governance action violates LIVE_AUTO policy., _audit_metadata(), LiveAutoRegistry, Any, Normalize values into JSON-serializable audit metadata., Deterministic governance authority for LIVE_AUTO execution. (+7 more)
 
 ### Community 93 - "5. Controls"
 Cohesion: 0.09
 Nodes (22): 1. Trust zones, 2. Assets, 3. Threat actors, 4. Threat register, 5. Controls, 6. Definition of Done — traceability, 7. Residual risks, C10 — Emergency controls (INV-7) (+14 more)
-
-### Community 94 - "RiskPolicy"
-Cohesion: 0.33
-Nodes (5): Decimal, field_validator, Versioned risk policy. Every numeric limit is explicit — no implicit defaults.…, RiskPolicy, _spread_too_high()
 
 ### Community 95 - "Architecture Invariants"
 Cohesion: 0.11
 Nodes (17): Architecture Invariants, INV-10 — Data stores are separated by purpose, INV-11 — Graphify ≠ Graphiti, INV-12 — Frozen decisions require ADRs, INV-13 — Two runtimes, never merged, INV-14 — Dependencies are pinned, INV-15 — Domain events use the standard envelope, INV-16 — Signal Fusion weights are calibrated, not arbitrary (+9 more)
 
 ### Community 96 - "VirtualClock"
+Cohesion: 0.06
+Nodes (57): MockTradingAgentsAdapter, Scenario-driven stand-in for the upstream committee. Scenario lookup: exact…, Protocol, SnapshotSource, Deterministic simulation clock. Time only advances through explicit…, VirtualClock, get_settings(), Process-wide settings singleton. (+49 more)
+
+### Community 97 - "OperationalMetrics"
 Cohesion: 0.05
-Nodes (64): Protocol, SnapshotSource, PostTradeReconciliationPendingError, RuntimeError, The trade is not yet definitively closed-and-reconciled (INV-6). Raised on…, Deterministic simulation clock. Time only advances through explicit…, VirtualClock, get_settings() (+56 more)
+Nodes (30): _tool_metric_name(), CollectorRegistry, Vendor-specific telemetry adapters with safe no-op defaults., OperationalMetrics, Bounded-cardinality Prometheus metrics for the trading runtime., Own all application metrics so tests can use an isolated registry., deterministic_trace_id(), LangfuseTracer (+22 more)
 
-### Community 97 - "LangfuseTracer"
-Cohesion: 0.08
-Nodes (21): Vendor-specific telemetry adapters with safe no-op defaults., deterministic_trace_id(), LangfuseTracer, NullObservation, Any, UUID, Langfuse v4 tracing correlated to the canonical domain ``trace_id``., Return the W3C 16-byte lowercase hexadecimal trace identifier. (+13 more)
+### Community 98 - "Instrument"
+Cohesion: 0.09
+Nodes (36): _instrument_from_row(), Any, DatasetConfig, Deterministic historical dataset: synthetic (seeded) or parquet replay., build_dataset(), Dataset, _hash_rows(), load_parquet_dataset() (+28 more)
 
-### Community 98 - "synthetic_dataset"
-Cohesion: 0.13
-Nodes (34): DatasetConfig, Deterministic historical dataset: synthetic (seeded) or parquet replay., Constant spread applied around each bar close when synthesizing quotes., SpreadConfig, build_dataset(), Dataset, _hash_rows(), load_parquet_dataset() (+26 more)
-
-### Community 99 - "test_posttrade_metrics.py"
-Cohesion: 0.20
-Nodes (8): direction_correct(), Signed move over entry in percent (LONG: up positive; SHORT: down positive)., A producer's stance vs the realized move. LONG is correct when the market rose,…, signed_return_pct(), long_winner_path(), Deterministic metric math for the post-trade learning loop (architecture §17)., TestDirectionCorrectness, TestSignedReturn
+### Community 99 - "Guía Completa de Instalación y Uso — OpenTrading"
+Cohesion: 0.07
+Nodes (26): 10.1 LIVE_GATED — aprobación humana por operación, 10.2 LIVE_AUTO — gobernanza determinista sin aprobación por operación, 10.3 Controles de emergencia y dead man switch (INV-7), 10. Modos LIVE_GATED y LIVE_AUTO (cuenta demo), 11. Quant R&D (fábrica de estrategias), 12. Observabilidad: métricas, trazas y paneles, 13. Operación diaria y recuperación, 14. Configuración de referencia (+18 more)
 
 ### Community 100 - "Operations Manual — OpenTrading"
 Cohesion: 0.18
 Nodes (10): 1. Operating modes (INV-8), 2. Daily runbook — development / staging, 3. Live operations (LIVE_GATED), 4. Emergency control system (INV-7), 5. Reconciliation (INV-6 — mandatory), 6. Monitoring & alerting, 7. Maintenance tasks, 8. Troubleshooting quick map (+2 more)
 
 ### Community 101 - "test_live_auto_api.py"
-Cohesion: 0.17
-Nodes (22): build_live_auto_router(), DemotionBody, PnlBody, PromotionBody, APIRouter, BaseModel, OperatorResolver, Authenticated operator API for LIVE_AUTO governance (Phase 11). Every mutation… (+14 more)
+Cohesion: 0.20
+Nodes (17): LiveAutoConfig, Configuration for LIVE_AUTO governance (Phase 11). ``LiveAutoConfig`` mirrors…, Fail closed unless the capability is on AND every limit is explicit., test_disabled_or_partial_config_fails_closed_on_runtime_wiring(), app_with(), authenticated_operator(), make_registry(), promotion_body() (+9 more)
 
 ### Community 102 - "Known Limitations — OpenTrading"
 Cohesion: 0.20
 Nodes (9): Documentation & repository, Execution & venues, Infrastructure & observability, Known Limitations — OpenTrading, Performance, Resolution policy, Risk & fusion, Security (+1 more)
 
-### Community 103 - "QlibAdapter"
-Cohesion: 0.21
-Nodes (8): EvaluationResult, Any, BaseModel, Protocol, QlibAdapter, QlibBackend, Qlib result mapper; Qlib classes never enter the canonical domain., Typed Qlib evaluation boundary for the Python 3.11 research runtime.
+### Community 103 - "EvaluationResult"
+Cohesion: 0.18
+Nodes (7): EvaluationResult, Any, BaseModel, Protocol, QlibBackend, Qlib result mapper; Qlib classes never enter the canonical domain., Typed Qlib evaluation boundary for the Python 3.11 research runtime.
 
 ### Community 104 - "_build_platform_with_poison"
 Cohesion: 0.21
 Nodes (6): _build_platform_with_poison(), Six M1 bars at 10:00…10:05 plus deliberately planted future information: - a…, Absolute invariant: no returned bar has available_time > as_of., bars/snapshot require as_of; there is no bypass method., TestApiLeakage, TestRepositoryLeakage
 
 ### Community 105 - "StageWorker"
-Cohesion: 0.10
-Nodes (12): Mirror an already-authoritative event (used by synchronous runs)., Reclaim stale PEL entries; dead-letter poisoned ones. Returns the reclaimed…, Dispatch one message; ACK on success, leave unacked on failure. Stages publish…, One pass: recover, then read+dispatch new messages. Returns (reclaimed,…, One consumer group: recovery loop + new-message loop (unattended)., StageWorker, Long-running unattended mode: scheduler + worker threads., Runs the autonomous PAPER pipeline, optionally forever. (+4 more)
+Cohesion: 0.06
+Nodes (21): MirroringEventBus, Any, Bus proxy that mirrors only after authoritative publish succeeds. Export errors…, Mirror an already-authoritative event (used by synchronous runs)., Reclaim stale PEL entries; dead-letter poisoned ones. Returns the reclaimed…, Dispatch one message; ACK on success, leave unacked on failure. Stages publish…, One pass: recover, then read+dispatch new messages. Returns (reclaimed,…, One consumer group: recovery loop + new-message loop (unattended). (+13 more)
 
 ### Community 106 - "OrderRejectionSim"
-Cohesion: 0.29
-Nodes (5): OrderRejectionSim, datetime, Decimal, Deterministic rejection rule chain evaluated per ``OrderIntent``., Return a rejection reason, or ``None`` when the order may proceed.
+Cohesion: 0.15
+Nodes (11): OrderRejectionSim, datetime, Decimal, Deterministic simulated-venue order rejection (ADR-0007: rejection simulation).…, Deterministic rejection rule chain evaluated per ``OrderIntent``., Return a rejection reason, or ``None`` when the order may proceed., CurrencyPair, DomainStrategy (+3 more)
 
 ### Community 107 - "NativeRDAgentQlibBackend"
 Cohesion: 0.26
 Nodes (4): NativeRDAgentQlibBackend, Any, Concrete bridge to RD-Agent 0.8.0's Qlib factor/model loops. All imports of…, Drive one official RD-Agent hypothesis/code/run cycle at a time.
 
-### Community 108 - "SignalDirection"
-Cohesion: 0.09
-Nodes (38): build_committee(), infer_stance(), parse_trader_action(), Read the Trader's BUY/HOLD/SELL action out of its rendered proposal., Deterministic, documented heuristic: net bullish/bearish token weight. Used…, Preserve analyst / researcher / trader / portfolio-manager evidence. The…, Translate a normalized upstream result into the canonical ``LLMSignal``.…, result_to_signal() (+30 more)
+### Community 108 - "signals.py"
+Cohesion: 0.19
+Nodes (14): CommitteeMember, Signal contracts: ``QuantSignal``, ``LLMSignal``, ``FusedSignal``., One analyst in the TradingAgents qualitative committee (Phase 2+)., _imports_in(), AST, Path, Boundary contract tests: TradingAgents can disappear entirely. These tests…, (node, module-name) for every import in a file, with module context. (+6 more)
 
 ### Community 109 - "Any"
 Cohesion: 0.44
@@ -829,13 +839,13 @@ Nodes (12): 10. Explicitly NOT implemented (phase gates), 11. Local verification
 Cohesion: 0.14
 Nodes (13): Architecture, Backups (operational notes), Definition of Done (this milestone), Development vs production, Files, Health checks, Migrations, Observability (+5 more)
 
-### Community 113 - "window_blind_store"
-Cohesion: 0.25
-Nodes (5): A backend that leaks everything — for defense-in-depth tests., window_blind_store(), Sweep as_of through the whole timeline against a backend that reports…, test_invariant_holds_for_every_as_of_in_a_sweep(), TestDefenseInDepth
+### Community 113 - "command_center.py"
+Cohesion: 0.16
+Nodes (14): SQLAlchemy Core table definitions for the market data catalog. PostgreSQL is…, build_command_center_router(), CommandCenterDataSource, _json(), PostgresCommandCenterDataSource, Any, APIRouter, datetime (+6 more)
 
-### Community 114 - "producers.py"
-Cohesion: 0.22
-Nodes (9): BaselineQuantProducer, _episode_stance(), MemoryContextProducer, datetime, UUID, Signal producers for the research stage (Phase 7). -…, Deterministic momentum quant signal from a single snapshot. ``strength`` scales…, Distills point-in-time memory episodes into a directional stance. Only episodes… (+1 more)
+### Community 114 - "MarketSnapshot"
+Cohesion: 0.12
+Nodes (17): BaselineQuantProducer, _episode_stance(), MemoryContextProducer, datetime, UUID, Signal producers for the research stage (Phase 7). -…, Deterministic momentum quant signal from a single snapshot. ``strength`` scales…, Distills point-in-time memory episodes into a directional stance. Only episodes… (+9 more)
 
 ### Community 115 - "Domain Glossary (OpenTrading)"
 Cohesion: 0.17
@@ -850,16 +860,20 @@ Cohesion: 0.17
 Nodes (11): Accessibility & Inclusion, Capabilities and Constraints, Evidence on Hand, Operating Context, Platform, Positioning, Product, Product Principles (+3 more)
 
 ### Community 118 - "NautilusBacktestRunner"
-Cohesion: 0.08
-Nodes (37): NautilusBacktestRunner, Runs one BACKTEST with the Nautilus simulated venue (virtual clock)., make_config(), A realistic cost-inclusive deterministic config; override any field., _fills(), Cost-model tests: commission, spread, slippage are real and applied (skill:…, test_commission_is_applied_per_fill(), test_partial_fill_status_never_claimed_for_single_fill_orders() (+29 more)
+Cohesion: 0.07
+Nodes (36): NautilusBacktestRunner, Runs one BACKTEST with the Nautilus simulated venue (virtual clock)., input_fingerprint(), _fills(), Cost-model tests: commission, spread, slippage are real and applied (skill:…, test_commission_is_applied_per_fill(), test_partial_fill_status_never_claimed_for_single_fill_orders(), test_slippage_applied_and_tracked() (+28 more)
+
+### Community 119 - "make_intent"
+Cohesion: 0.19
+Nodes (24): ExecutionDivergenceError, RuntimeError, A venue report contradicts authoritative state in a capital-relevant way., make_intent(), _candidate(), fixture, OrderStateApplier DoD tests: full canonical lifecycle, crash-restart state,…, A fresh engine over the same store sees exactly the persisted state. (+16 more)
 
 ### Community 120 - "SequenceTracker"
 Cohesion: 0.27
 Nodes (4): Record a newly accepted sequence (must equal expected)., Per-namespace last-accepted sequences (reconciliation payload)., Strict monotonic sequence validation per ``strategy_id`` namespace. Sequences…, SequenceTracker
 
-### Community 121 - "ensure_utc"
+### Community 121 - "infra_health.py"
 Cohesion: 0.10
-Nodes (12): datetime, Point-in-time truth: the system could know this item at ``moment`` only if it…, datetime, timedelta, Current time as timezone-aware UTC., Move forward by ``delta`` (strictly positive) and return the new time., Jump to ``moment``; moving backwards is refused (monotonic simulation time)., ensure_utc() (+4 more)
+Nodes (16): datetime, timedelta, Current time as timezone-aware UTC., Move forward by ``delta`` (strictly positive) and return the new time., Jump to ``moment``; moving backwards is refused (monotonic simulation time)., main(), probe_http(), probe_minio() (+8 more)
 
 ### Community 122 - "Task Routing Workflow"
 Cohesion: 0.18
@@ -945,17 +959,17 @@ Nodes (9): Controls, Decision assembly, Definition of Done, Denomination (ADR-00
 Cohesion: 0.20
 Nodes (9): Daily commands, Endpoints (dev), First-time setup, Market data API (Phase 1), Prerequisites, Runbook — Local Development, Running the API against the stack, Troubleshooting (+1 more)
 
-### Community 143 - "FakeGraph"
-Cohesion: 0.22
-Nodes (3): FakeGraph, Any, Upstream graph double: records add_episode calls, returns queued edges.
+### Community 143 - "_WindowBlindStore"
+Cohesion: 0.14
+Nodes (5): FakeGraph, Any, Deliberately broken backend: ignores the temporal window and returns every…, Upstream graph double: records add_episode calls, returns queued edges., _WindowBlindStore
 
 ### Community 144 - "19. Validation Factory"
 Cohesion: 0.22
 Nodes (9): 19. Validation Factory, Backtest básico, Monte Carlo, Multiple-testing protection, Out-of-sample, Purged/embargo validation, Regime testing, Sensitivity (+1 more)
 
-### Community 145 - "Bar"
-Cohesion: 0.06
-Nodes (48): DatasetNotFoundError, DatasetNotSealedError, DatasetSealedError, FutureDataLeakageError, InstrumentResolutionError, MarketDataError, Exception, Market data platform errors. Concrete error types so callers (pipeline,… (+40 more)
+### Community 145 - "MarketDataRepository"
+Cohesion: 0.11
+Nodes (16): MarketDataRepository, PointInTimeFilter, datetime, Bars of a sealed dataset visible at ``as_of`` (INV-3 filter applied).…, Point-in-time snapshot from the latest bar visible at ``as_of``. Returns…, The single INV-3 choke point. Dropping logic in exactly one place makes the…, Read-only query API over sealed gold dataset versions., build_market_data_router() (+8 more)
 
 ### Community 146 - ".ai — Canonical AI Engineering Layer (OpenTrading)"
 Cohesion: 0.25
@@ -1113,13 +1127,9 @@ Nodes (8): Encrypting / decrypting, One-time setup, Policy, Production compose, 
 Cohesion: 0.46
 Nodes (4): Any, model_validator, Self, _validate_lineage()
 
-### Community 185 - "brier_error"
-Cohesion: 0.43
-Nodes (3): brier_error(), Per-observation calibration error ``(confidence - hit)²``. The proper-scoring-…, TestBrierError
-
-### Community 186 - "allows_order_submission"
-Cohesion: 0.31
-Nodes (4): allows_order_submission(), True when the pipeline may submit ``OrderIntent``s to a venue. RESEARCH: no…, model_validator, Self
+### Community 185 - "test_posttrade_notes.py"
+Cohesion: 0.13
+Nodes (18): FileVaultWriter, Path, Filesystem vault writer (UTF-8, parent directories created as needed)., _fmt(), note_path(), datetime, UUID, Human-readable Obsidian note rendering (architecture §25). Deterministic… (+10 more)
 
 ### Community 187 - "Quant R&D Runtime Specification"
 Cohesion: 0.25
@@ -1148,6 +1158,10 @@ Nodes (6): adapters/tradingagents — TradingAgents behind a strict boundary (AD
 ### Community 193 - ".store"
 Cohesion: 0.27
 Nodes (6): _load_upstream(), Any, Write one record into Graphiti. The full envelope is embedded in the episode…, Hybrid search with a temporal pushdown; results resolve fail-closed., Episode body: human-readable summary plus the machine-readable envelope., Import the upstream classes. The single upstream import seam. Order: (Graphiti,…
+
+### Community 194 - "SignalDirection"
+Cohesion: 0.16
+Nodes (13): SignalDirection, Random, _case(), _noisy_llm_cases(), datetime, Calibration tests: LLM zeroing, regime-specific weights, determinism (INV-16)., Quant is 60% accurate; the LLM is pure noise., Quant is 55% accurate; the LLM is 90% accurate. (+5 more)
 
 ### Community 195 - "ADR-0001: Python as the quantitative backend language"
 Cohesion: 0.29
@@ -1261,9 +1275,13 @@ Nodes (6): Calibration & research evaluation, engines/signal_fusion — Signal F
 Cohesion: 0.29
 Nodes (6): Always start here, Context, Hard rules, OpenTrading — GitHub Copilot instructions, Reporting, Routing (do not wait for the user to name an agent)
 
-### Community 223 - "test_reject.py"
-Cohesion: 0.11
-Nodes (5): Hard-check REJECT paths: every hard violation rejects with its reason code., TestBrokerState, TestMarketDataFreshness, TestStrategyState, TestWhitelist
+### Community 223 - "signal_fusion/config.py"
+Cohesion: 0.16
+Nodes (13): ConfidenceMap, DisagreementPolicy, MissingSignalPolicy, StrEnum, Fusion configuration: component weights, policies and confidence maps (INV-16).…, Map one raw confidence through the calibrated curve., How conflicting directional inputs are resolved (INV-16)., How absent inputs are handled (INV-16). (+5 more)
+
+### Community 224 - "build_domain_event"
+Cohesion: 0.17
+Nodes (16): build_domain_event(), datetime, UUID, Envelope construction, serialization and validation (INV-15)., Build a standard envelope around a validated canonical payload. The payload…, Deterministic UTF-8 bytes for the event bus., serialize_event(), parametrize (+8 more)
 
 ### Community 225 - "adapters/mt4 — MT4 execution protocol (Phase 6, ADR-0020)"
 Cohesion: 0.33
@@ -1289,9 +1307,9 @@ Nodes (5): Canonical sources of truth, Domain glossary, Key facts for agents, Re
 Cohesion: 0.33
 Nodes (5): Definition of Done, Evidence standard, Mandatory gates (all that apply to the task), Reporting, Review gates
 
-### Community 231 - "TestApprovedRiskInvariant"
-Cohesion: 0.40
-Nodes (3): parametrize, approved risk <= policy risk — for every decision type, exactly., TestApprovedRiskInvariant
+### Community 231 - "test_adapter_boundary.py"
+Cohesion: 0.17
+Nodes (13): _imports_in(), AST, MonkeyPatch, Path, Boundary contract tests: Graphiti can disappear entirely. These tests enforce…, (node, module-name) for every import in a file, with module context., Whether ``node`` sits inside a function definition (lazy import seam)., Block any import of the ``graphiti_core`` top-level package. (+5 more)
 
 ### Community 232 - "Routing Rules — OpenTrading"
 Cohesion: 0.33
@@ -1329,13 +1347,13 @@ Nodes (5): Checks, Decision model (ADR-0018), Determinism, engines/risk — Dete
 Cohesion: 0.33
 Nodes (5): Canonical documents, Development, OpenTrading — Autonomous Quantitative Trading & Research Platform, Repository layout (per `docs/architecture.md` §27), Status
 
-### Community 241 - "SafeModeViolation"
-Cohesion: 0.20
-Nodes (16): Action classes gated by SAFE_MODE. Only NEW_ENTRY is blocked., SafeModeAction, RuntimeError, Raise :class:`SafeModeViolation` for blocked actions while active., Raised when an action is blocked while SAFE_MODE is active., SafeModeViolation, fixture, SafeModeController DoD tests: gate semantics, alerts, audit, idempotency. (+8 more)
+### Community 241 - "Stack"
+Cohesion: 0.10
+Nodes (41): EmergencyBody, BaseModel, EmergencyLevel, The four emergency-control levels (INV-7, architecture §10). Semantics frozen…, EmergencyPolicy, Configuration of the emergency control system (never changeable by LLMs)., Wire the whole engine together over one store (tests inject doubles)., Stack (+33 more)
 
-### Community 242 - "RDAgentBackend"
-Cohesion: 0.33
-Nodes (3): Any, Protocol, RDAgentBackend
+### Community 242 - "PostgresAuditSink"
+Cohesion: 0.18
+Nodes (10): AuditEntry, AuditSink, Any, Protocol, UUID, One immutable audit record., Audit layer: immutable, clock-stamped action records., PostgresAuditSink (+2 more)
 
 ### Community 243 - "test_import_guard.py"
 Cohesion: 0.47
@@ -1409,6 +1427,10 @@ Nodes (3): Evidence and PAPER eligibility, Required stages, Strategy Validation 
 Cohesion: 0.40
 Nodes (4): ADR-0026 — LIVE_AUTO governance: automated live trading, disabled by default, Consequences, Context, Decision
 
+### Community 268 - ".__init__"
+Cohesion: 0.14
+Nodes (9): PendingOrderCanceller, PositionFlattener, Protocol, Callable that closes every open position (``OPTIONALLY_FLATTEN``)., Callable that cancels every still-live order (``CANCEL_PENDING``)., AlertSink, Protocol, Operational alert fan-out (log, pager, webhook — transport later). (+1 more)
+
 ### Community 269 - "29. Seguridad"
 Cohesion: 0.67
 Nodes (3): 29. Seguridad, MT4, Secrets
@@ -1429,32 +1451,56 @@ Nodes (4): Deterministic construction rules, Scenario matrix, tests/chaos — de
 Cohesion: 0.40
 Nodes (4): ADR-0025 — Security hardening milestone: trust zones, least privilege, secret lifecycle, Consequences, Context, Decision
 
-### Community 345 - "PortfolioExposure"
-Cohesion: 0.07
-Nodes (9): PortfolioExposure, Pre-computed aggregate exposures of the current portfolio (engines/portfolio).…, TestSimultaneity, Boundary tests: exactly-at-limit behavior with exact Decimal arithmetic.…, TestCountBoundaries, TestLeverageMarginBoundary, TestRiskBoundary, TestSizeBoundaries (+1 more)
+### Community 345 - "RiskReasonCode"
+Cohesion: 0.09
+Nodes (9): Canonical decision reason codes (architecture §7 controls, ADR-0018). Used both…, RiskReasonCode, TestStrategyState, Boundary tests: exactly-at-limit behavior with exact Decimal arithmetic.…, TestCountBoundaries, TestLeverageMarginBoundary, TestRiskBoundary, TestSizeBoundaries (+1 more)
 
 ### Community 346 - "ExecutionService"
-Cohesion: 0.09
-Nodes (15): ReconciliationResponse, LiveExecutionRuntime, Deterministic dead man evaluation (safe to call on a cadence)., ExecutionService, datetime, Protocol, UUID, Owns the submit path and the restart reconciliation procedure. (+7 more)
+Cohesion: 0.12
+Nodes (12): LiveExecutionRuntime, Deterministic dead man evaluation (safe to call on a cadence)., ExecutionService, datetime, UUID, Owns the submit path and the restart reconciliation procedure., Run the intent through the gates, persist before send, apply reply., Apply pushed venue events. Divergences escalate to SAFE_MODE. (+4 more)
 
-### Community 352 - "infra_health.py"
+### Community 347 - ".from_episode"
+Cohesion: 0.21
+Nodes (4): datetime, Map a domain :class:`MemoryEpisode` to the stored envelope. ``source`` /…, Point-in-time truth: the system could know this item at ``moment`` only if it…, TestMemoryRecordEnvelope
+
+### Community 349 - "assert_llm_process_cannot_execute"
+Cohesion: 0.19
+Nodes (8): assert_llm_process_cannot_execute(), ExecutionBoundaryViolation, RuntimeError, Process-level trust-zone enforcement (architecture §29, INV-1, INV-9,…, An LLM-facing process attempted to cross into the execution zone (INV-1)., Fail closed if an LLM-facing process is started in an execution mode. Must be…, MonkeyPatch, TestLlmProcessZoneGuard
+
+### Community 352 - "test_live_auto.py"
+Cohesion: 0.50
+Nodes (12): _intent(), _price(), _promoted(), LIVE_AUTO execution-path tests (Phase 11). Proves the automated path: a…, _registry(), _service(), test_automated_order_requires_no_human_approval_and_is_persisted(), test_automated_order_without_risk_decision_fails_closed() (+4 more)
+
+### Community 353 - "test_infra_smoke.py"
+Cohesion: 0.35
+Nodes (11): integration, _infra_up(), fixture, Integration smoke tests against the local docker-compose stack. Run ``make up``…, require_infra(), settings(), test_falkordb_responds_and_graph_module_loaded(), test_minio_expected_buckets_exist() (+3 more)
+
+### Community 354 - "live_auto.py"
+Cohesion: 0.24
+Nodes (9): build_live_auto_router(), DemotionBody, PnlBody, PromotionBody, APIRouter, BaseModel, OperatorResolver, Authenticated operator API for LIVE_AUTO governance (Phase 11). Every mutation… (+1 more)
+
+### Community 355 - "test_settings.py"
+Cohesion: 0.27
+Nodes (9): _clear_settings_cache(), fixture, MonkeyPatch, Settings tests: env-var overrides and enum validation., test_defaults(), test_env_prefix(), test_get_settings_is_cached(), test_invalid_mode_rejected() (+1 more)
+
+### Community 358 - "test_end_to_end.py"
 Cohesion: 0.43
-Nodes (6): main(), probe_http(), probe_minio(), probe_postgres(), probe_redis(), ProbeResult
+Nodes (6): build_request_from_snapshot(), End-to-end contract: MarketSnapshot → ResearchRequest → TradingAgents →…, The canonical first hop of the DoD chain: MarketSnapshot → ResearchRequest., test_e2e_replay_is_deterministic_with_the_mock(), test_end_to_end_has_no_execution_capability_whatsoever(), test_market_snapshot_to_research_request_to_llmsignal()
 
 ## Knowledge Gaps
-- **1014 isolated node(s):** `files`, `name`, `private`, `version`, `type` (+1009 more)
+- **1036 isolated node(s):** `Canonical sources of truth`, `Target repository layout (architecture §27 — created in Phase 0)`, `Key facts for agents`, `Domain glossary`, `INV-1 — Intelligence is never authority over capital` (+1031 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **76 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **77 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Clock` connect `Clock` to `WireMessage`, `DomainEvent`, `InMemoryStreamBus`, `OrderType`, `FusionInputs`, `Memory`, `Bar`, `OrderRecord`, `market_data/pipeline.py`, `Stack`, `normalization.py`, `PaperLedger`, `graphiti/memory.py`, `OrderState`, `main.py`, `HumanApprovalGate`, `quality.py`, `worker_helpers.py`, `LiveAutoRegistry`, `MemoryRecord`, `worker/ledger.py`, `ConnectionMonitor`, `DomainObject`, `Mt4ExecutionClient`, `ExecutionService`, `VirtualClock`, `StageWorker`, `ensure_utc`?**
-  _High betweenness centrality (0.032) - this node is a cross-community bridge._
-- **Why does `OrderIntent` connect `Clock` to `DomainEvent`, `OrderType`, `mapping.py`, `OrderRecord`, `Stack`, `PaperLedger`, `OrderState`, `factories.py`, `make_order_intent`, `schemas/__init__.py`, `HumanApprovalGate`, `test_paper_ledger.py`, `NautilusPaperExecutor`, `NautilusRouterStrategy`, `LiveAutoRegistry`, `allows_order_submission`, `OperatingMode`, `worker/ledger.py`, `DomainObject`, `Mt4ExecutionClient`, `backtest/conftest.py`, `test_execution_boundary.py`, `strategy.py`, `ExecutionService`, `OrderRejectionSim`, `test_paper_executor.py`?**
-  _High betweenness centrality (0.023) - this node is a cross-community bridge._
-- **Why does `SignalDirection` connect `SignalDirection` to `Clock`, `DomainEvent`, `TradeLifecycle`, `make_market_snapshot`, `TradeProposal`, `mapping.py`, `enums.py`, `FusionInputs`, `mapper.py`, `PaperLedger`, `OrderState`, `factories.py`, `schemas/__init__.py`, `stages/posttrade.py`, `test_client.py`, `calibration.py`, `domain/__init__.py`, `_sizing_probe.py`, `MarketSnapshot`, `evaluate_cases`, `CalibrationStore`, `risk_helpers.py`, `worker/ledger.py`, `compute_trade_metrics`, `test_posttrade_metrics.py`, `Any`, `producers.py`, `NautilusBacktestRunner`?**
-  _High betweenness centrality (0.023) - this node is a cross-community bridge._
+- **Why does `SignalDirection` connect `SignalDirection` to `enums.py`, `DomainEvent`, `TradeLifecycle`, `make_market_snapshot`, `TradeProposal`, `mapping.py`, `FusionInputs`, `mapper.py`, `PaperLedger`, `test_contracts.py`, `test_paper_contracts.py`, `analysis.py`, `PostTradeReviewRecord`, `test_posttrade_integration.py`, `test_client.py`, `domain/__init__.py`, `market_data/pipeline.py`, `LLMSignal`, `test_posttrade_notes.py`, `evaluate_cases`, `CalibrationStore`, `risk_helpers.py`, `stages/posttrade.py`, `signal_fusion/fusion.py`, `schemas/__init__.py`, `factories.py`, `signal_fusion/config.py`, `test_end_to_end.py`, `signals.py`, `Any`, `MarketSnapshot`, `NautilusBacktestRunner`?**
+  _High betweenness centrality (0.036) - this node is a cross-community bridge._
+- **Why does `OrderIntent` connect `enums.py` to `Mt4Emulator`, `DomainEvent`, `protocol.py`, `mapping.py`, `OrderRecord`, `PaperLedger`, `InMemoryExecutionStateStore`, `make_order_intent`, `OperatingMode`, `test_paper_ledger.py`, `NautilusPaperExecutor`, `NautilusRouterStrategy`, `SystemClock`, `model_validator`, `EmergencyController`, `schemas/__init__.py`, `OrderType`, `factories.py`, `OrderState`, `strategy.py`, `ExecutionService`, `LiveAutoRegistry`, `OrderRejectionSim`, `test_paper_executor.py`, `make_intent`?**
+  _High betweenness centrality (0.033) - this node is a cross-community bridge._
+- **Why does `Instrument` connect `Instrument` to `make_order_intent`, `DomainEvent`, `risk_helpers.py`, `worker/cli.py`, `PositionSnapshot`, `mapping.py`, `OrderRejectionSim`, `NautilusPaperExecutor`, `repository.py`, `schemas/__init__.py`, `TradeProposal`, `factories.py`, `nautilus/__init__.py`, `nautilus/engine.py`, `MarketSnapshot`?**
+  _High betweenness centrality (0.031) - this node is a cross-community bridge._
 - **Are the 45 inferred relationships involving `VirtualClock` (e.g. with `_long_adapter()` and `_snapshot_event()`) actually correct?**
   _`VirtualClock` has 45 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 81 inferred relationships involving `Stack` (e.g. with `TestPostgresRestart` and `_service()`) actually correct?**
