@@ -45,3 +45,12 @@ uv run pytest tests/unit/mt4/
 
 Phase 6 DoD: sending the same `order_intent_id` 100× never generates more than
 one trade — proven end-to-end in `tests/unit/mt4/test_lifecycle.py`.
+
+## Setting up a real MT4 terminal locally (Windows)
+
+Installing a real MetaTrader 4 terminal today gets you a terminal ready for
+when `QuantBridgeEA.mq4` ships — it does not yet connect to anything here,
+since the EA above doesn't exist. To exercise the full Core↔MT4 lifecycle
+now, run the emulator (`cli run`/`smoke` above) instead. See
+`docs/runbooks/local-development-windows.md` for the Windows/WSL2 setup and
+terminal installation steps.

@@ -4,6 +4,11 @@ How to start, verify and reset the OpenTrading local environment. Everything on
 this page runs from the repository root with `make` and targets the **dev**
 Compose stack in `infra/compose/docker-compose.yml`.
 
+> On Windows with a real MT4 terminal involved, read
+> `docs/runbooks/local-development-windows.md` instead — it covers the
+> WSL2 + native-MT4-terminal topology and only points back here for the parts
+> that are identical.
+
 ## Prerequisites
 
 | Tool | Version | Check |
