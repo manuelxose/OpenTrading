@@ -1,0 +1,36 @@
+# OpenTrading — Prometheus scrape configuration (development).
+# Every target is a service on the internal `opentrading` network.
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - /etc/prometheus/rules/*.yml
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ["prometheus:9090"]
+
+  - job_name: postgres
+    static_configs:
+      - targets: ["postgres-exporter:9187"]
+
+  - job_name: redis
+    static_configs:
+      - targets: ["redis-exporter:9121"]
+
+  - job_name: minio
+    metrics_path: /minio/v2/metrics/cluster
+    static_configs:
+      - targets: ["minio:9000"]
+
+  - job_name: mlflow
+    static_configs:
+      - targets: ["mlflow:5000"]
+
+  - job_name: opentrading-core
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["host.docker.internal:8000"]

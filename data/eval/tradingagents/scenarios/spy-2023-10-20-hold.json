@@ -1,0 +1,33 @@
+{
+  "scenario_id": "spy-2023-10-20-hold",
+  "description": "SPY late-2023: balanced cross-currents (rates vs. earnings) produce a Hold.",
+  "instrument_id": "SPY",
+  "asset_type": "stock",
+  "as_of": "2023-10-20T16:00:00Z",
+  "source_timestamp": "2023-10-20T15:58:00Z",
+  "bid": "421.30",
+  "ask": "421.45",
+  "source": "eval-fixture",
+  "question": "Should we shift our index exposure while rates stay elevated?",
+  "hypotheses": [
+    "rate pressure caps multiple expansion",
+    "earnings resilience supports the downside"
+  ],
+  "expected_rating": "Hold",
+  "mock_decision": {
+    "scenario_id": "spy-2023-10-20-hold",
+    "rating": "Hold",
+    "decision_markdown": "**Rating**: Hold\n\n**Executive Summary**: Maintain current exposure; neither side of the debate dominates.\n\n**Investment Thesis**: Elevated rates cap valuations while earnings resilience limits downside, leaving no decisive edge.\n\n**Time Horizon**: 1-3 months",
+    "investment_plan": "**Recommendation**: Hold\n\n**Rationale**: Balanced evidence; no directional edge.\n\n**Strategic Actions**: Keep current position; reassess after the next CPI print.",
+    "trader_plan": "**Action**: Hold\n\n**Reasoning**: Balanced setup; no edge.\n\nFINAL TRANSACTION PROPOSAL: **HOLD**",
+    "analyst_reports": {
+      "fundamentals_report": "Aggregate earnings are resilient but growth is decelerating; valuation is full.",
+      "market_report": "Index is range-bound between support and resistance with mixed breadth.",
+      "sentiment_report": "Investor sentiment is neutral to mixed.",
+      "news_report": "Macro newsflow is mixed: rate uncertainty offsets solid economic data."
+    },
+    "bull_history": "Bull: earnings resilience and disinflation path support the tape.",
+    "bear_history": "Bear: higher-for-longer rates compress multiples and consumer demand.",
+    "risk_history": "Aggressive: buy the range. Conservative: hedge the range. Neutral: stay the course."
+  }
+}

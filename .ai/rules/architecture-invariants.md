@@ -27,8 +27,9 @@ Leakage tests must fail the build on violation. (§12)
 
 100% own code. No LLM, no agent, no prompt, no probabilistic interpretation.
 `APPROVE` must carry `approved_quantity`, `approved_stop`, `policy_version`;
-`REJECT` must carry `reason_codes`. Property-based tests enforce
-"risk > limit → never approve". (§7)
+`REJECT` must carry `reason_codes`; `RESIZE` carries both the Risk-Engine-
+computed approved values and the `reason_codes` that bounded the size
+(ADR-0018). Property-based tests enforce "risk > limit → never approve". (§7)
 
 ## INV-5 — MT4 is execution-only
 

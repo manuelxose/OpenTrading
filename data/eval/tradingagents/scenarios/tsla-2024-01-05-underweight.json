@@ -1,0 +1,33 @@
+{
+  "scenario_id": "tsla-2024-01-05-underweight",
+  "description": "TSLA early-2024: delivery misses and margin compression justify reducing exposure.",
+  "instrument_id": "TSLA",
+  "asset_type": "stock",
+  "as_of": "2024-01-05T16:00:00Z",
+  "source_timestamp": "2024-01-05T15:59:10Z",
+  "bid": "237.40",
+  "ask": "237.65",
+  "source": "eval-fixture",
+  "question": "Should we reduce TSLA exposure after the latest delivery report?",
+  "hypotheses": [
+    "price cuts keep margins under pressure",
+    "delivery growth decelerates into 2024"
+  ],
+  "expected_rating": "Underweight",
+  "mock_decision": {
+    "scenario_id": "tsla-2024-01-05-underweight",
+    "rating": "Underweight",
+    "decision_markdown": "**Rating**: Underweight\n\n**Executive Summary**: Reduce exposure and take partial profits; fundamentals are deteriorating.\n\n**Investment Thesis**: Delivery growth missed expectations and repeated price cuts are compressing margins with no near-term catalyst to reverse the trend.\n\n**Time Horizon**: 3-6 months",
+    "investment_plan": "**Recommendation**: Underweight\n\n**Rationale**: The bear case carried the debate on fundamentals.\n\n**Strategic Actions**: Trim the position to underweight over the next sessions.",
+    "trader_plan": "**Action**: Sell\n\n**Reasoning**: Trim into weakness of fundamentals.\n\nFINAL TRANSACTION PROPOSAL: **SELL**",
+    "analyst_reports": {
+      "fundamentals_report": "Margins are declining on price cuts and growth is decelerating; cash flow weakened.",
+      "market_report": "Downtrend persists below resistance with bearish momentum.",
+      "sentiment_report": "Overall sentiment is mildly bearish.",
+      "news_report": "Delivery miss headlines and price-cut announcements dominate the negative news flow."
+    },
+    "bull_history": "Bull: new product cycles and energy storage can re-accelerate growth.",
+    "bear_history": "Bear: price cuts sacrifice margin for volume that is not materializing.",
+    "risk_history": "Aggressive: hold for the cycle. Conservative: cut the position. Neutral: partial trim."
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "scenario_id": "nvda-2024-05-10-buy",
+  "description": "NVDA pre-earnings: data-center demand and AI capex dominate; committee lands on Buy.",
+  "instrument_id": "NVDA",
+  "asset_type": "stock",
+  "as_of": "2024-05-10T16:00:00Z",
+  "source_timestamp": "2024-05-10T15:59:30Z",
+  "bid": "897.50",
+  "ask": "897.80",
+  "source": "eval-fixture",
+  "question": "Should we take a bullish view on NVDA heading into earnings?",
+  "hypotheses": [
+    "AI datacenter demand keeps revenue growing >50% YoY",
+    "guidance raises beat consensus again"
+  ],
+  "expected_rating": "Buy",
+  "mock_decision": {
+    "scenario_id": "nvda-2024-05-10-buy",
+    "rating": "Buy",
+    "decision_markdown": "**Rating**: Buy\n\n**Executive Summary**: Build a full position ahead of earnings; the demand evidence is overwhelming.\n\n**Investment Thesis**: Data-center revenue growth is accelerating on AI capex, guidance has consistently beaten consensus, and supply remains sold out through year-end.\n\n**Price Target**: 1240.0\n\n**Time Horizon**: 3-6 months",
+    "investment_plan": "**Recommendation**: Buy\n\n**Rationale**: The bull case carried the debate: accelerating AI demand with a sold-out supply chain.\n\n**Strategic Actions**: Build the position gradually over two weeks.",
+    "trader_plan": "**Action**: Buy\n\n**Reasoning**: Strong setup; enter on strength.\n\nFINAL TRANSACTION PROPOSAL: **BUY**",
+    "analyst_reports": {
+      "fundamentals_report": "Revenue grew 60% YoY with expanding margins; balance sheet is net cash. Growth is accelerating.",
+      "market_report": "Uptrend intact above key support with strong momentum and positive breadth.",
+      "sentiment_report": "Overall retail and institutional sentiment is bullish and building into earnings.",
+      "news_report": "Major hyperscalers announced expanded AI capex plans; supply constraints persist. Positive catalysts."
+    },
+    "bull_history": "Bull: AI capex cycle is structural and NVDA owns the fastest-growing segment.",
+    "bear_history": "Bear: valuation is rich and any guidance miss would trigger a sharp de-rating.",
+    "risk_history": "Aggressive: size up into strength. Conservative: trim into earnings. Neutral: balanced entry."
+  }
+}

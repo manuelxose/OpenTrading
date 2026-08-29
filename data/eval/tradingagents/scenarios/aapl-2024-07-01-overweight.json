@@ -1,0 +1,33 @@
+{
+  "scenario_id": "aapl-2024-07-01-overweight",
+  "description": "AAPL mid-2024: services momentum and AI-phone cycle support an Overweight stance.",
+  "instrument_id": "AAPL",
+  "asset_type": "stock",
+  "as_of": "2024-07-01T16:00:00Z",
+  "source_timestamp": "2024-07-01T15:59:45Z",
+  "bid": "216.20",
+  "ask": "216.40",
+  "source": "eval-fixture",
+  "question": "Should we add to our AAPL exposure into the AI-phone upgrade cycle?",
+  "hypotheses": [
+    "AI-capable iPhones trigger a multi-year upgrade cycle",
+    "services revenue re-accelerates margin expansion"
+  ],
+  "expected_rating": "Overweight",
+  "mock_decision": {
+    "scenario_id": "aapl-2024-07-01-overweight",
+    "rating": "Overweight",
+    "decision_markdown": "**Rating**: Overweight\n\n**Executive Summary**: Gradually increase exposure; the setup is favorable but not urgent.\n\n**Investment Thesis**: The AI-phone upgrade cycle and services mix shift support sustained earnings growth, though near-term demand timing remains uncertain.\n\n**Time Horizon**: 6-12 months",
+    "investment_plan": "**Recommendation**: Overweight\n\n**Rationale**: Favorable outlook, gradual accumulation warranted.\n\n**Strategic Actions**: Add in thirds over the coming weeks.",
+    "trader_plan": "**Action**: Buy\n\n**Reasoning**: Constructive setup, staggered entry.\n\nFINAL TRANSACTION PROPOSAL: **BUY**",
+    "analyst_reports": {
+      "fundamentals_report": "Earnings growth is positive and services margin expansion is improving the mix.",
+      "market_report": "Uptrend with improving momentum but some resistance overhead.",
+      "sentiment_report": "Sentiment is mildly bullish overall.",
+      "news_report": "AI-phone announcements support the cycle thesis; no near-term negative catalysts."
+    },
+    "bull_history": "Bull: upgrade cycle plus services gives a long growth runway.",
+    "bear_history": "Bear: hardware demand may slip before the cycle fully starts.",
+    "risk_history": "Aggressive: front-load the add. Conservative: wait for confirmation. Neutral: steady accumulation."
+  }
+}

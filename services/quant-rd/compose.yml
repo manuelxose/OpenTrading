@@ -1,0 +1,49 @@
+name: opentrading-quant-rd
+
+services:
+  quant-rd:
+    build:
+      context: ../..
+      dockerfile: services/quant-rd/Dockerfile
+    image: opentrading/quant-rd:rdagent-0.8.0-qlib-0.9.7
+    command: ["fin_quant"]
+    read_only: true
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=2g"]
+    volumes:
+      - quant-workspace:/workspace
+      - quant-outputs:/outputs
+    environment:
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      OT_OPERATING_MODE: RESEARCH
+      OT_BROKER_ENABLED: "false"
+      OT_LIVE_AUTO_ENABLED: "false"
+    networks: [research-only]
+    depends_on:
+      mlflow:
+        condition: service_healthy
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v3.8.1
+    command: ["mlflow", "server", "--host", "0.0.0.0", "--port", "5000", "--backend-store-uri", "sqlite:////mlflow/mlflow.db", "--artifacts-destination", "/mlflow/artifacts"]
+    read_only: true
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=512m"]
+    volumes: ["mlflow-data:/mlflow"]
+    networks: [research-only]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+networks:
+  research-only:
+    internal: true
+
+volumes:
+  quant-workspace:
+  quant-outputs:
+  mlflow-data:

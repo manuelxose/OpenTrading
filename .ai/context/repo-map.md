@@ -1,19 +1,32 @@
 # Repository Map (OpenTrading)
 
-Current state: **PRE-00**. The repository holds only `docs/architecture.md` (Spanish) —
-the definitive product architecture — plus this AI engineering layer. No code, no
-packages, no git history yet.
+Current state: **Phase 0 — Foundations implemented** (2026-08-26). The monorepo now
+matches the §27 target layout: canonical Pydantic contracts (`core/schemas`), domain
+enums + state machines (`core/domain`), event envelope + registry (`core/events`),
+virtual clock (`core/clock`), settings (`core/config`), audit (`core/audit`), and the
+`apps/`, `engines/`, `adapters/`, `services/`, `research/`, `infra/` skeleton.
+External trading framework integrations (Phases 1–12) are phase-gated; of these,
+the TradingAgents LLM committee (Phase 2) is now integrated **read-only** behind
+`adapters/tradingagents` (`MarketSnapshot → ResearchRequest → LLMSignal`, ADR-0004,
+pinned upstream v0.3.1) — see `adapters/tradingagents/README.md`.
+See `docs/architecture/PHASE0_FOUNDATIONS.md` for the Phase 0 implementation record.
 
 ## Canonical sources of truth
 
 | Doc | Purpose |
 |---|---|
 | `docs/architecture.md` | Product architecture (§1–§35): vision, components, modes, risk engine, MT4, reconciliation, memory, data, events, domain objects, fusion, post-trade, strategy factory, metrics, LLM eval, observability, Graphify, Obsidian, security, testing, roadmap, frozen decisions |
+| `docs/architecture/CURRENT_STATE.md` | Verified repository state (audit PRE-00 + Phase 0 addendum) |
+| `docs/architecture/PHASE0_FOUNDATIONS.md` | What Phase 0 implemented: modules, contracts, clock, events, tests, DoD evidence |
+| `docs/architecture/TARGET_ARCHITECTURE.md` | English condensation of `docs/architecture.md` (never drifts from it) |
+| `docs/architecture/GAP_ANALYSIS.md` | Component-by-component gap vs target, with closing milestones |
+| `docs/architecture/IMPLEMENTATION_ORDER.md` | Phase dependency graph and ordering (Phases 0–12) |
+| `docs/ADR/` | 16 ADRs for the frozen decisions (§34) + index README |
 | `docs/ai-engineering/AGENT_ARCHITECTURE.md` | AI team topology |
 | `docs/ai-engineering/ROUTING_RULES.md` | Task → agent routing |
 | `.ai/rules/architecture-invariants.md` | INV-1..INV-16 non-negotiables |
 
-## Target repository layout (architecture §27, to be created in Phase 0)
+## Target repository layout (architecture §27 — created in Phase 0)
 
 ```text
 apps/         api, worker, command-center

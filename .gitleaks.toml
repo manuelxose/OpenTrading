@@ -1,0 +1,23 @@
+# gitleaks configuration — OpenTrading (CI secret scanning, ADR-0025).
+#
+# The allowlist covers ONLY the dev-only placeholder credentials that are
+# intentionally committed (`.env.example`, dev compose defaults, docs). Any
+# other secret pattern fails the build on every push/PR.
+
+title = "OpenTrading gitleaks config"
+
+[allowlist]
+  description = "Dev-only placeholder values (never used in production; see .env.example)"
+  regexes = [
+    "opentrading-dev",
+    "pk-lf-opentrading-dev",
+    "sk-lf-opentrading-dev",
+    "admin-dev",
+    "clickhouse-dev",
+    "falkordb-dev",
+    "deadbeef0[1-9]",
+    "00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff",
+    # test fixtures in tests/security/test_secret_redaction.py (never real)
+    "sk-lf-1234567890abcdef",
+    "AGE-SECRET-KEY-1Q+",
+  ]

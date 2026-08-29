@@ -1,0 +1,179 @@
+# OpenTrading — production overrides (merge on top of docker-compose.yml).
+#
+# Usage (see docs/runbooks/infrastructure.md):
+#   docker compose --project-name opentrading-prod \
+#     -f infra/compose/docker-compose.yml \
+#     -f infra/compose/docker-compose.prod.yml \
+#     --env-file .env.prod up -d --wait
+#
+# Production differences from development:
+#   1. No published ports (!reset) — every service is internal-only.
+#   2. `restart: unless-stopped` and bounded json-file logging.
+#   3. Every secret is required (`${VAR:?…}`) — startup fails closed when a
+#      secret is missing, so dev placeholders can never leak into prod.
+#
+# Requires Docker Compose >= 2.24 (supports `!reset`).
+
+name: opentrading-prod
+
+x-prod-defaults: &prod-defaults
+  restart: unless-stopped
+  logging: &prod-logging
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+services:
+  postgres:
+    <<: *prod-defaults
+    ports: !reset []
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required in production}
+      POSTGRES_MIGRATOR_PASSWORD: ${POSTGRES_MIGRATOR_PASSWORD:?POSTGRES_MIGRATOR_PASSWORD is required in production}
+      POSTGRES_APP_PASSWORD: ${POSTGRES_APP_PASSWORD:?POSTGRES_APP_PASSWORD is required in production}
+      POSTGRES_READONLY_PASSWORD: ${POSTGRES_READONLY_PASSWORD:?POSTGRES_READONLY_PASSWORD is required in production}
+      LANGFUSE_DB_PASSWORD: ${LANGFUSE_DB_PASSWORD:?LANGFUSE_DB_PASSWORD is required in production}
+      MLFLOW_DB_PASSWORD: ${MLFLOW_DB_PASSWORD:?MLFLOW_DB_PASSWORD is required in production}
+    stop_grace_period: 30s
+
+  redis:
+    <<: *prod-defaults
+    ports: !reset []
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?REDIS_PASSWORD is required in production}
+      REDIS_EXPORTER_PASSWORD: ${REDIS_EXPORTER_PASSWORD:?REDIS_EXPORTER_PASSWORD is required in production}
+    # ACL (ADR-0025): `default` user disabled; apps authenticate as `opentrading`
+    # without @admin/@dangerous/@scripting; the exporter gets a read-only user.
+    volumes:
+      - ../redis/entrypoint-acl.sh:/usr/local/bin/redis-acl-entry.sh:ro
+    entrypoint: ["sh", "/usr/local/bin/redis-acl-entry.sh"]
+    command: []
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli --user opentrading -a \"$${REDIS_PASSWORD}\" ping | grep -q PONG"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  minio:
+    <<: *prod-defaults
+    ports: !reset []
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?MINIO_ROOT_USER is required in production}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD is required in production}
+      MINIO_BROWSER: "off"
+
+  falkordb:
+    <<: *prod-defaults
+    ports: !reset []
+    environment:
+      FALKORDB_PASSWORD: ${FALKORDB_PASSWORD:?FALKORDB_PASSWORD is required in production}
+
+  clickhouse:
+    <<: *prod-defaults
+    ports: !reset []
+    environment:
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:?CLICKHOUSE_PASSWORD is required in production}
+
+  langfuse-web:
+    <<: *prod-defaults
+    ports: !reset []
+    environment:
+      NEXTAUTH_URL: ${LANGFUSE_NEXTAUTH_URL:?LANGFUSE_NEXTAUTH_URL is required in production}
+      NEXTAUTH_SECRET: ${LANGFUSE_NEXTAUTH_SECRET:?LANGFUSE_NEXTAUTH_SECRET is required in production}
+      SALT: ${LANGFUSE_SALT:?LANGFUSE_SALT is required in production}
+      ENCRYPTION_KEY: ${LANGFUSE_ENCRYPTION_KEY:?LANGFUSE_ENCRYPTION_KEY is required in production}
+      LANGFUSE_S3_EVENT_UPLOAD_ACCESS_KEY_ID: ${MINIO_LANGFUSE_ACCESS_KEY:?MINIO_LANGFUSE_ACCESS_KEY is required in production}
+      LANGFUSE_S3_EVENT_UPLOAD_SECRET_ACCESS_KEY: ${MINIO_LANGFUSE_SECRET_KEY:?MINIO_LANGFUSE_SECRET_KEY is required in production}
+      LANGFUSE_S3_MEDIA_UPLOAD_ACCESS_KEY_ID: ${MINIO_LANGFUSE_ACCESS_KEY:?MINIO_LANGFUSE_ACCESS_KEY is required in production}
+      LANGFUSE_S3_MEDIA_UPLOAD_SECRET_ACCESS_KEY: ${MINIO_LANGFUSE_SECRET_KEY:?MINIO_LANGFUSE_SECRET_KEY is required in production}
+      TELEMETRY_ENABLED: "false"
+      LANGFUSE_ENABLE_EXPERIMENTAL_FEATURES: "false"
+      DATABASE_URL: postgresql://langfuse:${LANGFUSE_DB_PASSWORD:?LANGFUSE_DB_PASSWORD is required in production}@postgres:5432/langfuse
+      LANGFUSE_INIT_PROJECT_PUBLIC_KEY: ${LANGFUSE_INIT_PUBLIC_KEY:?LANGFUSE_INIT_PUBLIC_KEY is required in production}
+      LANGFUSE_INIT_PROJECT_SECRET_KEY: ${LANGFUSE_INIT_SECRET_KEY:?LANGFUSE_INIT_SECRET_KEY is required in production}
+      LANGFUSE_INIT_USER_EMAIL: ${LANGFUSE_INIT_EMAIL:?LANGFUSE_INIT_EMAIL is required in production}
+      LANGFUSE_INIT_USER_PASSWORD: ${LANGFUSE_INIT_PASSWORD:?LANGFUSE_INIT_PASSWORD is required in production}
+
+  langfuse-worker:
+    <<: *prod-defaults
+    environment:
+      NEXTAUTH_URL: ${LANGFUSE_NEXTAUTH_URL:?LANGFUSE_NEXTAUTH_URL is required in production}
+      SALT: ${LANGFUSE_SALT:?LANGFUSE_SALT is required in production}
+      ENCRYPTION_KEY: ${LANGFUSE_ENCRYPTION_KEY:?LANGFUSE_ENCRYPTION_KEY is required in production}
+      LANGFUSE_S3_EVENT_UPLOAD_ACCESS_KEY_ID: ${MINIO_LANGFUSE_ACCESS_KEY:?MINIO_LANGFUSE_ACCESS_KEY is required in production}
+      LANGFUSE_S3_EVENT_UPLOAD_SECRET_ACCESS_KEY: ${MINIO_LANGFUSE_SECRET_KEY:?MINIO_LANGFUSE_SECRET_KEY is required in production}
+      LANGFUSE_S3_MEDIA_UPLOAD_ACCESS_KEY_ID: ${MINIO_LANGFUSE_ACCESS_KEY:?MINIO_LANGFUSE_ACCESS_KEY is required in production}
+      LANGFUSE_S3_MEDIA_UPLOAD_SECRET_ACCESS_KEY: ${MINIO_LANGFUSE_SECRET_KEY:?MINIO_LANGFUSE_SECRET_KEY is required in production}
+      TELEMETRY_ENABLED: "false"
+      LANGFUSE_ENABLE_EXPERIMENTAL_FEATURES: "false"
+      DATABASE_URL: postgresql://langfuse:${LANGFUSE_DB_PASSWORD:?LANGFUSE_DB_PASSWORD is required in production}@postgres:5432/langfuse
+      REDIS_AUTH: ${REDIS_PASSWORD:?REDIS_PASSWORD is required in production}
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:?CLICKHOUSE_PASSWORD is required in production}
+
+  mlflow:
+    <<: *prod-defaults
+    ports: !reset []
+    image: opentrading/mlflow:v3.8.1
+    command:
+      - mlflow
+      - server
+      - --host
+      - 0.0.0.0
+      - --port
+      - "5000"
+      - --backend-store-uri
+      - postgresql://mlflow:${MLFLOW_DB_PASSWORD:?MLFLOW_DB_PASSWORD is required in production}@postgres:5432/mlflow
+      - --artifacts-destination
+      - s3://mlflow-artifacts
+      - --serve-artifacts
+    environment:
+      AWS_ACCESS_KEY_ID: ${MINIO_MLFLOW_ACCESS_KEY:?MINIO_MLFLOW_ACCESS_KEY is required in production}
+      AWS_SECRET_ACCESS_KEY: ${MINIO_MLFLOW_SECRET_KEY:?MINIO_MLFLOW_SECRET_KEY is required in production}
+
+  minio-init:
+    <<: *prod-defaults
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?MINIO_ROOT_USER is required in production}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD is required in production}
+      MINIO_APP_ACCESS_KEY: ${MINIO_APP_ACCESS_KEY:?MINIO_APP_ACCESS_KEY is required in production}
+      MINIO_APP_SECRET_KEY: ${MINIO_APP_SECRET_KEY:?MINIO_APP_SECRET_KEY is required in production}
+      MINIO_LANGFUSE_ACCESS_KEY: ${MINIO_LANGFUSE_ACCESS_KEY:?MINIO_LANGFUSE_ACCESS_KEY is required in production}
+      MINIO_LANGFUSE_SECRET_KEY: ${MINIO_LANGFUSE_SECRET_KEY:?MINIO_LANGFUSE_SECRET_KEY is required in production}
+      MINIO_MLFLOW_ACCESS_KEY: ${MINIO_MLFLOW_ACCESS_KEY:?MINIO_MLFLOW_ACCESS_KEY is required in production}
+      MINIO_MLFLOW_SECRET_KEY: ${MINIO_MLFLOW_SECRET_KEY:?MINIO_MLFLOW_SECRET_KEY is required in production}
+
+  prometheus:
+    <<: *prod-defaults
+    ports: !reset []
+
+  grafana:
+    <<: *prod-defaults
+    ports: !reset []
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?GRAFANA_ADMIN_PASSWORD is required in production}
+
+  postgres-exporter:
+    <<: *prod-defaults
+    environment:
+      DATA_SOURCE_NAME: postgresql://ot_readonly:${POSTGRES_READONLY_PASSWORD:?POSTGRES_READONLY_PASSWORD is required in production}@postgres:5432/${POSTGRES_DB:?POSTGRES_DB is required in production}?sslmode=disable
+
+  redis-exporter:
+    <<: *prod-defaults
+    command:
+      - --redis.addr
+      - redis://redis:6379
+      - --redis.user
+      - redis-exporter
+      - --redis.password
+      - ${REDIS_EXPORTER_PASSWORD:?REDIS_EXPORTER_PASSWORD is required in production}
+
+# ── Network isolation (ADR-0025, architecture §29) ───────────────────────────
+# The internal network is fully closed to the host and the internet. Access to
+# any service goes through the operator's WireGuard tunnel or a reverse proxy
+# in front of the host — never through published ports. The Core ↔ MT4 ZeroMQ
+# exec plane is separate again: it exists only inside the WireGuard tunnel to
+# the (Windows) MT4 host, so no compose service can reach execution sockets.
+networks:
+  opentrading:
+    internal: true

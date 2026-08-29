@@ -1,0 +1,71 @@
+[project]
+name = "opentrading"
+version = "0.1.0"
+description = "OpenTrading — Autonomous Quantitative Trading & Research Platform (core runtime, Phase 0 Foundations)"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.13,<2",
+    "fastapi>=0.115,<1",
+    "langfuse>=4.7,<5",
+    "minio>=7.2,<8",
+    "nautilus-trader>=1.208,<2",
+    "prometheus-client>=0.22,<1",
+    "psycopg[binary]>=3.2,<4",
+    "pyarrow>=17,<21",
+    "pydantic>=2.9,<3",
+    "pydantic-settings>=2.4,<3",
+    "pyzmq>=26,<27",
+    "redis>=5,<7",
+    "sqlalchemy>=2.0,<3",
+    "uvicorn[standard]>=0.30,<1",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.27,<1",
+    "hypothesis>=6.100,<7",
+    "mypy>=1.11,<2",
+    "pytest>=8.2,<9",
+    "ruff>=0.6,<1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["core", "engines", "adapters", "apps/api", "apps/worker"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["tests"]
+markers = [
+    "integration: requires the local docker-compose stack (run `make up`)",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["core", "apps", "engines", "adapters", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "C4", "RUF"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+exclude = ["research/"]
+
+[[tool.mypy.overrides]]
+module = "minio"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["pyarrow", "pyarrow.parquet"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["nautilus_trader", "nautilus_trader.*"]
+ignore_missing_imports = true

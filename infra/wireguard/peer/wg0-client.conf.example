@@ -1,0 +1,15 @@
+# WireGuard client (Windows MT4 host) — import in the WireGuard Windows app.
+# Fill in the <...> placeholders; never commit the filled-in file (secrets/).
+[Interface]
+# Client private key (wg genkey)
+PrivateKey = <CLIENT-PRIVATE-KEY>
+Address = 10.77.0.2/32
+DNS = <INTERNAL-DNS-IF-ANY>
+
+[Peer]
+# Linux Core host (tunnel server)
+PublicKey = <SERVER-PUBLIC-KEY>
+# Server public endpoint — restrict the server firewall to the MT4 host's IP
+Endpoint = <CORE-PUBLIC-IP>:51820
+AllowedIPs = 10.77.0.0/24
+PersistentKeepalive = 25

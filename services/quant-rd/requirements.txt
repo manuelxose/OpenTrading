@@ -1,0 +1,5 @@
+# Direct upstream pins for the isolated Python 3.11 runtime (INV-14).
+rdagent==0.8.0
+pyqlib==0.9.7
+mlflow==3.8.1
+pydantic==2.11.7

@@ -1,0 +1,403 @@
+# OpenTrading — local development infrastructure (Phase 1 Data Platform).
+#
+# All host ports are bound to 127.0.0.1 only: nothing is exposed publicly.
+# Production runs the same services with `docker-compose.prod.yml` on top
+# (no published ports, secrets required, restart policies). See
+# docs/runbooks/infrastructure.md.
+#
+# Every image is pinned to an exact version (INV-14, external-lock.yaml).
+# Dev-only credentials default to `opentrading-dev` placeholders; production
+# replaces them via `.env.prod` and the prod override fails closed if they
+# are missing.
+
+name: opentrading-dev
+
+x-dev-defaults: &dev-defaults
+  restart: "no"
+
+services:
+  # ── PostgreSQL + TimescaleDB (transactional source of truth, ADR-0010) ────
+  postgres:
+    <<: *dev-defaults
+    image: timescale/timescaledb:2.29.2-pg16
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-opentrading}
+      POSTGRES_USER: ${POSTGRES_USER:-opentrading}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-opentrading-dev}
+      # Least-privilege roles (ADR-0025, infra/postgres/init/002-roles.sh)
+      POSTGRES_MIGRATOR_PASSWORD: ${POSTGRES_MIGRATOR_PASSWORD:-opentrading-dev}
+      POSTGRES_APP_PASSWORD: ${POSTGRES_APP_PASSWORD:-opentrading-dev}
+      POSTGRES_READONLY_PASSWORD: ${POSTGRES_READONLY_PASSWORD:-opentrading-dev}
+      LANGFUSE_DB_PASSWORD: ${LANGFUSE_DB_PASSWORD:-opentrading-dev}
+      MLFLOW_DB_PASSWORD: ${MLFLOW_DB_PASSWORD:-opentrading-dev}
+      TZ: UTC
+      PGTZ: UTC
+    ports:
+      - "127.0.0.1:${OT_POSTGRES_HOST_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ../postgres/init:/docker-entrypoint-initdb.d:ro
+    networks: [opentrading]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+
+  # ── Redis (cache, locks, streams — §13) ───────────────────────────────────
+  redis:
+    <<: *dev-defaults
+    image: redis:7.4-alpine
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-opentrading-dev}
+    command: ["sh", "-c", "redis-server --appendonly yes --requirepass \"$${REDIS_PASSWORD}\""]
+    ports:
+      - "127.0.0.1:${OT_REDIS_HOST_PORT:-6379}:6379"
+    volumes:
+      - redis-data:/data
+    networks: [opentrading]
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$${REDIS_PASSWORD}\" ping | grep -q PONG"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # ── MinIO (S3-compatible object store: parquet, artifacts — §13) ──────────
+  minio:
+    <<: *dev-defaults
+    image: minio/minio:RELEASE.2025-09-07T16-13-09Z
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-opentrading}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-opentrading-dev}
+    ports:
+      - "127.0.0.1:${OT_MINIO_HOST_PORT:-9000}:9000"
+      - "127.0.0.1:${OT_MINIO_CONSOLE_HOST_PORT:-9001}:9001"
+    volumes:
+      - minio-data:/data
+    networks: [opentrading]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+
+  # Bucket bootstrap — run once with `make up` (profile "init").
+  # Also creates scoped users + per-bucket policies when MINIO_*_ACCESS_KEY vars
+  # are set (production, ADR-0025). Root credentials are admin-only.
+  minio-init:
+    image: minio/mc:RELEASE.2025-08-13T08-35-41Z
+    profiles: ["init"]
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-opentrading}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-opentrading-dev}
+      MINIO_APP_ACCESS_KEY: ${MINIO_APP_ACCESS_KEY:-}
+      MINIO_APP_SECRET_KEY: ${MINIO_APP_SECRET_KEY:-}
+      MINIO_LANGFUSE_ACCESS_KEY: ${MINIO_LANGFUSE_ACCESS_KEY:-}
+      MINIO_LANGFUSE_SECRET_KEY: ${MINIO_LANGFUSE_SECRET_KEY:-}
+      MINIO_MLFLOW_ACCESS_KEY: ${MINIO_MLFLOW_ACCESS_KEY:-}
+      MINIO_MLFLOW_SECRET_KEY: ${MINIO_MLFLOW_SECRET_KEY:-}
+    volumes:
+      - ../minio/policies:/policies:ro
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        mc alias set local http://minio:9000 "$${MINIO_ROOT_USER}" "$${MINIO_ROOT_PASSWORD}"
+        for bucket in raw bronze silver gold mlflow-artifacts langfuse posttrade-artifacts; do
+          mc mb --ignore-existing "local/$$bucket"
+        done
+        add_user() { # name, access, secret, policy-file
+          name="$$1"; access="$$2"; secret="$$3"; policy="$$4"
+          if [ -n "$$access" ] && [ -n "$$secret" ]; then
+            mc admin user add local "$$access" "$$secret" 2>/dev/null || true
+            mc admin policy create local "$$name-rw" "/policies/$$policy" 2>/dev/null || true
+            mc admin policy attach local "$$name-rw" --user "$$access"
+            echo "minio user ready: $$name ($$access)"
+          fi
+        }
+        add_user platform "$${MINIO_APP_ACCESS_KEY}" "$${MINIO_APP_SECRET_KEY}" platform-rw.json
+        add_user langfuse "$${MINIO_LANGFUSE_ACCESS_KEY}" "$${MINIO_LANGFUSE_SECRET_KEY}" langfuse-rw.json
+        add_user mlflow "$${MINIO_MLFLOW_ACCESS_KEY}" "$${MINIO_MLFLOW_SECRET_KEY}" mlflow-rw.json
+        echo "minio buckets ready"
+    networks: [opentrading]
+
+  # ── FalkorDB (graph store for temporal trading memory — §13) ──────────────
+  falkordb:
+    <<: *dev-defaults
+    image: falkordb/falkordb:v4.20.4-alpine
+    environment:
+      BROWSER: "0"
+      FALKORDB_DATA_PATH: /data
+      FALKORDB_PASSWORD: ${FALKORDB_PASSWORD:-falkordb-dev}
+    # `requirepass` is mandatory (ADR-0025): FalkorDB exposes a plain RESP port
+    # otherwise. Explicit entrypoint keeps auth on for both dev and prod.
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        exec falkordb-server --port 6379 --dir /data --requirepass "$${FALKORDB_PASSWORD}"
+    ports:
+      # Redis occupies 6379 on the host; FalkorDB keeps 6379 inside the network.
+      - "127.0.0.1:${OT_FALKORDB_HOST_PORT:-6380}:6379"
+    volumes:
+      - falkordb-data:/data
+    networks: [opentrading]
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$${FALKORDB_PASSWORD}\" ping | grep -q PONG"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # ── ClickHouse (Langfuse analytics backend) ───────────────────────────────
+  clickhouse:
+    <<: *dev-defaults
+    image: clickhouse/clickhouse-server:25.12.11
+    environment:
+      CLICKHOUSE_DB: default
+      CLICKHOUSE_USER: ${CLICKHOUSE_USER:-clickhouse}
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:-clickhouse-dev}
+    ports:
+      - "127.0.0.1:${OT_CLICKHOUSE_HOST_PORT:-8123}:8123"
+    volumes:
+      - clickhouse-data:/var/lib/clickhouse
+    networks: [opentrading]
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8123/ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  # ── Langfuse (LLM evaluation / observability — §22) ───────────────────────
+  langfuse-web:
+    <<: *dev-defaults
+    image: docker.langfuse.com/langfuse/langfuse:v4.19.0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      clickhouse:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    environment:
+      <<: &langfuse-env
+        NEXTAUTH_URL: ${LANGFUSE_NEXTAUTH_URL:-http://127.0.0.1:3000}
+        DATABASE_URL: postgresql://${POSTGRES_USER:-opentrading}:${POSTGRES_PASSWORD:-opentrading-dev}@postgres:5432/langfuse
+        SALT: ${LANGFUSE_SALT:-opentrading-dev-salt}
+        ENCRYPTION_KEY: ${LANGFUSE_ENCRYPTION_KEY:-00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff}
+        TELEMETRY_ENABLED: "false"
+        LANGFUSE_ENABLE_EXPERIMENTAL_FEATURES: "false"
+        LANGFUSE_BULLMQ_SKIP_REDIS_VERSION_CHECK: "true"
+        CLICKHOUSE_URL: http://clickhouse:8123
+        CLICKHOUSE_USER: ${CLICKHOUSE_USER:-clickhouse}
+        CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:-clickhouse-dev}
+        REDIS_HOST: redis
+        REDIS_PORT: "6379"
+        REDIS_AUTH: ${REDIS_PASSWORD:-opentrading-dev}
+        LANGFUSE_S3_EVENT_UPLOAD_BUCKET: langfuse
+        LANGFUSE_S3_EVENT_UPLOAD_REGION: auto
+        LANGFUSE_S3_EVENT_UPLOAD_ACCESS_KEY_ID: ${MINIO_ROOT_USER:-opentrading}
+        LANGFUSE_S3_EVENT_UPLOAD_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD:-opentrading-dev}
+        LANGFUSE_S3_EVENT_UPLOAD_ENDPOINT: http://minio:9000
+        LANGFUSE_S3_EVENT_UPLOAD_FORCE_PATH_STYLE: "true"
+        LANGFUSE_S3_MEDIA_UPLOAD_BUCKET: langfuse
+        LANGFUSE_S3_MEDIA_UPLOAD_REGION: auto
+        LANGFUSE_S3_MEDIA_UPLOAD_ACCESS_KEY_ID: ${MINIO_ROOT_USER:-opentrading}
+        LANGFUSE_S3_MEDIA_UPLOAD_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD:-opentrading-dev}
+        LANGFUSE_S3_MEDIA_UPLOAD_ENDPOINT: http://minio:9000
+        LANGFUSE_S3_MEDIA_UPLOAD_FORCE_PATH_STYLE: "true"
+      NEXTAUTH_SECRET: ${LANGFUSE_NEXTAUTH_SECRET:-opentrading-dev-auth-secret}
+      LANGFUSE_INIT_ORG_ID: opentrading
+      LANGFUSE_INIT_ORG_NAME: OpenTrading
+      LANGFUSE_INIT_PROJECT_ID: opentrading-dev
+      LANGFUSE_INIT_PROJECT_NAME: OpenTrading Dev
+      LANGFUSE_INIT_PROJECT_PUBLIC_KEY: ${LANGFUSE_INIT_PUBLIC_KEY:-pk-lf-opentrading-dev}
+      LANGFUSE_INIT_PROJECT_SECRET_KEY: ${LANGFUSE_INIT_SECRET_KEY:-sk-lf-opentrading-dev}
+      LANGFUSE_INIT_USER_EMAIL: ${LANGFUSE_INIT_EMAIL:-admin@opentrading.local}
+      LANGFUSE_INIT_USER_NAME: OpenTrading Admin
+      LANGFUSE_INIT_USER_PASSWORD: ${LANGFUSE_INIT_PASSWORD:-opentrading-dev}
+    ports:
+      - "127.0.0.1:${OT_LANGFUSE_HOST_PORT:-3000}:3000"
+    networks: [opentrading]
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget -q --spider http://localhost:3000/api/public/health || wget -q --spider http://localhost:3000/ || exit 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  langfuse-worker:
+    <<: *dev-defaults
+    image: docker.langfuse.com/langfuse/langfuse-worker:v4.19.0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      clickhouse:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    environment: *langfuse-env
+    networks: [opentrading]
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f node >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  # ── MLflow (experiment tracking, artifacts in MinIO, metadata in Postgres) ─
+  mlflow:
+    <<: *dev-defaults
+    build:
+      context: ../mlflow
+      dockerfile: Dockerfile
+      args:
+        MLFLOW_VERSION: v3.8.1
+    image: opentrading/mlflow:v3.8.1
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    environment:
+      AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER:-opentrading}
+      AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD:-opentrading-dev}
+      AWS_DEFAULT_REGION: us-east-1
+      MLFLOW_S3_ENDPOINT_URL: http://minio:9000
+      MLFLOW_S3_IGNORE_TLS: "true"
+    command:
+      - mlflow
+      - server
+      - --host
+      - 0.0.0.0
+      - --port
+      - "5000"
+      - --backend-store-uri
+      - postgresql://${POSTGRES_USER:-opentrading}:${POSTGRES_PASSWORD:-opentrading-dev}@postgres:5432/mlflow
+      - --artifacts-destination
+      - s3://mlflow-artifacts
+      - --serve-artifacts
+    ports:
+      - "127.0.0.1:${OT_MLFLOW_HOST_PORT:-5000}:5000"
+    networks: [opentrading]
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:5000/health', timeout=5)",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 30s
+
+  # ── Observability (§23, §31): Prometheus + Grafana + exporters ────────────
+  prometheus:
+    <<: *dev-defaults
+    image: prom/prometheus:v3.14.0
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
+    ports:
+      - "127.0.0.1:${OT_PROMETHEUS_HOST_PORT:-9090}:9090"
+    volumes:
+      - prometheus-data:/prometheus
+      - ../prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ../prometheus/rules:/etc/prometheus/rules:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks: [opentrading]
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/ready"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  grafana:
+    <<: *dev-defaults
+    image: grafana/grafana:13.0.7
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin-dev}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+    ports:
+      - "127.0.0.1:${OT_GRAFANA_HOST_PORT:-3001}:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ../grafana/provisioning:/etc/grafana/provisioning:ro
+      - ../grafana/dashboards:/var/lib/grafana/dashboards:ro
+    networks: [opentrading]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:3000/api/health || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 15s
+
+  postgres-exporter:
+    <<: *dev-defaults
+    image: prometheuscommunity/postgres-exporter:v0.20.1
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # SELECT-only monitoring role (ADR-0025), never the superuser
+      DATA_SOURCE_NAME: postgresql://ot_readonly:${POSTGRES_READONLY_PASSWORD:-opentrading-dev}@postgres:5432/${POSTGRES_DB:-opentrading}?sslmode=disable
+    networks: [opentrading]
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9187/"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  redis-exporter:
+    <<: *dev-defaults
+    image: oliver006/redis_exporter:v1.89.0-alpine
+    command:
+      - --redis.addr
+      - redis://redis:6379
+      - --redis.password
+      - ${REDIS_PASSWORD:-opentrading-dev}
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks: [opentrading]
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9121/"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+# ── Persistent volumes (data survives `make down`; `make reset-dev` wipes) ──
+volumes:
+  postgres-data:
+  redis-data:
+  minio-data:
+  falkordb-data:
+  clickhouse-data:
+  prometheus-data:
+  grafana-data:
+
+# ── Internal network: services talk over DNS names (postgres, redis, …) ─────
+networks:
+  opentrading:
+    driver: bridge

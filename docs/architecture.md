@@ -138,7 +138,7 @@ ResearchRequest(
     market_snapshot=...,
     portfolio_context=...,
     memory_context=...,
-    regime_context=...
+    regime_context=...,
 )
 ```
 
@@ -154,7 +154,7 @@ LLMSignal(
     catalysts=...,
     horizon=...,
     evidence=[...],
-    model_metadata=...
+    model_metadata=...,
 )
 ```
 
@@ -899,10 +899,7 @@ as_of
 Graphiti deberá exponer algo equivalente a:
 
 ```python
-memory.query(
-    query=...,
-    valid_at=simulation_clock.now()
-)
+memory.query(query=..., valid_at=simulation_clock.now())
 ```
 
 No precargaremos el knowledge graph con todo el dataset antes de iniciar un backtest.
@@ -1002,11 +999,13 @@ Eventos:
 market.snapshot.created
 research.requested
 research.completed
+research.bundle.created
 quant.signal.created
 llm.signal.created
 signal.fused
 
 risk.approved
+risk.resized
 risk.rejected
 
 order.intent.created
@@ -1014,7 +1013,10 @@ order.submitted
 order.acknowledged
 order.partially_filled
 order.filled
+order.cancelled
 order.rejected
+order.reconciled
+reconciliation.divergence
 
 position.updated
 trade.closed
@@ -1025,6 +1027,9 @@ memory.episode.created
 strategy.candidate.created
 strategy.promoted
 strategy.retired
+
+experiment.created
+experiment.completed
 
 system.safe_mode.entered
 system.safe_mode.exited
@@ -1956,6 +1961,10 @@ Windows MT4
 ```
 
 Los sockets ZeroMQ jamás se expondrán a Internet.
+
+La implementación operativa de esta sección vive en `docs/threat-model/threat-model.md`
+(registro de amenazas STRIDE, controles C1–C13), ADR-0025, `core/security/`,
+`docs/runbooks/secrets-management.md` e `infra/wireguard/`.
 
 ---
 
