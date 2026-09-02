@@ -1,0 +1,69 @@
+{
+  "version": "1.0.0",
+  "type": "fullstack-web",
+  "languages": [
+    "javascript",
+    "python",
+    "typescript"
+  ],
+  "frameworks": [
+    "vite",
+    "node"
+  ],
+  "databases": [
+    "redis",
+    "sql"
+  ],
+  "packageManager": "npm",
+  "monorepo": true,
+  "tests": [
+    "App.test.tsx",
+    "QUANT_RD_SPEC.md",
+    "TestOrcFile.emptyFile.jsn.gz",
+    "TestOrcFile.emptyFile.orc",
+    "TestOrcFile.test1.jsn.gz",
+    "TestOrcFile.test1.orc",
+    "TestOrcFile.testDate1900.jsn.gz",
+    "TestOrcFile.testDate1900.orc",
+    "__init__.cpython-312-pytest-8.4.2.pyc",
+    "_asyncio.cpython-312-pytest-8.4.2.pyc"
+  ],
+  "ui": true,
+  "seo": false,
+  "docker": true,
+  "graphify": true,
+  "approximateFiles": 14585,
+  "skills": [
+    "accessibility",
+    "api-design",
+    "cicd",
+    "code-review",
+    "database-migrations",
+    "docker",
+    "e2e-testing",
+    "graphify-first-analysis",
+    "javascript",
+    "nodejs",
+    "observability",
+    "performance-engineering",
+    "redis",
+    "repository-discovery",
+    "security-review",
+    "sql",
+    "testing",
+    "typescript",
+    "ux-ui-engineering"
+  ],
+  "agents": [
+    "architect",
+    "backend",
+    "database",
+    "devops",
+    "frontend",
+    "performance",
+    "qa",
+    "reviewer",
+    "security",
+    "ux-ui"
+  ]
+}

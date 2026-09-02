@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./graphify-out/**)",
+      "Read(./graph.json)"
+    ]
+  }
+}
