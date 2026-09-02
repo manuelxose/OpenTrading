@@ -175,7 +175,7 @@ services:
   # ── Langfuse (LLM evaluation / observability — §22) ───────────────────────
   langfuse-web:
     <<: *dev-defaults
-    image: docker.langfuse.com/langfuse/langfuse:v4.19.0
+    image: ghcr.io/langfuse/langfuse:3
     depends_on:
       postgres:
         condition: service_healthy
@@ -238,7 +238,7 @@ services:
 
   langfuse-worker:
     <<: *dev-defaults
-    image: docker.langfuse.com/langfuse/langfuse-worker:v4.19.0
+    image: ghcr.io/langfuse/langfuse-worker:3
     depends_on:
       postgres:
         condition: service_healthy
