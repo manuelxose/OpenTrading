@@ -73,6 +73,14 @@ uso **hasta demo/emulador**, que es lo que hoy puede ejecutarse.
 > levantar la infraestructura local, pero sí ejecutar todo el ciclo PAPER en
 > memoria (`run-once`, §5) y toda la suite de tests unitarios.
 
+> **¿Instalando en Windows con un cliente MT4 real?** Esta guía asume
+> Linux/macOS. Usa `docs/runbooks/local-development-windows.md` (inglés): Core
+> Platform dentro de WSL2 + terminal MT4 nativo en Windows — la topología real
+> del proyecto (Core en Linux, MT4 en Windows). Nota importante que esa página
+> explica en detalle: `QuantBridgeEA.mq4` todavía no existe (§8 de esta guía),
+> así que "instalar MT4" hoy te deja el terminal listo pero sin conectar; el
+> ciclo completo se prueba contra el emulador Python (§8).
+
 ---
 
 ## 3. Instalación desde cero
@@ -529,6 +537,7 @@ usadas (completas en `.env.example`):
 | `docs/OPERATIONS_MANUAL.md` | Manual de operación completo (inglés) |
 | `docs/DISASTER_RECOVERY.md` | RPO/RTO, backups, restauración y playbooks de incidente |
 | `docs/runbooks/local-development.md` | Entorno de desarrollo (inglés) |
+| `docs/runbooks/local-development-windows.md` | Entorno de desarrollo en Windows + terminal MT4 real (inglés) |
 | `docs/runbooks/paper-pipeline.md` | Pipeline PAPER en detalle (inglés) |
 | `docs/runbooks/infrastructure.md` | Infraestructura compose y producción (inglés) |
 | `docs/runbooks/observability-alerts.md` | Alertas y paneles (inglés) |
