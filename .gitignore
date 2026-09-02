@@ -48,3 +48,6 @@ test-results/
 # Editor
 .vscode/
 .idea/
+.agentic-backup/
+!.claude/
+!.claude/settings.json

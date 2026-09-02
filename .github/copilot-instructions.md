@@ -44,3 +44,7 @@ run `graphify update .` after material structural changes. See
 
 Implementation agents report via `.ai/templates/agent-output.md` (Goal, Repository
 evidence, Files affected, Implementation, Tests, Risks, Remaining issues).
+
+<!-- BEGIN AGENTIC-ENGINEERING-PLATFORM -->
+Use repository evidence before assumptions. When `graphify-out/graph.json` exists, query Graphify before broad exploration; read only the impacted source files. For non-trivial work: understand → graph discovery → plan → implement narrowly → test → review → verify. Preserve unrelated behavior, never hardcode secrets, and report only executed validation. For UI work verify responsive behavior, accessibility, and interaction states.
+<!-- END AGENTIC-ENGINEERING-PLATFORM -->
