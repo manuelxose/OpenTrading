@@ -176,6 +176,9 @@ services:
   langfuse-web:
     <<: *dev-defaults
     image: ghcr.io/langfuse/langfuse:3
+    # HOSTNAME env es sobreescrito por Docker (ID del contenedor) y el server
+    # acaba escuchando solo en su IP de red; forzamos 0.0.0.0 explicito.
+    command: ["/bin/sh", "-c", "node ./web/server.js --hostname 0.0.0.0 --keepAliveTimeout 110000"]
     depends_on:
       postgres:
         condition: service_healthy
