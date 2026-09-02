@@ -195,6 +195,8 @@ services:
         LANGFUSE_ENABLE_EXPERIMENTAL_FEATURES: "false"
         LANGFUSE_BULLMQ_SKIP_REDIS_VERSION_CHECK: "true"
         CLICKHOUSE_URL: http://clickhouse:8123
+        CLICKHOUSE_MIGRATION_URL: clickhouse://clickhouse:clickhouse-dev@clickhouse:9000
+        CLICKHOUSE_CLUSTER_ENABLED: "false"
         CLICKHOUSE_USER: ${CLICKHOUSE_USER:-clickhouse}
         CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:-clickhouse-dev}
         REDIS_HOST: redis
