@@ -690,9 +690,9 @@
     "semantic_hash": ""
   },
   ".github/copilot-instructions.md": {
-    "mtime": 1787736975.6985524,
-    "seen": 1787739936.5191622,
-    "ast_hash": "bef88445df0dd4d24721aaf79b741d85",
+    "mtime": 1788022404.7696795,
+    "seen": 1788363715.0379915,
+    "ast_hash": "420b9eaedf1c1d58aebd83c06d1f495c",
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
@@ -702,15 +702,15 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1787736975.6985524,
-    "seen": 1787739936.519166,
-    "ast_hash": "997b9da86d39a5e93181f8a2d675e526",
+    "mtime": 1788022404.7686796,
+    "seen": 1788363715.0380032,
+    "ast_hash": "0f2818c90d33e3f90b3c3880c1399acf",
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1787736975.6985524,
-    "seen": 1787739936.519168,
-    "ast_hash": "9d690cebb8b46ea35a94b604baac34aa",
+    "mtime": 1788022404.7686796,
+    "seen": 1788363715.0380058,
+    "ast_hash": "941cc88901c05f8c52932b03d1d6b72c",
     "semantic_hash": ""
   },
   "README.md": {
@@ -3312,15 +3312,195 @@
     "semantic_hash": ""
   },
   "docs/GUIA_INSTALACION_USO.md": {
-    "mtime": 1787962722.4538326,
-    "seen": 1787963240.469794,
+    "mtime": 1787963612.2622304,
+    "seen": 1788363715.0381527,
     "ast_hash": "f67759234bc873c3a91cbbcb0c5a2614",
     "semantic_hash": ""
   },
   ".claude/settings.json": {
+    "mtime": 1788023467.8463397,
+    "seen": 1788363715.036625,
+    "ast_hash": "8a80554c91d9fca8acb82f023de02f11",
+    "semantic_hash": ""
+  },
+  ".agentic-platform-backups/20260829-171107/settings.json": {
     "mtime": 1788021491.0772777,
-    "seen": 1788021573.692671,
+    "seen": 1788363715.0366037,
     "ast_hash": "b7aa8417bdc0e914ee4d548274784b9c",
-    "semantic_hash": "b7aa8417bdc0e914ee4d548274784b9c"
+    "semantic_hash": ""
+  },
+  ".agentic/platform.json": {
+    "mtime": 1788023468.8373215,
+    "seen": 1788363715.0366147,
+    "ast_hash": "c28c609d93ea3966e3795fa75f8a7ae7",
+    "semantic_hash": ""
+  },
+  ".agentic/repository-profile.json": {
+    "mtime": 1788023468.8373215,
+    "seen": 1788363715.0366192,
+    "ast_hash": "79ec09d5af4eac88739b39cf98f2600c",
+    "semantic_hash": ""
+  },
+  ".agentic-platform-backups/20260829-165324/AGENTS.md": {
+    "mtime": 1788021491.0732777,
+    "seen": 1788363715.037759,
+    "ast_hash": "b64e6b4c9ce581697d185f90cb1ba5ce",
+    "semantic_hash": ""
+  },
+  ".agentic-platform-backups/20260829-165324/CLAUDE.md": {
+    "mtime": 1788021491.0732777,
+    "seen": 1788363715.0377617,
+    "ast_hash": "9c2570baf258b48812314f7a5f0758a2",
+    "semantic_hash": ""
+  },
+  ".agentic-platform-backups/20260829-165324/POLICY.md": {
+    "mtime": 1788021491.0742779,
+    "seen": 1788363715.0377643,
+    "ast_hash": "429cbaf81165700270c534c4643ec560",
+    "semantic_hash": ""
+  },
+  ".agentic-platform-backups/20260829-165324/architect.md": {
+    "mtime": 1788021491.0742779,
+    "seen": 1788363715.037767,
+    "ast_hash": "b43b9504585db34912c46778b5c1f83a",
+    "semantic_hash": ""
+  },
+  ".agentic-platform-backups/20260829-165324/backend.md": {
+    "mtime": 1788021491.0752778,
+    "seen": 1788363715.0377693,
+    "ast_hash": "a725dc75cb3680962ffc2cb048745068",
+    "semantic_hash": ""
+  },
+  ".agentic-platform-backups/20260829-165324/copilot-instructions.md": {
+    "mtime": 1788021491.0732777,
+    "seen": 1788363715.037771,
+    "ast_hash": "076917918d328090f53dd596ac94cca6",
+    "semantic_hash": ""
+  },
+  ".agentic-platform-backups/20260829-165324/database.md": {
+    "mtime": 1788021491.0752778,
+    "seen": 1788363715.0377734,
+    "ast_hash": "3cdf825f895b8efb39ea61d53e1b6166",
+    "semantic_hash": ""
+  },
+  ".agentic-platform-backups/20260829-165324/devops.md": {
+    "mtime": 1788021491.0762777,
+    "seen": 1788363715.0377758,
+    "ast_hash": "bfcb282cdf117d0d16acd01c6cbaaae2",
+    "semantic_hash": ""
+  },
+  ".agentic-platform-backups/20260829-165324/frontend.md": {
+    "mtime": 1788021491.0742779,
+    "seen": 1788363715.0377777,
+    "ast_hash": "776b49ff54966c2c2af695d4ec8d6da0",
+    "semantic_hash": ""
+  },
+  ".agentic-platform-backups/20260829-165324/orchestrator.md": {
+    "mtime": 1788021491.0742779,
+    "seen": 1788363715.03778,
+    "ast_hash": "746556e5e188ec1511f9b060a620faed",
+    "semantic_hash": ""
+  },
+  ".agentic-platform-backups/20260829-165324/performance.md": {
+    "mtime": 1788021491.0762777,
+    "seen": 1788363715.037782,
+    "ast_hash": "db8f56a0532171dd0e73f20bfa545b04",
+    "semantic_hash": ""
+  },
+  ".agentic-platform-backups/20260829-165324/qa.md": {
+    "mtime": 1788021491.0762777,
+    "seen": 1788363715.0377843,
+    "ast_hash": "9ce96c21a019bbb64c7eb7019b9ecdc6",
+    "semantic_hash": ""
+  },
+  ".agentic-platform-backups/20260829-165324/reviewer.md": {
+    "mtime": 1788021491.0762777,
+    "seen": 1788363715.0377865,
+    "ast_hash": "104aab7fd38ecfd29e24e191ae8eda4e",
+    "semantic_hash": ""
+  },
+  ".agentic-platform-backups/20260829-165324/security.md": {
+    "mtime": 1788021491.0752778,
+    "seen": 1788363715.0377884,
+    "ast_hash": "3fa2c1b0b5ebe9443fb8afaf4d1b73ae",
+    "semantic_hash": ""
+  },
+  ".agentic-platform-backups/20260829-165324/seo.md": {
+    "mtime": 1788021491.0762777,
+    "seen": 1788363715.0377905,
+    "ast_hash": "ab9622bc19c9a11706f47160880c7446",
+    "semantic_hash": ""
+  },
+  ".agentic-platform-backups/20260829-165324/ux-ui.md": {
+    "mtime": 1788021491.0752778,
+    "seen": 1788363715.0377922,
+    "ast_hash": "0b5cd76337b2a7516c88b93ee71901e4",
+    "semantic_hash": ""
+  },
+  ".agentic/POLICY.md": {
+    "mtime": 1788022404.7696795,
+    "seen": 1788363715.037794,
+    "ast_hash": "78ca78384b0199e0cdfc2ff398ce0c3d",
+    "semantic_hash": ""
+  },
+  ".agentic/agents/architect.md": {
+    "mtime": 1788022404.7716794,
+    "seen": 1788363715.0377963,
+    "ast_hash": "23438a6b0af72d9e692de453454ce40b",
+    "semantic_hash": ""
+  },
+  ".agentic/agents/backend.md": {
+    "mtime": 1788022404.7726793,
+    "seen": 1788363715.0377984,
+    "ast_hash": "a7382af68559992650eb604e1bc73ac1",
+    "semantic_hash": ""
+  },
+  ".agentic/agents/database.md": {
+    "mtime": 1788022404.7736795,
+    "seen": 1788363715.0378008,
+    "ast_hash": "a9eab4ce2ba8603a5716ca56fb766706",
+    "semantic_hash": ""
+  },
+  ".agentic/agents/devops.md": {
+    "mtime": 1788022404.7786794,
+    "seen": 1788363715.0378027,
+    "ast_hash": "b74d6830c34d5fbd0a388664fd1ad560",
+    "semantic_hash": ""
+  },
+  ".agentic/agents/frontend.md": {
+    "mtime": 1788022404.7716794,
+    "seen": 1788363715.0378048,
+    "ast_hash": "cb2eb08e4a064d17640c8860912b78fe",
+    "semantic_hash": ""
+  },
+  ".agentic/agents/performance.md": {
+    "mtime": 1788022404.7756793,
+    "seen": 1788363715.037807,
+    "ast_hash": "9a6aa90aaabc4f3bd65efa50621fd6c1",
+    "semantic_hash": ""
+  },
+  ".agentic/agents/qa.md": {
+    "mtime": 1788022404.7766793,
+    "seen": 1788363715.037809,
+    "ast_hash": "974fc0006664295f5c32b2f55dc82d8f",
+    "semantic_hash": ""
+  },
+  ".agentic/agents/reviewer.md": {
+    "mtime": 1788022404.7796793,
+    "seen": 1788363715.0378108,
+    "ast_hash": "b197c1de8831528f557ec0485d77951e",
+    "semantic_hash": ""
+  },
+  ".agentic/agents/security.md": {
+    "mtime": 1788022404.7746794,
+    "seen": 1788363715.037813,
+    "ast_hash": "eb62e53648ae60391de667453f3b6321",
+    "semantic_hash": ""
+  },
+  ".agentic/agents/ux-ui.md": {
+    "mtime": 1788022404.7726793,
+    "seen": 1788363715.037815,
+    "ast_hash": "e2a390783cf9a195ca58b68beebc1c77",
+    "semantic_hash": ""
   }
 }
