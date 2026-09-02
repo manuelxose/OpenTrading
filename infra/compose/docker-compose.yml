@@ -139,7 +139,7 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
-        exec falkordb-server --port 6379 --dir /data --requirepass "$${FALKORDB_PASSWORD}"
+        exec redis-server --port 6379 --dir /data --loadmodule /var/lib/falkordb/bin/falkordb.so --requirepass "$${FALKORDB_PASSWORD}"
     ports:
       # Redis occupies 6379 on the host; FalkorDB keeps 6379 inside the network.
       - "127.0.0.1:${OT_FALKORDB_HOST_PORT:-6380}:6379"
