@@ -299,7 +299,9 @@ def _row_to_order(row: object) -> OrderRecord:
 
 
 def _order_values(record: OrderRecord) -> dict[str, object]:
-    return record.model_dump(mode="json")
+    # schema_version is a contract-level field with no column in execution_orders
+    # (migration 0003): exclude it, like the other row mappers do explicitly.
+    return record.model_dump(mode="json", exclude={"schema_version"})
 
 
 def _row_to_position(row: object) -> ExecutionPosition:
@@ -308,7 +310,7 @@ def _row_to_position(row: object) -> ExecutionPosition:
 
 
 def _position_values(position: ExecutionPosition) -> dict[str, object]:
-    return position.model_dump(mode="json")
+    return position.model_dump(mode="json", exclude={"schema_version"})
 
 
 def _row_to_run(row: object) -> ReconciliationRun:
@@ -317,7 +319,7 @@ def _row_to_run(row: object) -> ReconciliationRun:
 
 
 def _run_values(run: ReconciliationRun) -> dict[str, object]:
-    return run.model_dump(mode="json")
+    return run.model_dump(mode="json", exclude={"schema_version"})
 
 
 class PostgresExecutionStateStore:

@@ -210,6 +210,7 @@ def _control_values(state: EmergencyControlState) -> dict[str, object]:
 
 def _row_to_dead_man(row: object) -> DeadManSwitchState:
     values = {column.key: getattr(row, column.key) for column in emergency_dead_man_table.c}
+    values.pop("id", None)  # singleton PK column is not part of the state schema
     values["reason_codes"] = tuple(values.get("reason_codes") or ())
     return DeadManSwitchState.model_validate(values)
 

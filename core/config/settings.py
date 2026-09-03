@@ -59,6 +59,29 @@ class Settings(BaseSettings):
     # map contains a strategy, its promotion budget may not exceed this value.
     live_auto_strategy_risk_budgets: dict[str, Decimal] = {}
 
+    # ── LIVE_AUTO deterministic supervisor (apps/live_supervisor) ───────────
+    # The only process allowed to originate automated orders in LIVE_AUTO mode.
+    # No LLM, RD-Agent or strategy code participates in any capital decision
+    # (INV-1): signals are deterministic EMA momentum on broker quotes.
+    live_auto_instruments: str = "BTCUSD,ETHUSD"
+    live_auto_strategy_id: str = "baseline-momentum-live-001"
+    live_auto_strategy_version: str = "1.0.0"
+    live_auto_cycle_interval_seconds: int = 300
+    live_auto_position_equity_pct: Decimal = Decimal("0.02")
+    live_auto_stop_atr_ratio: Decimal = Decimal("1.5")
+    live_auto_take_atr_ratio: Decimal = Decimal("3.0")
+    live_auto_max_open_positions: int = 1
+    live_auto_max_spread_points: Decimal = Decimal("30")
+    live_auto_risk_per_trade: Decimal = Decimal("100")
+    live_auto_min_strength: Decimal = Decimal("0.0002")
+    # Strategy signal parameters (EMA cross + ATR) — versioned per deployment.
+    live_auto_fast_ema: int = 12
+    live_auto_slow_ema: int = 45
+    live_auto_atr_period: int = 14
+    # Strategy Lab (offline self-improvement, INV-8): persist M1 bars so the
+    # lab can replay and evaluate parameter candidates deterministically.
+    live_auto_persist_bars: bool = True
+
     # ── Emergency control system (INV-7, architecture §10) ─────────────────
     # Dead man switch over the Core ↔ MT4 heartbeat: loss blocks new entries,
     # leaves broker-side SL/TP untouched and raises a CRITICAL alert. Flattening

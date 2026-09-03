@@ -84,7 +84,7 @@ class PostgresLiveAutoStore:
                     live_auto_strategies_table.c.strategy_id == strategy_id
                 )
             ).first()
-        return None if row is None else _decode_strategy(row._mapping)
+        return None if row is None else _decode_strategy(row)
 
     def save_strategy(self, record: LiveAutoStrategyRecord) -> None:
         values = _encode_strategy(record)
@@ -112,7 +112,7 @@ class PostgresLiveAutoStore:
     def list_strategies(self) -> tuple[LiveAutoStrategyRecord, ...]:
         with self.engine.connect() as conn:
             rows = conn.execute(select(live_auto_strategies_table)).all()
-        return tuple(_decode_strategy(row._mapping) for row in rows)
+        return tuple(_decode_strategy(row) for row in rows)
 
     def append_pnl(
         self,

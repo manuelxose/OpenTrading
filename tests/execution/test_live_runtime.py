@@ -40,7 +40,15 @@ def test_live_auto_composition_wires_the_deterministic_registry() -> None:
 
 def test_live_auto_composition_fails_closed_when_disabled_by_default() -> None:
     with pytest.raises(LiveAutoViolation, match="disabled"):
-        build_live_execution_runtime(Settings(operating_mode=OperatingMode.LIVE_AUTO))
+        build_live_execution_runtime(
+            Settings(
+                operating_mode=OperatingMode.LIVE_AUTO,
+                live_auto_enabled=False,
+                live_auto_max_strategies=0,
+                live_auto_max_capital=None,
+                live_auto_max_loss=None,
+            )
+        )
 
 
 def test_live_auto_composition_fails_closed_without_explicit_limits() -> None:
@@ -50,6 +58,7 @@ def test_live_auto_composition_fails_closed_without_explicit_limits() -> None:
                 operating_mode=OperatingMode.LIVE_AUTO,
                 live_auto_enabled=True,
                 live_auto_max_strategies=2,
-                # no max capital, no max loss
+                live_auto_max_capital=None,
+                live_auto_max_loss=None,
             )
         )

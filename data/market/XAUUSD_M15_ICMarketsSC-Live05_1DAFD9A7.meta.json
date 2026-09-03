@@ -1,0 +1,19 @@
+{
+  "source_file": "C:\\Users\\Admin\\AppData\\Roaming\\MetaQuotes\\Terminal\\1DAFD9A7C67DC84FE37EAA1FC1E5CF75\\history\\ICMarketsSC-Live05\\XAUUSD15.hst",
+  "server": "ICMarketsSC-Live05",
+  "data_folder": "C:\\Users\\Admin\\AppData\\Roaming\\MetaQuotes\\Terminal\\1DAFD9A7C67DC84FE37EAA1FC1E5CF75",
+  "symbol": "XAUUSD",
+  "period_minutes": 15,
+  "digits": 2,
+  "format_version": 401,
+  "bars": 448172,
+  "first_bar_broker_time": "2004-06-11 07:15:00",
+  "last_bar_broker_time": "2024-01-09 14:15:00",
+  "span_years": 19.578,
+  "timestamps_are": "BROKER SERVER TIME (not UTC)",
+  "broker_utc_offset_hours": null,
+  "spread_source": "MODELLED CONSTANT",
+  "spread_points": 25.0,
+  "data_sha256": "a87527e8a7929f48",
+  "exported_at": "2026-08-31T02:32:56"
+}

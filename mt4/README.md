@@ -18,17 +18,20 @@ rejected per ADR-0003). No strategy intelligence ever migrates into MQL4.
   bridge + a deterministic simulated venue. The Core executes the full
   lifecycle suite against it with no MetaTrader installed (Phase 6 DoD):
   `tests/unit/mt4/`.
-- ⏳ **QuantBridgeEA.mq4** — to be written as a mechanical MQL4 port of the
-  emulator's gate and venue checks. Not started (by design: protocol first).
+- ✅ **QuantBridgeEA.mq4** — implemented as a mechanical MQL4 port of the
+  emulator's gate and venue checks (ADR-0020): REP command channel, PUSH
+  events, PUB market quotes, identical validation order, error codes and
+  idempotency/sequence semantics. Compiles clean (0 errors, 0 warnings) on
+  MetaEditor build 600+. See `Experts/README.md` for install/attach steps.
 
 ## Layout
 
-| Path | Purpose |
-|---|---|
-| `protocol/README.md` | normative wire spec for the MQL4 implementer |
-| `Include/` | shared MQL4 includes (protocol constants + JSON/checksum helpers) |
-| `Experts/QuantBridgeEA.mq4` | the execution-only EA (next step) |
-| `tests/` | pointer to the real suite in `tests/unit/mt4/` (repo test convention) |
+| Path                        | Purpose                                                               |
+| --------------------------- | --------------------------------------------------------------------- |
+| `protocol/README.md`        | normative wire spec for the MQL4 implementer                          |
+| `Include/`                  | shared MQL4 includes (protocol constants + JSON/checksum helpers)     |
+| `Experts/QuantBridgeEA.mq4` | the execution-only EA (next step)                                     |
+| `tests/`                    | pointer to the real suite in `tests/unit/mt4/` (repo test convention) |
 
 ## Run the emulator / lifecycle
 

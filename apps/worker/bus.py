@@ -105,8 +105,14 @@ class RedisConnection(Protocol):
         start_id: str = "0-0",
         count: int | None = None,
     ) -> list[Any]: ...
-    def xpending(
-        self, name: str, groupname: str, min: str = "-", max: str = "+", count: int | None = None
+    def xpending(self, name: str, groupname: str) -> Any: ...
+    def xpending_range(
+        self,
+        name: str,
+        groupname: str,
+        min: str = "-",
+        max: str = "+",
+        count: int | None = None,
     ) -> Any: ...
     def xlen(self, name: str) -> int: ...
     def xdel(self, name: str, *ids: str) -> int: ...
@@ -269,7 +275,7 @@ class RedisStreamBus:
         """Inspect the group's PEL (delivery counts, idle times)."""
         raw = self._execute(
             "XPENDING",
-            lambda c: c.xpending(self._stream_key, group, min="-", max="+", count=count),
+            lambda c: c.xpending_range(self._stream_key, group, "-", "+", count=count),
         )
         if not raw:
             return []

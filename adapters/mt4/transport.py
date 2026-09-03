@@ -118,7 +118,10 @@ def recv_frame(socket: zmq.Socket[bytes], timeout_ms: int, now: datetime) -> Wir
         )
     raw = socket.recv()
     message = parse_message(raw)
-    message.verify_checksum()
+    # MQL4 bridges emit checksum:null on replies/events (spec §9: verification
+    # optional); verify whenever a checksum is actually present.
+    if message.checksum is not None:
+        message.verify_checksum()
     return message
 
 

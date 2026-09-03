@@ -45,6 +45,15 @@ before any implementation touches them:
 - §34.11 — Obsidian as the human knowledge UI (cross-referenced in TARGET_ARCHITECTURE §19)
 - §34.20 — Research never auto-promotes to real money (cross-referenced in ADR-0015/0006)
 
+## Later additions
+
+- **ADR-0027 — Standalone XAUUSD RPB Expert Advisor.** Adds `mt4/Experts/XauRpbEA.mq4`
+  as a standalone autonomous EA, outside the QuantBridge execution path.
+  `QuantBridgeEA.mq4` remains execution-only and INV-5 continues to hold for the
+  bridge without exception. The canonical strategy definition stays in Python
+  (`research/strategies/xau_rpb/`), with signal-parity tests holding the two
+  implementations together.
+
 ## Process
 
 1. Draft with `.ai/templates/adr.md` → 2. Principal Architect review → 3. mandatory

@@ -32,7 +32,9 @@ def build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="command", required=True)
 
     run = sub.add_parser("run", help="run the Python MT4 emulator")
-    run.add_argument("--command", default="tcp://127.0.0.1:5555")
+    run.add_argument(
+        "--command", dest="command_addr", default="tcp://127.0.0.1:5555"
+    )
     run.add_argument("--events", default="tcp://127.0.0.1:5556")
     run.add_argument("--quotes", default="tcp://127.0.0.1:5557")
     run.add_argument("--seed", type=int, default=42)
@@ -152,7 +154,7 @@ def main() -> int:
     if args.command == "run":
         run_emulator(
             Mt4Endpoints(
-                command_addr=args.command,
+                command_addr=args.command_addr,
                 events_addr=args.events,
                 quotes_addr=args.quotes,
             ),

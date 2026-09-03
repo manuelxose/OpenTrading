@@ -51,3 +51,11 @@ test-results/
 .agentic-backup/
 !.claude/
 !.claude/settings.json
+
+# Local-only MT4 demo credentials (never commit)
+scripts/mt4-demo-creds.env
+
+# Exported MT4 market history: large raw datasets are not committed (mandate §62).
+# Regenerate with: python scripts/export_mt4_history.py --symbol XAUUSD --period 15
+# The .meta.json sidecars ARE tracked so any result stays traceable to its data.
+data/market/*.csv
