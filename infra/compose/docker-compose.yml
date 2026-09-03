@@ -51,14 +51,20 @@ services:
     image: redis:7.4-alpine
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:-opentrading-dev}
-    command: ["sh", "-c", "redis-server --appendonly yes --requirepass \"$${REDIS_PASSWORD}\""]
+    command:
+      [
+        "sh",
+        "-c",
+        'redis-server --appendonly yes --requirepass "$${REDIS_PASSWORD}"',
+      ]
     ports:
       - "127.0.0.1:${OT_REDIS_HOST_PORT:-6379}:6379"
     volumes:
       - redis-data:/data
     networks: [opentrading]
     healthcheck:
-      test: ["CMD-SHELL", "redis-cli -a \"$${REDIS_PASSWORD}\" ping | grep -q PONG"]
+      test:
+        ["CMD-SHELL", 'redis-cli -a "$${REDIS_PASSWORD}" ping | grep -q PONG']
       interval: 5s
       timeout: 3s
       retries: 20
@@ -147,7 +153,11 @@ services:
       - falkordb-data:/data
     networks: [opentrading]
     healthcheck:
-      test: ["CMD-SHELL", "redis-cli -a \"$${FALKORDB_PASSWORD}\" ping | grep -q PONG"]
+      test:
+        [
+          "CMD-SHELL",
+          'redis-cli -a "$${FALKORDB_PASSWORD}" ping | grep -q PONG',
+        ]
       interval: 5s
       timeout: 3s
       retries: 20
@@ -166,7 +176,15 @@ services:
       - clickhouse-data:/var/lib/clickhouse
     networks: [opentrading]
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8123/ping"]
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:8123/ping",
+        ]
       interval: 5s
       timeout: 5s
       retries: 20
@@ -218,6 +236,7 @@ services:
         LANGFUSE_S3_MEDIA_UPLOAD_ENDPOINT: http://minio:9000
         LANGFUSE_S3_MEDIA_UPLOAD_FORCE_PATH_STYLE: "true"
       NEXTAUTH_SECRET: ${LANGFUSE_NEXTAUTH_SECRET:-opentrading-dev-auth-secret}
+      HOSTNAME: "0.0.0.0"
       LANGFUSE_INIT_ORG_ID: opentrading
       LANGFUSE_INIT_ORG_NAME: OpenTrading
       LANGFUSE_INIT_PROJECT_ID: opentrading-dev
@@ -328,7 +347,15 @@ services:
       - "host.docker.internal:host-gateway"
     networks: [opentrading]
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/ready"]
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:9090/-/ready",
+        ]
       interval: 5s
       timeout: 5s
       retries: 20
@@ -367,7 +394,15 @@ services:
       DATA_SOURCE_NAME: postgresql://ot_readonly:${POSTGRES_READONLY_PASSWORD:-opentrading-dev}@postgres:5432/${POSTGRES_DB:-opentrading}?sslmode=disable
     networks: [opentrading]
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9187/"]
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:9187/",
+        ]
       interval: 10s
       timeout: 5s
       retries: 20
@@ -386,7 +421,15 @@ services:
         condition: service_healthy
     networks: [opentrading]
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9121/"]
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:9121/",
+        ]
       interval: 10s
       timeout: 5s
       retries: 20

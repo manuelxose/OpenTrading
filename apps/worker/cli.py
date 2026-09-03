@@ -47,8 +47,8 @@ def build_default_config(settings: Settings) -> PaperPipelineConfig:
             tick_size=Decimal("0.00001"),
             price_precision=5,
             lot_size=Decimal("100000"),
-            lot_step=Decimal("1"),
-            min_lot=Decimal("1"),
+            lot_step=Decimal("0.01"),
+            min_lot=Decimal("0.01"),
             max_lot=Decimal("100"),
             initial_mid=Decimal("1.10000") + index * Decimal("0.05"),
         )

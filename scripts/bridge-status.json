@@ -1,0 +1,9 @@
+{
+  "ts": "2026-08-29T21:32:30.6531742+02:00",
+  "mode": "ATTACHED_DEMO",
+  "terminal": "C:\\Program Files (x86)\\MetaTrader 4 IC Markets Global\\terminal.exe",
+  "dataFolder": "C:\\Users\\Admin\\AppData\\Roaming\\MetaQuotes\\Terminal\\5D49F47D1EA1ECFC0DDC965B6D100AC5",
+  "account": "account=44961955 is_demo=True broker_connected=True trading_enabled=True positions=0",
+  "safeMode": "OFF",
+  "reconciled": true
+}

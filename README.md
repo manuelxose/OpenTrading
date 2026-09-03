@@ -82,6 +82,12 @@ LLM direct control over capital**.
 | `docs/DISASTER_RECOVERY.md` | RPO/RTO targets, backups, restore and incident playbooks |
 | `docs/ADR/` | Frozen decisions (26 ADRs) |
 | `.ai/rules/architecture-invariants.md` | Non-negotiable invariants INV-1…INV-16 |
+| `docs/strategy/XAUUSD_RPB_SPEC.md` | Frozen XAU_RPB strategy contract (`XAU_RPB_V1.0.0`) |
+| `docs/strategy/RESEARCH_REPORT.md` | XAU_RPB qualification status and limitations |
+| `docs/strategy/VALIDATION_METHODOLOGY.md` | How XAU_RPB would be proven or rejected |
+| `docs/strategy/RISK_POLICY.md` | XAU_RPB risk mandate and kill switches |
+| `docs/strategy/BROKER_COMPATIBILITY.md` | XAUUSD-specific broker audit |
+| `docs/runbooks/xau-rpb-ea.md` | Installing and operating the XAU_RPB EA |
 
 ## Repository layout (per `docs/architecture.md` §27)
 
@@ -93,9 +99,11 @@ engines/         signal_fusion, risk, execution, portfolio, posttrade, promotion
 adapters/        tradingagents, graphiti, nautilus, qlib, rdagent,
                  market_data, mt4                                       (phase-gated)
 services/        core-runtime (Python 3.12), quant-rd (Python 3.11)
-research/        factors, models, strategies, baselines, notebooks
+research/        factors, models, strategies (xau_rpb), validation,
+                 baselines, notebooks
 infra/           compose + per-service config (postgres, redis, minio, …)
 mt4/             QuantBridgeEA.mq4 (Phase 6, execution-only, INV-5)
+                 XauRpbEA.mq4 + Include/xau_rpb/ (standalone EA, ADR-0027)
 tests/           unit, integration, replay, leakage, backtest, execution,
                  risk, security, chaos
 ```

@@ -98,11 +98,10 @@ class ProposalStage(Stage):
         equity = account.equity if account is not None else config.starting_balance
 
         contract_size = Decimal(str(getattr(instrument, "contract_size", 1)))
-        lot_size = instrument.lot_size
         step = instrument.lot_step
         min_lot = instrument.min_lot
         max_lot = instrument.max_lot
-        notional_per_lot = contract_size * lot_size * mid
+        notional_per_lot = contract_size * mid
         if notional_per_lot <= 0:
             raise ValueError("instrument notional per lot must be positive")
         raw = equity * config.proposal.position_equity_pct / notional_per_lot

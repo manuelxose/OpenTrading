@@ -361,7 +361,9 @@ class Mt4ExecutionClient:
             return None
         topic, raw = self._quotes.recv_multipart()
         quote = MarketQuote.model_validate_json(raw.decode("utf-8"))
-        quote.verify_checksum()
+        # MQL4 bridges emit checksum:null (spec §9: verification optional).
+        if quote.checksum is not None:
+            quote.verify_checksum()
         self._metrics.set_market_data_age(
             "mt4", (self._clock.now() - quote.timestamp).total_seconds()
         )
