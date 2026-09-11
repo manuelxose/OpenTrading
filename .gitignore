@@ -49,9 +49,6 @@ test-results/
 .vscode/
 .idea/
 .agentic-backup/
-!.claude/
-!.claude/settings.json
-
 # Local-only MT4 demo credentials (never commit)
 scripts/mt4-demo-creds.env
 
@@ -59,3 +56,22 @@ scripts/mt4-demo-creds.env
 # Regenerate with: python scripts/export_mt4_history.py --symbol XAUUSD --period 15
 # The .meta.json sidecars ARE tracked so any result stays traceable to its data.
 data/market/*.csv
+
+# === AI agents/skills tooling + graphify (local-only, never in remote) ===
+.claude/
+.codex/
+.copilot/
+.agents/
+.planning/
+.ai/
+.agentic/
+.agentic-platform-backups/
+graphify-out/
+AGENTS.md
+CLAUDE.md
+AI_GUIDE.md
+copilot-instructions.md
+.mcp.json
+mcp.json
+docs/ai-engineering/
+docs/ADR/0009-graphify-development-context-only.md
