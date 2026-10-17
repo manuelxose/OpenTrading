@@ -124,9 +124,7 @@ class ScriptedRedis:
         for name, cursor in streams.items():
             key = (name, groupname)
             if key not in self._groups:
-                raise redis_exc.ResponseError(
-                    "NOGROUP No such key or consumer group"
-                )
+                raise redis_exc.ResponseError("NOGROUP No such key or consumer group")
             group = self._groups[key]
             stored = self._streams.get(name, [])
             entries: list[tuple[str, dict[str, str]]] = []
@@ -138,9 +136,7 @@ class ScriptedRedis:
             else:  # replay this consumer's own PEL ("0")
                 for message_id, pel in group["pel"].items():
                     if pel[0] == consumername:
-                        match = next(
-                            (fields for mid, fields in stored if mid == message_id), None
-                        )
+                        match = next((fields for mid, fields in stored if mid == message_id), None)
                         if match is not None:
                             entries.append((message_id, dict(match)))
             if count is not None:
@@ -222,6 +218,12 @@ class ScriptedRedis:
             for message_id, pel in group["pel"].items()
         ]
         return items[:count] if count is not None else items
+
+    def xpending_range(
+        self, name: str, groupname: str, min: str = "-", max: str = "+", count: int | None = None
+    ) -> Any:
+        """redis-py's name for the extended XPENDING form that ``bus.pending`` calls."""
+        return self.xpending(name, groupname, min, max, count)
 
     def xlen(self, name: str) -> int:
         self._guard()

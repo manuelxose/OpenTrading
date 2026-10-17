@@ -6,8 +6,8 @@ import argparse
 import json
 import sys
 
-from core.config.settings import get_settings
 from core.clock.clocks import SystemClock
+from core.config.settings import get_settings
 from core.security import install_redacting_logging
 from engines.live_auto.config import LiveAutoConfig
 from engines.live_auto.persistence import PostgresLiveAutoStore

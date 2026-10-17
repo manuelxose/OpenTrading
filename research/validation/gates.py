@@ -137,27 +137,26 @@ def evaluate_gates(
     # ---- §43 provisional acceptance gates -----------------------------------
     r.append(_gate("OOS net profit factor", oos.profit_factor, 1.25, 1.35))
     r.append(_gate("OOS expectancy (R/trade)", oos.expectancy_r, 0.0, 0.10))
-    r.append(
-        _gate("OOS max drawdown %", oos.max_drawdown_pct, 15.0, 10.0,
-              higher_is_better=False)
-    )
+    r.append(_gate("OOS max drawdown %", oos.max_drawdown_pct, 15.0, 10.0, higher_is_better=False))
     r.append(_gate("Recovery factor", oos.recovery_factor, 1.5, 2.0))
     r.append(_gate("Sharpe (annualized)", oos.sharpe, 0.5, 0.8))
     r.append(
-        _gate("OOS trade count", float(oos.trades), 200.0, 300.0,
-              note="a small sample cannot support a deployment decision")
+        _gate(
+            "OOS trade count",
+            float(oos.trades),
+            200.0,
+            300.0,
+            note="a small sample cannot support a deployment decision",
+        )
     )
 
     degradation: float | None = None
     if is_profit_factor and oos.profit_factor is not None and is_profit_factor > 0:
         degradation = (is_profit_factor - oos.profit_factor) / is_profit_factor * 100.0
-    r.append(
-        _gate("PF degradation IS->OOS %", degradation, 30.0, 20.0, higher_is_better=False)
-    )
+    r.append(_gate("PF degradation IS->OOS %", degradation, 30.0, 20.0, higher_is_better=False))
     r.append(_gate("1.5x spread stress PF", spread_stress_pf, 1.0, 1.15))
     r.append(
-        _gate("Monte Carlo P95 drawdown %", monte_carlo_p95_dd, 20.0, 15.0,
-              higher_is_better=False)
+        _gate("Monte Carlo P95 drawdown %", monte_carlo_p95_dd, 20.0, 15.0, higher_is_better=False)
     )
 
     # ---- §44 automatic rejection conditions ---------------------------------
@@ -173,9 +172,7 @@ def evaluate_gates(
     if spread_stress_pf is not None and spread_stress_pf < 1.0:
         rejects.append(f"1.5x spread stress profit factor {spread_stress_pf:.3f} < 1.0")
     if monte_carlo_p95_dd is not None and monte_carlo_p95_dd > 20.0:
-        rejects.append(
-            f"Monte Carlo P95 drawdown {monte_carlo_p95_dd:.2f}% exceeds the mandate"
-        )
+        rejects.append(f"Monte Carlo P95 drawdown {monte_carlo_p95_dd:.2f}% exceeds the mandate")
     if max_year_contribution_pct is not None and max_year_contribution_pct > 50.0:
         rejects.append(
             f"a single year contributes {max_year_contribution_pct:.1f}% of total profit"

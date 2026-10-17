@@ -128,8 +128,9 @@ class _RecordingClient:
         return drain
 
 
-def _service_with_client(
-) -> tuple[InMemoryExecutionStateStore, Stack, FakeReconcileClient, ExecutionService]:
+def _service_with_client() -> tuple[
+    InMemoryExecutionStateStore, Stack, FakeReconcileClient, ExecutionService
+]:
     store = InMemoryExecutionStateStore()
     stack = Stack(store=store, clock=new_clock())
     client = FakeReconcileClient()
@@ -158,9 +159,7 @@ def partial_emulator() -> Iterator[Mt4Emulator]:
             events_addr="tcp://127.0.0.1:*",
             quotes_addr="tcp://127.0.0.1:*",
         ),
-        broker_config=BrokerConfig(
-            symbols={"EURUSD": EURUSD}, partial_fill_ratio=Decimal("0.5")
-        ),
+        broker_config=BrokerConfig(symbols={"EURUSD": EURUSD}, partial_fill_ratio=Decimal("0.5")),
         seed=19,
         heartbeat_interval_seconds=0.1,
         quote_interval_seconds=0.05,
@@ -181,9 +180,7 @@ def slow_quotes_emulator() -> Iterator[Mt4Emulator]:
             events_addr="tcp://127.0.0.1:*",
             quotes_addr="tcp://127.0.0.1:*",
         ),
-        broker_config=BrokerConfig(
-            symbols={"EURUSD": EURUSD}, partial_fill_ratio=Decimal("0.5")
-        ),
+        broker_config=BrokerConfig(symbols={"EURUSD": EURUSD}, partial_fill_ratio=Decimal("0.5")),
         seed=19,
         heartbeat_interval_seconds=0.1,
         quote_interval_seconds=60.0,
@@ -322,9 +319,7 @@ class TestBrokerEventStreamIntegrity:
         record = service.submit(intent)
         assert record.state is OrderState.FILLED
         assert store.get_safe_mode().active is False
-        assert any(
-            entry.action == "execution.event.skipped" for entry in stack.audit_sink.entries
-        )
+        assert any(entry.action == "execution.event.skipped" for entry in stack.audit_sink.entries)
 
 
 class TestNoDuplicateFillFingerprint:
@@ -335,9 +330,7 @@ class TestNoDuplicateFillFingerprint:
         store, stack, client, service = _service_with_client()
         intent = make_intent()
         now = stack.clock.now()
-        first = make_fill_event(
-            now, intent.order_intent_id, quantity=Decimal("0.05"), sequence=1
-        )
+        first = make_fill_event(now, intent.order_intent_id, quantity=Decimal("0.05"), sequence=1)
         second = FillEvent(
             message_id=first.message_id,  # same frame id, next sequence
             timestamp=now,

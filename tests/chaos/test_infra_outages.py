@@ -96,9 +96,7 @@ def _long_adapter(clock: VirtualClock) -> MockTradingAgentsAdapter:
 
 
 def _two_cycle_source() -> scripted_snapshots:
-    return scripted_snapshots(
-        {"EURUSD": [Decimal("1.10000"), Decimal("1.09700")]}
-    )
+    return scripted_snapshots({"EURUSD": [Decimal("1.10000"), Decimal("1.09700")]})
 
 
 def _run_two_cycles(stack: PaperStack) -> list[DomainEvent]:
@@ -177,12 +175,8 @@ class TestRedisTermination:
 class TestPostgresRestart:
     def test_store_outage_mid_stage_redelivers_and_never_duplicates(self) -> None:
         clock = VirtualClock(NOW)
-        stack = build_paper_stack(
-            clock=clock, settings=get_settings(), source=scripted_snapshots()
-        )
-        outage = TransientOutage(
-            stack.store, fail_methods={"save_context_fragment"}, failures=1
-        )
+        stack = build_paper_stack(clock=clock, settings=get_settings(), source=scripted_snapshots())
+        outage = TransientOutage(stack.store, fail_methods={"save_context_fragment"}, failures=1)
         stack.rt.store = outage  # type: ignore[assignment]
         probe = GuardedProbeStage()
         worker = StageWorker(
@@ -208,9 +202,7 @@ class TestPostgresRestart:
 
         # PostgreSQL returns; the restart redelivery produces exactly-once.
         outage.recover()
-        clock.advance(
-            timedelta(milliseconds=stack.config.bus.claim_idle_ms + 100)
-        )
+        clock.advance(timedelta(milliseconds=stack.config.bus.claim_idle_ms + 100))
         worker.run_iteration()
         assert probe.calls == 2
         assert stack.bus.pending("ot:fusion") == []
@@ -252,9 +244,7 @@ class TestPostgresRestart:
         client.submit_reply = make_ack(intent.order_intent_id)
         client.events = [
             make_fill_event(stack.clock.now(), intent.order_intent_id),
-            make_position_snapshot_event(
-                stack.clock.now(), intent_id=intent.order_intent_id
-            ),
+            make_position_snapshot_event(stack.clock.now(), intent_id=intent.order_intent_id),
         ]
         record = service.submit(intent)
         assert record.state is OrderState.FILLED
@@ -274,9 +264,7 @@ class TestFalkordbOutage:
         raw = InMemoryStore()
         seeded = Memory(raw, clock=clock)
         seeded.ingest(
-            make_memory_episode(
-                clock.now(), content={"stance": "LONG", "instrument_id": "EURUSD"}
-            ),
+            make_memory_episode(clock.now(), content={"stance": "LONG", "instrument_id": "EURUSD"}),
             source="test.seed",
             event_time=clock.now(),
             available_time=clock.now(),
@@ -295,17 +283,13 @@ class TestFalkordbOutage:
         events = stack.runner.run_once()
         bundle = next(e for e in events if e.event_name == "research.bundle.created")
         assert bundle.payload.get("memory") is None
-        assert any(
-            entry.action == "memory.retrieval.failed" for entry in stack.audit_sink.entries
-        )
+        assert any(entry.action == "memory.retrieval.failed" for entry in stack.audit_sink.entries)
 
         # FalkorDB returns: the next cycle sees the point-in-time memory again.
         outage.recover()
         stack.clock.advance(timedelta(minutes=5))
         recovered = stack.runner.run_once()
-        recovered_bundle = next(
-            e for e in recovered if e.event_name == "research.bundle.created"
-        )
+        recovered_bundle = next(e for e in recovered if e.event_name == "research.bundle.created")
         assert recovered_bundle.payload.get("memory") is not None
 
     def test_ingest_outage_never_loses_the_canonical_postmortem(self) -> None:
@@ -333,9 +317,7 @@ class TestFalkordbOutage:
         assert review is not None
         assert review.postmortem_completed is True
         assert review.episode_id is None
-        assert any(
-            entry.action == "memory.ingest.failed" for entry in stack.audit_sink.entries
-        )
+        assert any(entry.action == "memory.ingest.failed" for entry in stack.audit_sink.entries)
 
 
 # ── MinIO outage ─────────────────────────────────────────────────────────────
@@ -370,8 +352,7 @@ class TestMinioOutage:
         assert review.postmortem_completed is True
         assert review.artifact_key is None
         assert any(
-            entry.action == "posttrade.artifact.failed"
-            for entry in stack.audit_sink.entries
+            entry.action == "posttrade.artifact.failed" for entry in stack.audit_sink.entries
         )
 
         # Redelivery of the closing event (worker restart) is idempotent: the
@@ -405,9 +386,7 @@ class TestLlmBoundaryFailures:
         bundle = next(e for e in events if e.event_name == "research.bundle.created")
         assert bundle.payload["llm"] is None
         assert "TradingAgentsTimeoutError" in bundle.payload["llm_error"]
-        assert any(
-            entry.action == "llm.analysis.failed" for entry in stack.audit_sink.entries
-        )
+        assert any(entry.action == "llm.analysis.failed" for entry in stack.audit_sink.entries)
         account = stack.store.get_account(stack.config.account_id)
         assert account is not None  # account state intact
 
@@ -415,9 +394,7 @@ class TestLlmBoundaryFailures:
         adapter.fail = False
         stack.clock.advance(timedelta(minutes=5))
         recovered = stack.runner.run_once()
-        recovered_bundle = next(
-            e for e in recovered if e.event_name == "research.bundle.created"
-        )
+        recovered_bundle = next(e for e in recovered if e.event_name == "research.bundle.created")
         assert recovered_bundle.payload["llm"] is not None
         assert "llm.signal.created" in [e.event_name for e in recovered]
 

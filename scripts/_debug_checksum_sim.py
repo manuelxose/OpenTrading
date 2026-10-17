@@ -1,4 +1,5 @@
 """Debug: simulate QuantBridgeEA canonical-body rebuild vs Python checksum."""
+
 from __future__ import annotations
 
 import hashlib
@@ -7,8 +8,8 @@ import sys
 from uuid import UUID
 
 sys.path.insert(0, ".")
-from adapters.mt4.protocol import ReconciliationRequestCommand, serialize_message  # noqa: E402
-from core.clock.clocks import SystemClock  # noqa: E402
+from adapters.mt4.protocol import ReconciliationRequestCommand, serialize_message
+from core.clock.clocks import SystemClock
 
 clock = SystemClock()
 cmd = ReconciliationRequestCommand(
@@ -25,10 +26,27 @@ frame = json.loads(raw.decode())
 
 # EA canonical key order for reconciliation_request (skip checksum).
 keys = [
-    "protocol_version", "message_type", "message_id", "trace_id", "timestamp",
-    "sequence", "correlation_id", "checksum", "order_intent_id", "strategy_id",
-    "strategy_version", "expires_at", "symbol", "side", "quantity",
-    "order_type", "price", "stop_loss", "take_profit", "max_slippage", "scope",
+    "protocol_version",
+    "message_type",
+    "message_id",
+    "trace_id",
+    "timestamp",
+    "sequence",
+    "correlation_id",
+    "checksum",
+    "order_intent_id",
+    "strategy_id",
+    "strategy_version",
+    "expires_at",
+    "symbol",
+    "side",
+    "quantity",
+    "order_type",
+    "price",
+    "stop_loss",
+    "take_profit",
+    "max_slippage",
+    "scope",
 ]
 
 # EA rebuild: values as RAW substrings of the original JSON text.

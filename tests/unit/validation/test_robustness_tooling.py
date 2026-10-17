@@ -30,8 +30,16 @@ from research.validation import (
 )
 
 SPEC = BrokerSpec(
-    symbol="XAUUSD", point=0.01, digits=2, tick_value=1.0, tick_size=0.01,
-    lot_size=100.0, min_lot=0.01, max_lot=50.0, lot_step=0.01, stop_level_points=10.0,
+    symbol="XAUUSD",
+    point=0.01,
+    digits=2,
+    tick_value=1.0,
+    tick_size=0.01,
+    lot_size=100.0,
+    min_lot=0.01,
+    max_lot=50.0,
+    lot_step=0.01,
+    stop_level_points=10.0,
 )
 
 
@@ -62,12 +70,22 @@ def make_trades(pnls: list[float]) -> list[Trade]:
         entry = datetime(2024, 1, 1) + timedelta(hours=i)
         out.append(
             Trade(
-                entry_time=entry, direction=Direction.LONG, entry_price=2000.0,
-                stop_price=1990.0, initial_stop_price=1990.0, lots=0.1,
-                atr_at_signal=5.0, score=7, regime_at_entry=Regime.TREND_UP,
-                risk_amount=350.0, exit_time=entry + timedelta(hours=2),
-                exit_price=2010.0, exit_reason=ExitReason.TARGET, pnl=pnl,
-                r_multiple=pnl / 350.0, bars_held=8,
+                entry_time=entry,
+                direction=Direction.LONG,
+                entry_price=2000.0,
+                stop_price=1990.0,
+                initial_stop_price=1990.0,
+                lots=0.1,
+                atr_at_signal=5.0,
+                score=7,
+                regime_at_entry=Regime.TREND_UP,
+                risk_amount=350.0,
+                exit_time=entry + timedelta(hours=2),
+                exit_price=2010.0,
+                exit_reason=ExitReason.TARGET,
+                pnl=pnl,
+                r_multiple=pnl / 350.0,
+                bars_held=8,
             )
         )
     return out
@@ -140,9 +158,7 @@ def test_chronological_split_is_ordered_and_non_overlapping() -> None:
 
     assert split.development.end <= split.validation.start
     assert split.validation.end <= split.final_oos.start
-    total = len(split.development.bars) + len(split.validation.bars) + len(
-        split.final_oos.bars
-    )
+    total = len(split.development.bars) + len(split.validation.bars) + len(split.final_oos.bars)
     assert total == len(bars)
 
 
@@ -201,7 +217,10 @@ def test_a_parameter_sweep_only_varies_research_parameters() -> None:
     bars = synthetic_bars(3000)
     base = StrategyConfig()
     points = parameter_sweep(
-        bars, base, SPEC, {"sl_atr_mult": (1.5, 2.0), "adx_trend_min": (18.0, 22.0)},
+        bars,
+        base,
+        SPEC,
+        {"sl_atr_mult": (1.5, 2.0), "adx_trend_min": (18.0, 22.0)},
     )
 
     assert len(points) == 4
@@ -214,7 +233,9 @@ def test_a_parameter_sweep_only_varies_research_parameters() -> None:
 def test_sweep_skips_internally_contradictory_combinations() -> None:
     bars = synthetic_bars(1500)
     points = parameter_sweep(
-        bars, StrategyConfig(), SPEC,
+        bars,
+        StrategyConfig(),
+        SPEC,
         # adx_range_max above adx_trend_min is invalid and must be skipped, not forced.
         {"adx_range_max": (10.0, 99.0)},
     )
@@ -224,7 +245,10 @@ def test_sweep_skips_internally_contradictory_combinations() -> None:
 def test_surface_summary_describes_a_plateau_rather_than_crowning_a_winner() -> None:
     bars = synthetic_bars(3000)
     points = parameter_sweep(
-        bars, StrategyConfig(), SPEC, {"sl_atr_mult": (1.5, 2.0, 2.5)},
+        bars,
+        StrategyConfig(),
+        SPEC,
+        {"sl_atr_mult": (1.5, 2.0, 2.5)},
     )
     surface = summarize_surface(points)
 
@@ -237,17 +261,18 @@ def test_surface_summary_describes_a_plateau_rather_than_crowning_a_winner() -> 
 def test_execution_stress_reruns_the_strategy_under_each_cost_scenario() -> None:
     bars = synthetic_bars(4000)
     scenarios = execution_stress(
-        bars, StrategyConfig(), SPEC,
-        spread_multipliers=(1.0, 2.0), slippage_points=(0.0, 3.0),
+        bars,
+        StrategyConfig(),
+        SPEC,
+        spread_multipliers=(1.0, 2.0),
+        slippage_points=(0.0, 3.0),
     )
     assert len(scenarios) == 4
     labels = {s.label for s in scenarios}
     assert len(labels) == 4
 
-    baseline = next(s for s in scenarios if s.spread_multiplier == 1.0
-                    and s.slippage_points == 0.0)
-    worst = next(s for s in scenarios if s.spread_multiplier == 2.0
-                 and s.slippage_points == 3.0)
+    baseline = next(s for s in scenarios if s.spread_multiplier == 1.0 and s.slippage_points == 0.0)
+    worst = next(s for s in scenarios if s.spread_multiplier == 2.0 and s.slippage_points == 3.0)
     # Worse fills can only reduce the number of eligible setups or their P&L.
     assert worst.metrics.trades <= baseline.metrics.trades
 
@@ -260,8 +285,7 @@ def test_parameter_stability_reports_the_spread_of_selected_values() -> None:
     bars = synthetic_bars(200)
     window = WalkForwardWindow(0, bars[:100], bars[100:], False)
     results = [
-        WalkForwardResult(window, {"sl_atr_mult": v}, PerformanceMetrics(),
-                          PerformanceMetrics())
+        WalkForwardResult(window, {"sl_atr_mult": v}, PerformanceMetrics(), PerformanceMetrics())
         for v in (1.5, 2.0, 2.5, 1.5)
     ]
     stability = parameter_stability(results)
@@ -282,19 +306,14 @@ def test_expected_max_sharpe_grows_with_the_number_of_trials() -> None:
 
 
 def test_deflated_sharpe_falls_as_the_trial_count_rises() -> None:
-    single = deflated_sharpe_ratio(
-        1.2, trials=1, variance_of_sharpes=0.2, sample_length=400
-    )
-    searched = deflated_sharpe_ratio(
-        1.2, trials=500, variance_of_sharpes=0.2, sample_length=400
-    )
+    single = deflated_sharpe_ratio(1.2, trials=1, variance_of_sharpes=0.2, sample_length=400)
+    searched = deflated_sharpe_ratio(1.2, trials=500, variance_of_sharpes=0.2, sample_length=400)
     assert single is not None and searched is not None
     assert searched < single, "the same Sharpe is weaker evidence after 500 trials"
 
 
 def test_deflated_sharpe_is_none_for_a_degenerate_sample() -> None:
-    assert deflated_sharpe_ratio(1.0, trials=10, variance_of_sharpes=0.1,
-                                 sample_length=1) is None
+    assert deflated_sharpe_ratio(1.0, trials=10, variance_of_sharpes=0.1, sample_length=1) is None
 
 
 def test_pbo_is_near_one_half_when_configurations_are_pure_noise() -> None:
@@ -331,10 +350,24 @@ def test_pbo_returns_none_when_the_matrix_is_too_small() -> None:
 def test_trial_ledger_records_failures_as_well_as_successes(tmp_path) -> None:  # type: ignore[no-untyped-def]
     """Mandate §36: never hide unsuccessful parameter runs."""
     ledger = TrialLedger(tmp_path / "trials.json")
-    ledger.record(config_hash="a", params={"x": 1}, profit_factor=1.6, sharpe=0.9,
-                  net_return_pct=20.0, trades=250, partition="DEV")
-    ledger.record(config_hash="b", params={"x": 2}, profit_factor=0.7, sharpe=-0.3,
-                  net_return_pct=-12.0, trades=240, partition="DEV")
+    ledger.record(
+        config_hash="a",
+        params={"x": 1},
+        profit_factor=1.6,
+        sharpe=0.9,
+        net_return_pct=20.0,
+        trades=250,
+        partition="DEV",
+    )
+    ledger.record(
+        config_hash="b",
+        params={"x": 2},
+        profit_factor=0.7,
+        sharpe=-0.3,
+        net_return_pct=-12.0,
+        trades=240,
+        partition="DEV",
+    )
     ledger.flush()
 
     assert ledger.count == 2, "the losing run must be recorded too"

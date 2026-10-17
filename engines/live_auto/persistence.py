@@ -103,9 +103,7 @@ class PostgresLiveAutoStore:
                     with self.engine.begin() as conn:
                         conn.execute(
                             update(live_auto_strategies_table)
-                            .where(
-                                live_auto_strategies_table.c.strategy_id == record.strategy_id
-                            )
+                            .where(live_auto_strategies_table.c.strategy_id == record.strategy_id)
                             .values(**values)
                         )
 

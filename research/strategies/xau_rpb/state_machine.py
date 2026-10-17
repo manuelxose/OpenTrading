@@ -181,9 +181,7 @@ class SetupMachine:
             return False
         return True
 
-    def _step_armed(
-        self, bars: Sequence[Bar], index: int, regime: Regime, atr_m15: float
-    ) -> bool:
+    def _step_armed(self, bars: Sequence[Bar], index: int, regime: Regime, atr_m15: float) -> bool:
         if not self._regime_still_valid(index, regime):
             return False
 

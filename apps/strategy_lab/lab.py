@@ -9,14 +9,16 @@ strategy — going live remains an operator-audited action.
 from __future__ import annotations
 
 import json
+from collections.abc import Sequence
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from decimal import Decimal
 from itertools import product
 from pathlib import Path
 from uuid import uuid4
 
 import sqlalchemy as sa
+from core.config.settings import Settings
 from sqlalchemy.engine import Engine
 
 from apps.live_supervisor.bars_store import BarsStore
@@ -82,9 +84,7 @@ def evaluate_grid(
     ):
         if fast >= slow:
             continue
-        params = ScalpParams(
-            fast_ema=fast, slow_ema=slow, atr_period=atr, min_strength=strength
-        )
+        params = ScalpParams(fast_ema=fast, slow_ema=slow, atr_period=atr, min_strength=strength)
         result = replay(bars, params, stop_ratio=stop_r, take_ratio=take_r, spread=spread)
         candidates.append(CandidateEval(params, stop_r, take_r, result))
     candidates.sort(key=lambda c: c.score, reverse=True)
@@ -111,7 +111,7 @@ def persist_candidates(
         sa.column("bars", sa.Integer),
         sa.column("created_at", sa.DateTime(timezone=True)),
     )
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     rows = [
         {
             "candidate_id": uuid4(),
@@ -141,7 +141,7 @@ def persist_candidates(
 
 
 def run_lab(
-    settings,
+    settings: Settings,
     *,
     strategy_id: str,
     instrument_id: str,
@@ -161,7 +161,9 @@ def run_lab(
 
     grid = grid or ScalpingGrid.aggressive()
     candidates = evaluate_grid(bars, grid, spread=spread)
-    persisted = persist_candidates(engine, strategy_id=strategy_id, bars_count=len(bars), candidates=candidates)
+    persisted = persist_candidates(
+        engine, strategy_id=strategy_id, bars_count=len(bars), candidates=candidates
+    )
     print(f"candidates persisted: {persisted} (top {top} below)")
     for rank, candidate in enumerate(candidates[:top], start=1):
         result = candidate.result
@@ -179,7 +181,7 @@ def run_lab(
         "strategy_id": strategy_id,
         "instrument_id": instrument_id,
         "bars": len(bars),
-        "evaluated_at": datetime.now(timezone.utc).isoformat(),
+        "evaluated_at": datetime.now(UTC).isoformat(),
         "top": [
             {
                 "rank": rank,
@@ -192,7 +194,9 @@ def run_lab(
                     "take_ratio": str(c.take_ratio),
                 },
                 "score": str(c.score),
-                "profit_factor": str(c.result.profit_factor) if c.result.profit_factor is not None else None,
+                "profit_factor": str(c.result.profit_factor)
+                if c.result.profit_factor is not None
+                else None,
                 "expectancy": str(c.result.expectancy) if c.result.expectancy is not None else None,
                 "trades": c.result.trades,
             }

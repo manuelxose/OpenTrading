@@ -69,9 +69,7 @@ def _snapshot_event(clock: VirtualClock) -> DomainEvent:
 
 
 def _make_runtime(clock: VirtualClock):
-    stack = build_paper_stack(
-        clock=clock, settings=get_settings(), source=scripted_snapshots()
-    )
+    stack = build_paper_stack(clock=clock, settings=get_settings(), source=scripted_snapshots())
     return stack
 
 
@@ -214,9 +212,7 @@ class TestApiCrash:
         settings = get_settings()
 
         # Instance 1 (healthy).
-        client = TestClient(
-            create_app(settings=settings, readiness_checks=_readiness_checks("ok"))
-        )
+        client = TestClient(create_app(settings=settings, readiness_checks=_readiness_checks("ok")))
         response = client.get("/readyz")
         assert response.status_code == 200
         assert response.json()["status"] == "ready"

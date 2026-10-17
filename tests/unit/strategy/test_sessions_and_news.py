@@ -24,9 +24,7 @@ def resolver(**kw: object) -> SessionResolver:
 
 def test_broker_time_converts_to_utc_using_the_configured_offset() -> None:
     r = resolver()
-    assert r.to_utc(datetime(2024, 1, 15, 12, 0)) == datetime(
-        2024, 1, 15, 10, 0, tzinfo=UTC
-    )
+    assert r.to_utc(datetime(2024, 1, 15, 12, 0)) == datetime(2024, 1, 15, 10, 0, tzinfo=UTC)
 
 
 def test_london_session_is_detected_in_winter() -> None:
@@ -68,8 +66,8 @@ def test_asian_session_is_excluded_unless_explicitly_allowed() -> None:
 
 def test_the_permitted_window_covers_london_and_new_york() -> None:
     r = resolver()
-    assert r.is_permitted(datetime(2024, 1, 15, 11, 0))   # London
-    assert r.is_permitted(datetime(2024, 1, 15, 20, 0))   # New York afternoon
+    assert r.is_permitted(datetime(2024, 1, 15, 11, 0))  # London
+    assert r.is_permitted(datetime(2024, 1, 15, 20, 0))  # New York afternoon
     assert not r.is_permitted(datetime(2024, 1, 15, 5, 0))  # dead zone
 
 
@@ -164,7 +162,9 @@ def test_many_events_are_queried_without_scanning_them_all() -> None:
     events = [
         NewsEvent(
             datetime(2024, 1, 1, tzinfo=UTC).replace(day=(i % 28) + 1, hour=i % 24),
-            "USD", "HIGH", f"event {i}",
+            "USD",
+            "HIGH",
+            f"event {i}",
         )
         for i in range(500)
     ]

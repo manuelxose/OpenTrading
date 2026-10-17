@@ -107,7 +107,7 @@ def read_hst(path: Path) -> tuple[dict[str, object], list[tuple]]:
     if len(raw) < HEADER_SIZE:
         raise ValueError(f"{path.name}: shorter than a header")
 
-    version, = struct.unpack_from("<i", raw, 0)
+    (version,) = struct.unpack_from("<i", raw, 0)
     symbol = raw[68:80].split(b"\0")[0].decode("ascii", "replace")
     period, digits = struct.unpack_from("<ii", raw, 80)
 
@@ -168,11 +168,17 @@ def export(
         for ctm, o, h, low, c, vol, spread in bars:
             moment = datetime.fromtimestamp(ctm, UTC).replace(tzinfo=None)
             spread_points = float(spread) if observed_spread else assumed_spread_points
-            writer.writerow([
-                moment.strftime("%Y.%m.%d %H:%M"),
-                f"{o:.5f}", f"{h:.5f}", f"{low:.5f}", f"{c:.5f}",
-                f"{vol:.0f}", f"{spread_points:.1f}",
-            ])
+            writer.writerow(
+                [
+                    moment.strftime("%Y.%m.%d %H:%M"),
+                    f"{o:.5f}",
+                    f"{h:.5f}",
+                    f"{low:.5f}",
+                    f"{c:.5f}",
+                    f"{vol:.0f}",
+                    f"{spread_points:.1f}",
+                ]
+            )
             digest.update(f"{ctm}|{o}|{h}|{low}|{c}".encode())
 
     first = datetime.fromtimestamp(bars[0][0], UTC).replace(tzinfo=None)
@@ -197,9 +203,7 @@ def export(
         data_sha256=digest.hexdigest()[:16],
         exported_at=datetime.now().isoformat(timespec="seconds"),
     )
-    (out_dir / f"{stem}.meta.json").write_text(
-        json.dumps(asdict(meta), indent=2), encoding="utf-8"
-    )
+    (out_dir / f"{stem}.meta.json").write_text(json.dumps(asdict(meta), indent=2), encoding="utf-8")
     return meta
 
 
@@ -211,19 +215,22 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--server", help="restrict to one server folder")
     parser.add_argument("--out", default="data/market", help="output directory")
     parser.add_argument(
-        "--assumed-spread-points", type=float, default=20.0,
+        "--assumed-spread-points",
+        type=float,
+        default=20.0,
         help="spread written when the .hst carries none (MT4 usually stores 0)",
     )
     parser.add_argument(
-        "--broker-utc-offset", type=float, default=None,
+        "--broker-utc-offset",
+        type=float,
+        default=None,
         help="server UTC offset, recorded in the sidecar for the session layer",
     )
     args = parser.parse_args(argv)
 
     folders = find_data_folders()
     if not folders:
-        print("no MT4 data folders found under %APPDATA%/MetaQuotes/Terminal",
-              file=sys.stderr)
+        print("no MT4 data folders found under %APPDATA%/MetaQuotes/Terminal", file=sys.stderr)
         return 2
 
     if args.list:
@@ -241,9 +248,11 @@ def main(argv: list[str] | None = None) -> int:
                 first = datetime.fromtimestamp(bars[0][0], UTC)
                 last = datetime.fromtimestamp(bars[-1][0], UTC)
                 years = (last - first).days / 365.25
-                print(f"    {server}/{hst.name}: {header['symbol']} "
-                      f"M{header['period']} {len(bars)} bars "
-                      f"{first:%Y-%m-%d}->{last:%Y-%m-%d} ({years:.2f}y)")
+                print(
+                    f"    {server}/{hst.name}: {header['symbol']} "
+                    f"M{header['period']} {len(bars)} bars "
+                    f"{first:%Y-%m-%d}->{last:%Y-%m-%d} ({years:.2f}y)"
+                )
         return 0
 
     if not args.symbol:
@@ -257,17 +266,24 @@ def main(argv: list[str] | None = None) -> int:
             if hst.stem.upper() != f"{args.symbol.upper()}{args.period}":
                 continue
             meta = export(
-                hst, Path(args.out), server=server, data_folder=data_folder,
+                hst,
+                Path(args.out),
+                server=server,
+                data_folder=data_folder,
                 assumed_spread_points=args.assumed_spread_points,
                 broker_utc_offset_hours=args.broker_utc_offset,
             )
             stem = f"{meta.symbol}_M{meta.period_minutes}_{server}_{data_folder.name[:8]}"
             print(f"exported {meta.bars} bars -> {Path(args.out) / (stem + '.csv')}")
             print(f"  symbol={meta.symbol} M{meta.period_minutes} digits={meta.digits}")
-            print(f"  range  {meta.first_bar_broker_time} -> {meta.last_bar_broker_time} "
-                  f"({meta.span_years} years, BROKER SERVER TIME)")
-            print(f"  spread {meta.spread_source}"
-                  + (f" = {meta.spread_points} points" if meta.spread_points else ""))
+            print(
+                f"  range  {meta.first_bar_broker_time} -> {meta.last_bar_broker_time} "
+                f"({meta.span_years} years, BROKER SERVER TIME)"
+            )
+            print(
+                f"  spread {meta.spread_source}"
+                + (f" = {meta.spread_points} points" if meta.spread_points else "")
+            )
             print(f"  sha256 {meta.data_sha256}")
             exported += 1
 

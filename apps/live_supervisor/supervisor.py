@@ -13,8 +13,7 @@ from __future__ import annotations
 
 import logging
 import time
-from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime
 from decimal import Decimal
 
 from adapters.mt4.client import Mt4ExecutionClient
@@ -22,8 +21,9 @@ from adapters.mt4.protocol import MarketQuote, ReconciliationResponse
 from core.clock.clocks import Clock, SystemClock
 from core.config.settings import Settings, get_settings
 from core.domain.enums import AssetClass, OperatingMode, PositionSide
-from core.schemas import PositionSnapshot, Provenance
+from core.schemas import OrderIntent, PositionSnapshot, Provenance, RiskDecision
 from core.schemas.risk import AccountState, PortfolioExposure, PortfolioState
+from engines.execution.live_gate import PriceContext
 from engines.execution.live_runtime import build_live_execution_runtime
 from engines.execution.service import ExecutionService
 
@@ -33,7 +33,8 @@ from apps.live_supervisor.config import (
     build_live_policy,
     build_strategy_configuration,
 )
-from apps.live_supervisor.engine import CycleOutcome, LiveTradingEngine
+from apps.live_supervisor.engine import LiveTradingEngine, OrderSubmitter
+
 logger = logging.getLogger("live-supervisor")
 
 __all__ = ["ServiceSubmitter", "run_once", "serve"]
@@ -45,7 +46,9 @@ class ServiceSubmitter:
     def __init__(self, service: ExecutionService) -> None:
         self._service = service
 
-    def submit(self, intent, *, price_context, risk_decision) -> object:
+    def submit(
+        self, intent: OrderIntent, *, price_context: PriceContext, risk_decision: RiskDecision
+    ) -> object:
         return self._service.submit(
             intent, venue="mt4", price_context=price_context, risk_decision=risk_decision
         )
@@ -156,7 +159,9 @@ def core_account_state(response: ReconciliationResponse, now: datetime) -> Accou
     )
 
 
-def _build_engine(config: LiveSupervisorConfig, clock: Clock, submitter) -> LiveTradingEngine:
+def _build_engine(
+    config: LiveSupervisorConfig, clock: Clock, submitter: OrderSubmitter
+) -> LiveTradingEngine:
     now = clock.now()
     return LiveTradingEngine(
         config,
@@ -200,7 +205,6 @@ def run_once(settings: Settings | None = None, *, timeout_seconds: int = 120) ->
         response = runtime.client.reconcile()
         runtime.client.resync_sequences(response.last_sequences)
         account = core_account_state(response, clock.now())
-        quotes: dict[str, MarketQuote] = {}
         # Warm the quote series first, then run one cycle.
         collected = collect_latest_quotes(runtime.client, config.instruments)
         for quote in collected.values():
@@ -210,10 +214,14 @@ def run_once(settings: Settings | None = None, *, timeout_seconds: int = 120) ->
             portfolio=broker_positions_to_portfolio(response, config.instruments, clock.now()),
             quotes=collected,
         )
-        for outcome in outcomes:
+        for cycle_outcome in outcomes:
             print(
-                f"[{outcome.instrument_id}] {outcome.decision}: {outcome.detail} "
-                + (f"intent={outcome.order_intent_id}" if outcome.order_intent_id else "")
+                f"[{cycle_outcome.instrument_id}] {cycle_outcome.decision}: {cycle_outcome.detail} "
+                + (
+                    f"intent={cycle_outcome.order_intent_id}"
+                    if cycle_outcome.order_intent_id
+                    else ""
+                )
             )
         return 0
     finally:
@@ -229,10 +237,13 @@ def serve(settings: Settings | None = None) -> None:
     clock = SystemClock()
     runtime = build_live_execution_runtime(settings, clock=clock)
     runtime.connect_and_reconcile()
-    logger.info("live supervisor starting: strategy=%s instruments=%s", config.strategy_id, config.instruments)
+    logger.info(
+        "live supervisor starting: strategy=%s instruments=%s",
+        config.strategy_id,
+        config.instruments,
+    )
     try:
         # Startup gate (INV-6): refuse to trade until clean.
-        gate_ok = False
         while True:
             outcome = runtime.service.startup_reconciliation()
             logger.info(
@@ -242,7 +253,6 @@ def serve(settings: Settings | None = None) -> None:
                 outcome.material_discrepancies,
             )
             if outcome.broker_reachable and not outcome.safe_mode_active:
-                gate_ok = True
                 break
             time.sleep(10)
 
@@ -253,10 +263,9 @@ def serve(settings: Settings | None = None) -> None:
         )
 
         bars_store = None
-        last_persisted: dict[str, datetime | None] = {iid: None for iid in config.instruments}
+        last_persisted: dict[str, datetime | None] = dict.fromkeys(config.instruments)
         if config.persist_bars:
             import sqlalchemy as sa
-
             from core.config.settings import ensure_psycopg_dsn
 
             from apps.live_supervisor.bars_store import BarsStore
@@ -277,7 +286,9 @@ def serve(settings: Settings | None = None) -> None:
             response = runtime.client.reconcile()
             runtime.client.resync_sequences(response.last_sequences)
             if not response.account.is_demo:
-                raise RuntimeError("REFUSED: bridge account is not a DEMO account (demo-first policy)")
+                raise RuntimeError(
+                    "REFUSED: bridge account is not a DEMO account (demo-first policy)"
+                )
             account = core_account_state(response, clock.now())
             quotes = collect_latest_quotes(runtime.client, config.instruments)
             for quote in quotes.values():
@@ -285,23 +296,24 @@ def serve(settings: Settings | None = None) -> None:
             if bars_store is not None:
                 for instrument_id in config.instruments:
                     bars = engine.closed_bars(instrument_id)
+                    persisted_until = last_persisted[instrument_id]
                     pending = [
-                        b
-                        for b in bars
-                        if last_persisted[instrument_id] is None or b.closed_at > last_persisted[instrument_id]
+                        b for b in bars if persisted_until is None or b.closed_at > persisted_until
                     ]
                     if pending:
                         bars_store.upsert_bars(instrument_id, tuple(pending))
                         last_persisted[instrument_id] = pending[-1].closed_at
             portfolio = broker_positions_to_portfolio(response, config.instruments, clock.now())
             outcomes = engine.cycle(account=account, portfolio=portfolio, quotes=quotes)
-            for outcome in outcomes:
+            for cycle_outcome in outcomes:
                 logger.info(
                     "[%s] %s: %s%s",
-                    outcome.instrument_id,
-                    outcome.decision,
-                    outcome.detail,
-                    f" intent={outcome.order_intent_id}" if outcome.order_intent_id else "",
+                    cycle_outcome.instrument_id,
+                    cycle_outcome.decision,
+                    cycle_outcome.detail,
+                    f" intent={cycle_outcome.order_intent_id}"
+                    if cycle_outcome.order_intent_id
+                    else "",
                 )
             time.sleep(config.cycle_interval_seconds)
     except KeyboardInterrupt:

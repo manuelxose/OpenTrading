@@ -98,7 +98,7 @@ def build_scenario(name: str, count: int = 4000) -> list[Bar]:
 
         scale = 1.0
         if name == "volatility_shock" and count // 2 <= i < count // 2 + 60:
-            scale = 6.0   # a volatility burst, to exercise HIGH_VOLATILITY and ATR gates
+            scale = 6.0  # a volatility burst, to exercise HIGH_VOLATILITY and ATR gates
 
         price += drift + rng.gauss(0, 0.6 * scale)
         open_ = price
@@ -128,12 +128,17 @@ def write_csv(bars: list[Bar], path: Path) -> None:
         writer = csv.writer(fh, lineterminator="\n")
         writer.writerow(["time", "open", "high", "low", "close", "volume", "spread"])
         for bar in bars:
-            writer.writerow([
-                bar.time.strftime("%Y.%m.%d %H:%M"),
-                f"{bar.open:.5f}", f"{bar.high:.5f}",
-                f"{bar.low:.5f}", f"{bar.close:.5f}",
-                f"{bar.volume:.0f}", f"{bar.spread_points:.1f}",
-            ])
+            writer.writerow(
+                [
+                    bar.time.strftime("%Y.%m.%d %H:%M"),
+                    f"{bar.open:.5f}",
+                    f"{bar.high:.5f}",
+                    f"{bar.low:.5f}",
+                    f"{bar.close:.5f}",
+                    f"{bar.volume:.0f}",
+                    f"{bar.spread_points:.1f}",
+                ]
+            )
 
 
 def generate_golden(bars: list[Bar], config: StrategyConfig) -> list[ParityRow]:

@@ -25,8 +25,16 @@ import pytest
 from research.strategies.xau_rpb import Bar, BrokerSpec, StrategyConfig, run_backtest
 
 SPEC = BrokerSpec(
-    symbol="XAUUSD", point=0.01, digits=2, tick_value=1.0, tick_size=0.01,
-    lot_size=100.0, min_lot=0.01, max_lot=50.0, lot_step=0.01, stop_level_points=10.0,
+    symbol="XAUUSD",
+    point=0.01,
+    digits=2,
+    tick_value=1.0,
+    tick_size=0.01,
+    lot_size=100.0,
+    min_lot=0.01,
+    max_lot=50.0,
+    lot_step=0.01,
+    stop_level_points=10.0,
 )
 
 
@@ -95,8 +103,13 @@ def test_rewriting_future_bars_cannot_change_an_earlier_decision(bars: list[Bar]
         b = mutated[i]
         shift = rng.uniform(-50.0, 50.0)
         mutated[i] = Bar(
-            b.time, b.open + shift, b.high + shift, b.low + shift, b.close + shift,
-            b.volume, b.spread_points,
+            b.time,
+            b.open + shift,
+            b.high + shift,
+            b.low + shift,
+            b.close + shift,
+            b.volume,
+            b.spread_points,
         )
     perturbed = run_backtest(mutated, cfg, SPEC)
 
@@ -150,8 +163,15 @@ def test_warmup_bars_produce_no_trades(bars: list[Bar]) -> None:
 def test_an_all_invalid_regime_series_produces_no_trades() -> None:
     """A flat market never reaches a trend regime, so nothing may be opened."""
     flat = [
-        Bar(datetime(2024, 1, 1) + i * timedelta(minutes=15), 2000.0, 2000.0, 2000.0, 2000.0,
-            100.0, 20.0)
+        Bar(
+            datetime(2024, 1, 1) + i * timedelta(minutes=15),
+            2000.0,
+            2000.0,
+            2000.0,
+            2000.0,
+            100.0,
+            20.0,
+        )
         for i in range(3000)
     ]
     result = run_backtest(flat, StrategyConfig(), SPEC)

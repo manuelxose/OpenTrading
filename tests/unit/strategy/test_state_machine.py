@@ -16,9 +16,16 @@ ATR = 1.0
 
 
 def params(**kw: object) -> ResearchParams:
-    base = {"impulse_lookback": 2, "min_pullback_bars": 1, "max_pullback_bars": 3,
-            "min_pullback_depth_atr": 0.2, "max_pullback_depth_atr": 5.0,
-            "breakout_window_bars": 2, "breakout_buffer_atr": 0.1, "max_setup_bars": 12}
+    base = {
+        "impulse_lookback": 2,
+        "min_pullback_bars": 1,
+        "max_pullback_bars": 3,
+        "min_pullback_depth_atr": 0.2,
+        "max_pullback_depth_atr": 5.0,
+        "breakout_window_bars": 2,
+        "breakout_buffer_atr": 0.1,
+        "max_setup_bars": 12,
+    }
     base.update(kw)
     return ResearchParams(**base)  # type: ignore[arg-type]
 
@@ -31,7 +38,7 @@ def drive(machine: SetupMachine, bars: list, regime: Regime = Regime.TREND_UP) -
 def _long_setup_bars() -> list:
     """Impulse up, one counter-trend bar, then a bar that closes above the structure."""
     return [
-        bar(0, 100.0, 101.0, 99.8, 100.9),   # impulse
+        bar(0, 100.0, 101.0, 99.8, 100.9),  # impulse
         bar(1, 100.9, 102.0, 100.8, 101.9),  # impulse, high 102.0
         bar(2, 101.9, 102.1, 100.5, 100.7),  # counter-trend pullback (close < open)
         bar(3, 100.7, 103.0, 100.6, 102.9),  # up bar closing beyond 102.1 + 0.1
@@ -73,9 +80,9 @@ def test_full_short_sequence_is_symmetric() -> None:
     machine = SetupMachine(params())
     bars = [
         bar(0, 100.0, 100.2, 99.0, 99.1),
-        bar(1, 99.1, 99.2, 98.0, 98.1),      # impulse down, low 98.0
-        bar(2, 98.1, 99.5, 98.0, 99.3),      # counter-trend (close > open)
-        bar(3, 99.3, 99.4, 97.0, 97.1),      # closes below 98.0 - 0.1
+        bar(1, 99.1, 99.2, 98.0, 98.1),  # impulse down, low 98.0
+        bar(2, 98.1, 99.5, 98.0, 99.3),  # counter-trend (close > open)
+        bar(3, 99.3, 99.4, 97.0, 97.1),  # closes below 98.0 - 0.1
     ]
     flags = drive(machine, bars, Regime.TREND_DOWN)
 
@@ -105,7 +112,8 @@ def test_breakout_must_clear_the_atr_buffer_not_merely_the_level() -> None:
 
 def test_breakout_window_expires_and_resets_to_scanning() -> None:
     machine = SetupMachine(params(breakout_window_bars=2))
-    bars = [*_long_setup_bars()[:3],
+    bars = [
+        *_long_setup_bars()[:3],
         bar(3, 100.7, 101.0, 100.6, 100.8),  # pullback ends, no breakout -> window opens
         bar(4, 100.8, 101.0, 100.6, 100.9),  # window bar 1, no breakout
         bar(5, 100.9, 101.0, 100.6, 100.95),  # window bar 2, no breakout -> expire
@@ -150,7 +158,7 @@ def test_a_pullback_shallower_than_the_floor_is_rejected() -> None:
         bar(0, 100.0, 101.0, 99.8, 100.9),
         bar(1, 100.9, 102.0, 100.8, 101.9),
         bar(2, 101.9, 101.95, 101.8, 101.85),  # a token 0.2 retrace
-        bar(3, 101.85, 102.5, 101.8, 102.4),   # pullback ends
+        bar(3, 101.85, 102.5, 101.8, 102.4),  # pullback ends
     ]
     drive(machine, bars)
     assert any(t.reason == "PULLBACK_TOO_SHALLOW" for t in machine.transitions)
@@ -159,9 +167,9 @@ def test_a_pullback_shallower_than_the_floor_is_rejected() -> None:
 def test_losing_the_impulse_origin_resets_the_setup() -> None:
     machine = SetupMachine(params(max_pullback_depth_atr=50.0))
     bars = [
-        bar(0, 100.0, 101.0, 99.0, 100.9),   # origin low 99.0
+        bar(0, 100.0, 101.0, 99.0, 100.9),  # origin low 99.0
         bar(1, 100.9, 102.0, 100.8, 101.9),
-        bar(2, 101.9, 102.0, 98.0, 98.1),    # trades below the origin
+        bar(2, 101.9, 102.0, 98.0, 98.1),  # trades below the origin
     ]
     drive(machine, bars)
 

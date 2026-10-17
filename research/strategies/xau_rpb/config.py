@@ -103,9 +103,18 @@ class ResearchParams:
             raise ValueError("entry_score_threshold must be within the 0..9 score range")
         if self.sl_atr_mult <= 0:
             raise ValueError("sl_atr_mult must be > 0")
-        for name in ("ema_fast_period", "ema_slow_period", "adx_period", "er_window",
-                     "atr_period_h1", "atr_period_m15", "atr_pct_window",
-                     "impulse_lookback", "slope_lookback", "breakout_window_bars"):
+        for name in (
+            "ema_fast_period",
+            "ema_slow_period",
+            "adx_period",
+            "er_window",
+            "atr_period_h1",
+            "atr_period_m15",
+            "atr_pct_window",
+            "impulse_lookback",
+            "slope_lookback",
+            "breakout_window_bars",
+        ):
             if getattr(self, name) < 1:
                 raise ValueError(f"{name} must be >= 1")
 
@@ -156,8 +165,14 @@ class ExecutionParams:
     quote_max_age_sec: int = 5
     magic_number: int = 20260831
     symbol_aliases: tuple[str, ...] = (
-        "XAUUSD", "GOLD", "XAUUSD.a", "XAUUSDm", "XAUUSD.m",
-        "XAUUSD_i", "XAUUSDpro", "GOLD.a",
+        "XAUUSD",
+        "GOLD",
+        "XAUUSD.a",
+        "XAUUSDm",
+        "XAUUSD.m",
+        "XAUUSD_i",
+        "XAUUSDpro",
+        "GOLD.a",
     )
     commission_per_lot: float = 0.0
     slippage_points_entry: float = 0.0

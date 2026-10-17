@@ -32,9 +32,16 @@ def _read(path: Path) -> str:
 
 def test_the_mql4_sources_all_exist() -> None:
     expected = {
-        "BrokerSpec.mqh", "Config.mqh", "Execution.mqh", "Indicators.mqh",
-        "News.mqh", "Regime.mqh", "Risk.mqh", "Sessions.mqh",
-        "SetupMachine.mqh", "Telemetry.mqh",
+        "BrokerSpec.mqh",
+        "Config.mqh",
+        "Execution.mqh",
+        "Indicators.mqh",
+        "News.mqh",
+        "Regime.mqh",
+        "Risk.mqh",
+        "Sessions.mqh",
+        "SetupMachine.mqh",
+        "Telemetry.mqh",
     }
     present = {p.name for p in MQL_INCLUDE.glob("*.mqh")}
     assert expected <= present, f"missing MQL4 modules: {sorted(expected - present)}"
@@ -53,9 +60,7 @@ def test_spec_version_matches_across_implementations() -> None:
 def test_every_setup_state_exists_on_both_sides() -> None:
     config_mqh = _read(MQL_INCLUDE / "Config.mqh")
     for state in SetupState:
-        assert f"STATE_{state.value}" in config_mqh, (
-            f"MQL4 is missing the {state.value} state"
-        )
+        assert f"STATE_{state.value}" in config_mqh, f"MQL4 is missing the {state.value} state"
 
 
 def test_every_reject_reason_exists_on_both_sides() -> None:
@@ -91,10 +96,18 @@ def test_state_machine_transition_reasons_correspond() -> None:
     mql4_reasons = _mql4_transition_reasons()
 
     core = {
-        "PULLBACK_STARTED", "PULLBACK_COMPLETE", "BREAKOUT_CONFIRMED",
-        "PULLBACK_TOO_LONG", "PULLBACK_TOO_DEEP", "PULLBACK_TOO_SHORT",
-        "PULLBACK_TOO_SHALLOW", "STRUCTURE_LOST", "REGIME_INVALIDATED",
-        "BREAKOUT_WINDOW_EXPIRED", "SETUP_LIFETIME_EXCEEDED", "ATR_INVALID",
+        "PULLBACK_STARTED",
+        "PULLBACK_COMPLETE",
+        "BREAKOUT_CONFIRMED",
+        "PULLBACK_TOO_LONG",
+        "PULLBACK_TOO_DEEP",
+        "PULLBACK_TOO_SHORT",
+        "PULLBACK_TOO_SHALLOW",
+        "STRUCTURE_LOST",
+        "REGIME_INVALIDATED",
+        "BREAKOUT_WINDOW_EXPIRED",
+        "SETUP_LIFETIME_EXCEEDED",
+        "ATR_INVALID",
     }
     missing_python = core - python_reasons
     missing_mql4 = core - mql4_reasons
@@ -199,9 +212,16 @@ def test_prohibited_strategy_families_are_absent_from_the_mql4_sources() -> None
             # The word may appear in a comment SAYING it is prohibited; only flag
             # it when it is not adjacent to a prohibition word.
             for hit in re.finditer(re.escape(term), lowered):
-                window = lowered[max(0, hit.start() - 120): hit.end() + 120]
+                window = lowered[max(0, hit.start() - 120) : hit.end() + 120]
                 assert any(
                     marker in window
-                    for marker in ("prohibit", "never", "not ", "no ", "unrepresentable",
-                                   "absent", "forbid")
+                    for marker in (
+                        "prohibit",
+                        "never",
+                        "not ",
+                        "no ",
+                        "unrepresentable",
+                        "absent",
+                        "forbid",
+                    )
                 ), f"{path.name} references {term!r} outside a prohibition context"

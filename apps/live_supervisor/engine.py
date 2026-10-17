@@ -7,13 +7,15 @@ production, a fake in tests) is the only way an order can leave the engine.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from decimal import Decimal
 from typing import Protocol
-from uuid import NAMESPACE_URL, UUID, uuid5
+from uuid import UUID, uuid5
 
 from adapters.mt4.protocol import MarketQuote
+from core.clock.clocks import Clock
 from core.domain.enums import (
     OperatingMode,
     OrderSide,
@@ -40,7 +42,13 @@ from apps.live_supervisor.config import (
     build_live_policy,
     build_strategy_configuration,
 )
-from apps.live_supervisor.signals import MinuteBarSeries, floor_to_step, scalp_signal
+from apps.live_supervisor.signals import (
+    BaselineSignal,
+    MinuteBarSeries,
+    PriceBar,
+    floor_to_step,
+    scalp_signal,
+)
 
 __all__ = ["CycleOutcome", "LiveTradingEngine", "OrderSubmitter"]
 
@@ -71,7 +79,7 @@ class LiveTradingEngine:
     def __init__(
         self,
         config: LiveSupervisorConfig,
-        clock,
+        clock: Clock,
         submitter: OrderSubmitter,
         *,
         policy: RiskPolicy | None = None,
@@ -95,14 +103,14 @@ class LiveTradingEngine:
             return
         series.on_price((quote.bid + quote.ask) / 2, quote.timestamp)
 
-    def closed_bars(self, instrument_id: str):
+    def closed_bars(self, instrument_id: str) -> tuple[PriceBar, ...]:
         """Closed minute bars for the Strategy Lab persistence path."""
         series = self._series.get(instrument_id)
         if series is None:
             return ()
         return series.bars()
 
-    def seed_bars(self, instrument_id: str, bars) -> None:
+    def seed_bars(self, instrument_id: str, bars: Sequence[PriceBar]) -> None:
         """Pre-warm the series with persisted bars (restart without cold start)."""
         series = self._series.get(instrument_id)
         if series is None or series.bars():
@@ -146,17 +154,13 @@ class LiveTradingEngine:
         if quote is None:
             return None
         if instrument_id in open_instruments:
-            return CycleOutcome(
-                instrument_id, "SKIP", f"open position on {instrument_id}"
-            )
+            return CycleOutcome(instrument_id, "SKIP", f"open position on {instrument_id}")
         if len(open_instruments) >= self._policy.max_positions:
             return CycleOutcome(instrument_id, "SKIP", "max open positions reached")
 
         age = now - quote.timestamp
         if age > timedelta(seconds=self._policy.market_data_max_age_seconds):
-            return CycleOutcome(
-                instrument_id, "SKIP", f"quote stale ({age.total_seconds():.1f}s)"
-            )
+            return CycleOutcome(instrument_id, "SKIP", f"quote stale ({age.total_seconds():.1f}s)")
         if not quote.tradable:
             return CycleOutcome(instrument_id, "SKIP", "symbol not tradable")
 
@@ -246,7 +250,7 @@ class LiveTradingEngine:
         self,
         instrument_id: str,
         instrument: Instrument,
-        signal,
+        signal: BaselineSignal,
         quote: MarketQuote,
         now: datetime,
         equity: Decimal,

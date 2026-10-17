@@ -225,9 +225,7 @@ class LiveAutoRegistry:
             )
         return record
 
-    def demote(
-        self, *, strategy_id: str, actor: str, reason: str
-    ) -> LiveAutoStrategyRecord:
+    def demote(self, *, strategy_id: str, actor: str, reason: str) -> LiveAutoStrategyRecord:
         """Demote a LIVE_AUTO strategy (retire it). Explicit admin action only."""
         existing = self._store.get_strategy(strategy_id)
         if existing is None or not existing.active:
@@ -267,9 +265,7 @@ class LiveAutoRegistry:
         Entries are append-only; the authorizer reads the cumulative sum.
         """
         if self._store.get_strategy(strategy_id) is None:
-            raise LiveAutoViolation(
-                f"strategy {strategy_id!r} is not in the LIVE_AUTO registry"
-            )
+            raise LiveAutoViolation(f"strategy {strategy_id!r} is not in the LIVE_AUTO registry")
         if amount == 0:
             raise LiveAutoViolation("realized-PnL entries must be non-zero")
         if not source:

@@ -81,9 +81,7 @@ def compute_score(
     slope_pts = 1 if abs(normalized_slope) >= params.score_slope_min else 0
 
     depth_pts = (
-        1
-        if params.min_pullback_depth_atr <= depth_atr <= params.max_pullback_depth_atr
-        else 0
+        1 if params.min_pullback_depth_atr <= depth_atr <= params.max_pullback_depth_atr else 0
     )
 
     breakout_pts = 2 if breakout_confirmed else 0

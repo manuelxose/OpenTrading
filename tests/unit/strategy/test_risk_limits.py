@@ -99,8 +99,8 @@ def test_peak_equity_tracks_the_high_water_mark() -> None:
 
 def test_drawdown_is_measured_from_the_peak_not_the_start() -> None:
     g = governor()
-    g.observe(MONDAY.replace(hour=10), 200_000.0)          # new peak
-    g.observe(MONDAY.replace(day=5, hour=9), 181_000.0)    # -9.5% from peak
+    g.observe(MONDAY.replace(hour=10), 200_000.0)  # new peak
+    g.observe(MONDAY.replace(day=5, hour=9), 181_000.0)  # -9.5% from peak
     assert g.state.hard_kill_active
 
 
@@ -114,8 +114,8 @@ def test_safe_mode_outranks_every_other_block() -> None:
 
 def test_block_reasons_are_ordered_by_severity() -> None:
     g = governor()
-    g.observe(MONDAY.replace(hour=14), 98_000.0)   # daily breach
-    g.observe(MONDAY.replace(day=6), 89_000.0)     # weekly + hard breach
+    g.observe(MONDAY.replace(hour=14), 98_000.0)  # daily breach
+    g.observe(MONDAY.replace(day=6), 89_000.0)  # weekly + hard breach
     assert g.entry_block_reason() is RejectReason.HARD_DRAWDOWN_KILL
 
 
@@ -125,6 +125,4 @@ def test_the_governor_never_liquidates_it_only_blocks_entries() -> None:
     g.observe(MONDAY.replace(day=5), 85_000.0)
 
     assert not g.allows_new_entry()
-    assert not hasattr(g, "close_all_positions"), (
-        "the governor must not expose a liquidation path"
-    )
+    assert not hasattr(g, "close_all_positions"), "the governor must not expose a liquidation path"

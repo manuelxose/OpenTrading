@@ -5,22 +5,22 @@ Exit codes:
   1 — EA unreachable / timeout.
   2 — EA reachable but the account is NOT a demo (never touch live accounts).
 """
+
 from __future__ import annotations
 
 import sys
 from uuid import uuid4
 
 sys.path.insert(0, ".")
-import zmq  # noqa: E402
-
-from adapters.mt4.protocol import (  # noqa: E402
+import zmq
+from adapters.mt4.protocol import (
     Mt4MessageType,
     ReconciliationRequestCommand,
     ReconciliationResponse,
     parse_message,
     serialize_message,
 )
-from core.clock.clocks import SystemClock  # noqa: E402
+from core.clock.clocks import SystemClock
 
 
 def main() -> int:

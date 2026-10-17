@@ -6,9 +6,9 @@ explicit spread cost. Pure functions — no IO, no sockets, no live state.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from decimal import Decimal
-from typing import Sequence
 
 from apps.live_supervisor.signals import PriceBar, ScalpParams, ema
 
@@ -122,8 +122,10 @@ def replay(
 
     trades = len(outcomes)
     total = sum(outcomes, start=Decimal("0"))
-    profit_factor = (gross_profit / gross_loss) if gross_loss > 0 else (
-        Decimal("0") if gross_profit == 0 else None
+    profit_factor = (
+        (gross_profit / gross_loss)
+        if gross_loss > 0
+        else (Decimal("0") if gross_profit == 0 else None)
     )
     expectancy = (total / Decimal(trades)) if trades else None
     return ReplayResult(

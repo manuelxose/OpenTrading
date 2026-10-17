@@ -107,7 +107,9 @@ def warm_series(
         observed = start_at + timedelta(minutes=i)
         price += step
         for tick in range(4):
-            series.on_price(price + Decimal(tick % 2) * Decimal("0.10"), observed + timedelta(seconds=tick * 15))
+            series.on_price(
+                price + Decimal(tick % 2) * Decimal("0.10"), observed + timedelta(seconds=tick * 15)
+            )
     return price
 
 
@@ -155,7 +157,10 @@ def test_engine_approves_and_submits_on_strong_signal() -> None:
         clock,
         submitter,
         policy=policy,
-        instruments={"BTCUSD": build_instrument("BTCUSD", T0), "ETHUSD": build_instrument("ETHUSD", T0)},
+        instruments={
+            "BTCUSD": build_instrument("BTCUSD", T0),
+            "ETHUSD": build_instrument("ETHUSD", T0),
+        },
         strategy=build_strategy_configuration(config, T0),
     )
     warm_engine(engine, minutes=120)
@@ -189,18 +194,26 @@ def test_engine_skips_stale_quote() -> None:
     clock = FakeClock(T0)
     submitter = CapturingSubmitter()
     engine = LiveTradingEngine(
-        config, clock, submitter,
+        config,
+        clock,
+        submitter,
         policy=build_live_policy(config, T0),
         instruments={"BTCUSD": build_instrument("BTCUSD", T0)},
         strategy=build_strategy_configuration(config, T0),
     )
     warm_engine(engine, minutes=120)
-    stale = make_quote("BTCUSD", Decimal("78120.00"), Decimal("78120.40"), T0 - timedelta(minutes=5))
+    stale = make_quote(
+        "BTCUSD", Decimal("78120.00"), Decimal("78120.40"), T0 - timedelta(minutes=5)
+    )
     outcomes = engine.cycle(
         account=make_account(),
         portfolio=PortfolioState(
-            account_id="44961955", positions=[], pending_order_count=0,
-            exposure=PortfolioExposure(), as_of=T0, produced_at=T0,
+            account_id="44961955",
+            positions=[],
+            pending_order_count=0,
+            exposure=PortfolioExposure(),
+            as_of=T0,
+            produced_at=T0,
             provenance=Provenance(producer="test", produced_at=T0),
         ),
         quotes={"BTCUSD": stale},
@@ -214,7 +227,9 @@ def test_engine_skips_when_position_open() -> None:
     clock = FakeClock(T0)
     submitter = CapturingSubmitter()
     engine = LiveTradingEngine(
-        config, clock, submitter,
+        config,
+        clock,
+        submitter,
         policy=build_live_policy(config, T0),
         instruments={"BTCUSD": build_instrument("BTCUSD", T0)},
         strategy=build_strategy_configuration(config, T0),
@@ -234,15 +249,23 @@ def test_engine_skips_when_position_open() -> None:
         provenance=Provenance(producer="test", produced_at=T0),
     )
     exposure = PortfolioExposure(
-        total_notional=Decimal("781.2"), by_instrument={"BTCUSD": Decimal("781.2")},
-        by_asset_class={}, net_by_currency={"USD": Decimal("781.2")},
+        total_notional=Decimal("781.2"),
+        by_instrument={"BTCUSD": Decimal("781.2")},
+        by_asset_class={},
+        net_by_currency={"USD": Decimal("781.2")},
     )
     portfolio = PortfolioState(
-        account_id="44961955", positions=[open_position], pending_order_count=0,
-        exposure=exposure, as_of=T0, produced_at=T0,
+        account_id="44961955",
+        positions=[open_position],
+        pending_order_count=0,
+        exposure=exposure,
+        as_of=T0,
+        produced_at=T0,
         provenance=Provenance(producer="test", produced_at=T0),
     )
-    quote = make_quote("BTCUSD", Decimal("78120.00"), Decimal("78120.20"), T0 - timedelta(seconds=1))
+    quote = make_quote(
+        "BTCUSD", Decimal("78120.00"), Decimal("78120.20"), T0 - timedelta(seconds=1)
+    )
     outcomes = engine.cycle(account=make_account(), portfolio=portfolio, quotes={"BTCUSD": quote})
     assert not submitter.calls
     assert any("open position" in outcome.detail for outcome in outcomes)
@@ -254,31 +277,51 @@ def test_risk_engine_approves_deterministic_proposal() -> None:
     instrument = build_instrument("BTCUSD", T0)
     strategy = build_strategy_configuration(config, T0)
     engine = LiveTradingEngine(
-        config, FakeClock(T0), CapturingSubmitter(),
-        policy=policy, instruments={"BTCUSD": instrument}, strategy=strategy,
+        config,
+        FakeClock(T0),
+        CapturingSubmitter(),
+        policy=policy,
+        instruments={"BTCUSD": instrument},
+        strategy=strategy,
     )
     warm_engine(engine, minutes=120)
     series = engine._series["BTCUSD"]
     sig = momentum_signal(series, config.min_strength)
     assert sig.tradable
     proposal = engine._build_proposal(
-        "BTCUSD", instrument, sig, make_quote("BTCUSD", Decimal("78120.00"), Decimal("78120.40"), T0 - timedelta(seconds=1)), T0, Decimal("51000")
+        "BTCUSD",
+        instrument,
+        sig,
+        make_quote("BTCUSD", Decimal("78120.00"), Decimal("78120.40"), T0 - timedelta(seconds=1)),
+        T0,
+        Decimal("51000"),
     )
     from core.schemas import MarketSnapshot
 
     snapshot = MarketSnapshot(
-        instrument_id="BTCUSD", as_of=T0, source_timestamp=T0 - timedelta(seconds=1),
-        bid=Decimal("78120.00"), ask=Decimal("78120.40"), last=Decimal("78120.20"),
-        high=Decimal("78120.40"), low=Decimal("78120.00"), close=Decimal("78120.20"),
-        source="test", produced_at=T0,
+        instrument_id="BTCUSD",
+        as_of=T0,
+        source_timestamp=T0 - timedelta(seconds=1),
+        bid=Decimal("78120.00"),
+        ask=Decimal("78120.40"),
+        last=Decimal("78120.20"),
+        high=Decimal("78120.40"),
+        low=Decimal("78120.00"),
+        close=Decimal("78120.20"),
+        source="test",
+        produced_at=T0,
         provenance=Provenance(producer="test", produced_at=T0),
     )
     decision = evaluate_proposal(
         proposal=proposal,
         account=make_account(),
         portfolio=PortfolioState(
-            account_id="44961955", positions=[], pending_order_count=0,
-            exposure=PortfolioExposure(), as_of=T0, produced_at=T0,
+            account_id="44961955",
+            positions=[],
+            pending_order_count=0,
+            exposure=PortfolioExposure(),
+            as_of=T0,
+            produced_at=T0,
             provenance=Provenance(producer="test", produced_at=T0),
         ),
         snapshot=snapshot,
@@ -301,7 +344,9 @@ def _trend_bars(start: Decimal, step: Decimal, count: int) -> tuple[MinuteBarSer
         series.on_price(price - Decimal("2"), observed)
         series.on_price(price + Decimal("2"), observed + timedelta(seconds=15))
         series.on_price(price, observed + timedelta(seconds=30))
-        series.on_price(price + (Decimal("1") if step >= 0 else Decimal("-1")), observed + timedelta(seconds=45))
+        series.on_price(
+            price + (Decimal("1") if step >= 0 else Decimal("-1")), observed + timedelta(seconds=45)
+        )
     return series, price
 
 
@@ -314,9 +359,7 @@ def test_replay_uptrend_wins_with_aggressive_scalp() -> None:
         PriceBar(open=b.open, high=b.high, low=b.low, close=b.close, closed_at=b.closed_at)
         for b in series.bars()
     ]
-    params = ScalpParams(
-        fast_ema=5, slow_ema=13, atr_period=7, min_strength=Decimal("0.00005")
-    )
+    params = ScalpParams(fast_ema=5, slow_ema=13, atr_period=7, min_strength=Decimal("0.00005"))
     result = replay(
         bars, params, stop_ratio=Decimal("1.2"), take_ratio=Decimal("2.0"), spread=Decimal("5")
     )
@@ -334,9 +377,7 @@ def test_replay_downtrend_profits_short() -> None:
         PriceBar(open=b.open, high=b.high, low=b.low, close=b.close, closed_at=b.closed_at)
         for b in series.bars()
     ]
-    params = ScalpParams(
-        fast_ema=5, slow_ema=13, atr_period=7, min_strength=Decimal("0.00005")
-    )
+    params = ScalpParams(fast_ema=5, slow_ema=13, atr_period=7, min_strength=Decimal("0.00005"))
     result = replay(
         bars, params, stop_ratio=Decimal("1.2"), take_ratio=Decimal("2.0"), spread=Decimal("5")
     )
@@ -346,9 +387,7 @@ def test_replay_downtrend_profits_short() -> None:
 
 def test_scalp_signal_uses_parametrized_windows() -> None:
     series, _ = _trend_bars(Decimal("100.00"), Decimal("0.20"), 120)
-    aggressive = ScalpParams(
-        fast_ema=5, slow_ema=13, atr_period=7, min_strength=Decimal("0.00005")
-    )
+    aggressive = ScalpParams(fast_ema=5, slow_ema=13, atr_period=7, min_strength=Decimal("0.00005"))
     from apps.live_supervisor.signals import scalp_signal
 
     signal = scalp_signal(series, aggressive)
@@ -386,11 +425,21 @@ class BackloggedQuoteClient:
     def __init__(self, backlog: int, fresh: int, now: datetime) -> None:
         self._queue: list[tuple[str, MarketQuote]] = []
         for i in range(backlog):
-            stale = make_quote("BTCUSD", Decimal("78120.00"), Decimal("78120.20"), now - timedelta(seconds=60 + i))
+            stale = make_quote(
+                "BTCUSD", Decimal("78120.00"), Decimal("78120.20"), now - timedelta(seconds=60 + i)
+            )
             self._queue.append(("BTCUSD", stale))
-        for i in range(fresh):
+        for _ in range(fresh):
             self._queue.append(
-                ("BTCUSD", make_quote("BTCUSD", Decimal("78120.00"), Decimal("78120.20"), now - timedelta(milliseconds=100)))
+                (
+                    "BTCUSD",
+                    make_quote(
+                        "BTCUSD",
+                        Decimal("78120.00"),
+                        Decimal("78120.20"),
+                        now - timedelta(milliseconds=100),
+                    ),
+                )
             )
 
     def poll_quote(self, timeout_ms: int = 0):

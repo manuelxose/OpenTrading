@@ -208,8 +208,7 @@ def test_demote_revokes_live_auto_authority_and_is_audited() -> None:
             intent=intent, risk_decision=decision_for(intent), price_context=price()
         )
     assert any(
-        e.action == "live_auto.strategy_demoted" and e.actor == "operator-2"
-        for e in sink.entries
+        e.action == "live_auto.strategy_demoted" and e.actor == "operator-2" for e in sink.entries
     )
 
 

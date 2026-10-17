@@ -152,13 +152,17 @@ def passing_metrics() -> PerformanceMetrics:
 
 def test_a_strong_result_reaches_a_candidate_classification() -> None:
     report = evaluate_gates(
-        passing_metrics(), is_profit_factor=1.55, spread_stress_pf=1.3,
-        monte_carlo_p95_dd=11.0, max_year_contribution_pct=30.0,
+        passing_metrics(),
+        is_profit_factor=1.55,
+        spread_stress_pf=1.3,
+        monte_carlo_p95_dd=11.0,
+        max_year_contribution_pct=30.0,
     )
     assert not report.failures
     assert not report.rejections
     assert report.qualification in (
-        Qualification.FORWARD_TEST_CANDIDATE, Qualification.MICRO_LIVE_CANDIDATE
+        Qualification.FORWARD_TEST_CANDIDATE,
+        Qualification.MICRO_LIVE_CANDIDATE,
     )
 
 
@@ -173,8 +177,13 @@ def test_missing_evidence_never_silently_passes_a_gate() -> None:
 def test_a_weak_profit_factor_triggers_automatic_rejection() -> None:
     m = passing_metrics()
     m.profit_factor = 1.05
-    report = evaluate_gates(m, is_profit_factor=1.1, spread_stress_pf=1.2,
-                            monte_carlo_p95_dd=10.0, max_year_contribution_pct=20.0)
+    report = evaluate_gates(
+        m,
+        is_profit_factor=1.1,
+        spread_stress_pf=1.2,
+        monte_carlo_p95_dd=10.0,
+        max_year_contribution_pct=20.0,
+    )
     assert report.qualification is Qualification.REJECTED
     assert any("profit factor" in r for r in report.rejections)
 
@@ -182,47 +191,73 @@ def test_a_weak_profit_factor_triggers_automatic_rejection() -> None:
 def test_non_positive_expectancy_triggers_rejection() -> None:
     m = passing_metrics()
     m.expectancy_r = -0.02
-    report = evaluate_gates(m, is_profit_factor=1.5, spread_stress_pf=1.2,
-                            monte_carlo_p95_dd=10.0, max_year_contribution_pct=20.0)
+    report = evaluate_gates(
+        m,
+        is_profit_factor=1.5,
+        spread_stress_pf=1.2,
+        monte_carlo_p95_dd=10.0,
+        max_year_contribution_pct=20.0,
+    )
     assert report.qualification is Qualification.REJECTED
 
 
 def test_excessive_drawdown_triggers_rejection() -> None:
     m = passing_metrics()
     m.max_drawdown_pct = 24.0
-    report = evaluate_gates(m, is_profit_factor=1.5, spread_stress_pf=1.2,
-                            monte_carlo_p95_dd=10.0, max_year_contribution_pct=20.0)
+    report = evaluate_gates(
+        m,
+        is_profit_factor=1.5,
+        spread_stress_pf=1.2,
+        monte_carlo_p95_dd=10.0,
+        max_year_contribution_pct=20.0,
+    )
     assert report.qualification is Qualification.REJECTED
 
 
 def test_profit_factor_collapse_from_is_to_oos_triggers_rejection() -> None:
     m = passing_metrics()
     m.profit_factor = 1.30
-    report = evaluate_gates(m, is_profit_factor=2.6, spread_stress_pf=1.2,
-                            monte_carlo_p95_dd=10.0, max_year_contribution_pct=20.0)
+    report = evaluate_gates(
+        m,
+        is_profit_factor=2.6,
+        spread_stress_pf=1.2,
+        monte_carlo_p95_dd=10.0,
+        max_year_contribution_pct=20.0,
+    )
     assert report.qualification is Qualification.REJECTED
     assert any("collapse" in r for r in report.rejections)
 
 
 def test_failing_the_spread_stress_triggers_rejection() -> None:
-    report = evaluate_gates(passing_metrics(), is_profit_factor=1.5,
-                            spread_stress_pf=0.92, monte_carlo_p95_dd=10.0,
-                            max_year_contribution_pct=20.0)
+    report = evaluate_gates(
+        passing_metrics(),
+        is_profit_factor=1.5,
+        spread_stress_pf=0.92,
+        monte_carlo_p95_dd=10.0,
+        max_year_contribution_pct=20.0,
+    )
     assert report.qualification is Qualification.REJECTED
 
 
 def test_a_single_dominant_year_triggers_rejection() -> None:
-    report = evaluate_gates(passing_metrics(), is_profit_factor=1.5,
-                            spread_stress_pf=1.2, monte_carlo_p95_dd=10.0,
-                            max_year_contribution_pct=64.0)
+    report = evaluate_gates(
+        passing_metrics(),
+        is_profit_factor=1.5,
+        spread_stress_pf=1.2,
+        monte_carlo_p95_dd=10.0,
+        max_year_contribution_pct=64.0,
+    )
     assert report.qualification is Qualification.REJECTED
     assert any("single year" in r for r in report.rejections)
 
 
 def test_an_edge_that_works_on_only_some_brokers_is_rejected() -> None:
     report = evaluate_gates(
-        passing_metrics(), is_profit_factor=1.5, spread_stress_pf=1.2,
-        monte_carlo_p95_dd=10.0, max_year_contribution_pct=20.0,
+        passing_metrics(),
+        is_profit_factor=1.5,
+        spread_stress_pf=1.2,
+        monte_carlo_p95_dd=10.0,
+        max_year_contribution_pct=20.0,
         broker_profit_factors={"A": 1.6, "B": 0.85, "C": 0.79},
     )
     assert report.qualification is Qualification.REJECTED
@@ -231,8 +266,11 @@ def test_an_edge_that_works_on_only_some_brokers_is_rejected() -> None:
 
 def test_profit_concentrated_in_five_trades_is_rejected() -> None:
     report = evaluate_gates(
-        passing_metrics(), is_profit_factor=1.5, spread_stress_pf=1.2,
-        monte_carlo_p95_dd=10.0, max_year_contribution_pct=20.0,
+        passing_metrics(),
+        is_profit_factor=1.5,
+        spread_stress_pf=1.2,
+        monte_carlo_p95_dd=10.0,
+        max_year_contribution_pct=20.0,
         top5_profit_share=0.93,
     )
     assert report.qualification is Qualification.REJECTED
@@ -241,8 +279,13 @@ def test_profit_concentrated_in_five_trades_is_rejected() -> None:
 def test_a_thin_sample_fails_the_trade_count_gate() -> None:
     m = passing_metrics()
     m.trades = 40
-    report = evaluate_gates(m, is_profit_factor=1.5, spread_stress_pf=1.2,
-                            monte_carlo_p95_dd=10.0, max_year_contribution_pct=20.0)
+    report = evaluate_gates(
+        m,
+        is_profit_factor=1.5,
+        spread_stress_pf=1.2,
+        monte_carlo_p95_dd=10.0,
+        max_year_contribution_pct=20.0,
+    )
     failed = {g.name for g in report.failures}
     assert "OOS trade count" in failed
     assert report.qualification is Qualification.RESEARCH_ONLY
@@ -262,16 +305,21 @@ def test_a_thin_sample_fails_the_trade_count_gate() -> None:
 )
 def test_gate_thresholds_are_frozen_at_the_mandated_values(name: str, minimum: float) -> None:
     """Pinning the thresholds makes any future relaxation a visible diff."""
-    report = evaluate_gates(passing_metrics(), is_profit_factor=1.5,
-                            spread_stress_pf=1.2, monte_carlo_p95_dd=10.0)
+    report = evaluate_gates(
+        passing_metrics(), is_profit_factor=1.5, spread_stress_pf=1.2, monte_carlo_p95_dd=10.0
+    )
     gate = next(g for g in report.results if g.name == name)
     assert gate.minimum == pytest.approx(minimum)
 
 
 def test_the_report_renders_a_readable_summary() -> None:
-    report = evaluate_gates(passing_metrics(), is_profit_factor=1.5,
-                            spread_stress_pf=1.2, monte_carlo_p95_dd=10.0,
-                            max_year_contribution_pct=20.0)
+    report = evaluate_gates(
+        passing_metrics(),
+        is_profit_factor=1.5,
+        spread_stress_pf=1.2,
+        monte_carlo_p95_dd=10.0,
+        max_year_contribution_pct=20.0,
+    )
     text = report.summary()
     assert "QUALIFICATION:" in text
     assert GateOutcome.PASS.value in text or GateOutcome.DESIRED_MET.value in text

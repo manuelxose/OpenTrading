@@ -93,9 +93,7 @@ def test_automated_order_requires_no_human_approval_and_is_persisted() -> None:
     assert len(client.submitted) == 1
     assert client.submitted[0]["live_intent"] is intent
     assert record.order_intent_id == intent.order_intent_id
-    authorized = [
-        e for e in stack.audit_sink.entries if e.action == "live_auto.order_authorized"
-    ]
+    authorized = [e for e in stack.audit_sink.entries if e.action == "live_auto.order_authorized"]
     assert len(authorized) == 1
 
 

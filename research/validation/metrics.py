@@ -76,9 +76,7 @@ class PerformanceMetrics:
             "net_profit": round(self.net_profit, 2),
             "net_return_pct": round(self.net_return_pct, 3),
             "cagr_pct": None if self.cagr_pct is None else round(self.cagr_pct, 3),
-            "profit_factor": (
-                None if self.profit_factor is None else round(self.profit_factor, 4)
-            ),
+            "profit_factor": (None if self.profit_factor is None else round(self.profit_factor, 4)),
             "expectancy": round(self.expectancy, 4),
             "expectancy_r": round(self.expectancy_r, 4),
             "sharpe": None if self.sharpe is None else round(self.sharpe, 4),
@@ -91,9 +89,7 @@ class PerformanceMetrics:
             "win_rate": round(self.win_rate, 4),
             "average_win": round(self.average_win, 2),
             "average_loss": round(self.average_loss, 2),
-            "payoff_ratio": (
-                None if self.payoff_ratio is None else round(self.payoff_ratio, 4)
-            ),
+            "payoff_ratio": (None if self.payoff_ratio is None else round(self.payoff_ratio, 4)),
             "average_holding_bars": round(self.average_holding_bars, 2),
             "max_losing_streak": self.max_losing_streak,
             "max_winning_streak": self.max_winning_streak,
@@ -145,9 +141,9 @@ def _streaks(trades: Sequence[Trade]) -> tuple[int, int]:
     return longest_loss, longest_win
 
 
-def _sharpe_sortino(returns: Sequence[float], periods_per_year: float) -> tuple[
-    float | None, float | None
-]:
+def _sharpe_sortino(
+    returns: Sequence[float], periods_per_year: float
+) -> tuple[float | None, float | None]:
     """Annualized Sharpe and Sortino from per-observation returns."""
     n = len(returns)
     if n < 2:
@@ -197,9 +193,7 @@ def compute_metrics(
     gross_profit = math.fsum(t.pnl for t in wins)
     gross_loss = abs(math.fsum(t.pnl for t in losses))
     m.net_profit = gross_profit - gross_loss
-    m.net_return_pct = (
-        m.net_profit / initial_equity * 100.0 if initial_equity > 0 else 0.0
-    )
+    m.net_return_pct = m.net_profit / initial_equity * 100.0 if initial_equity > 0 else 0.0
     # Undefined rather than infinite when there are no losses at all.
     m.profit_factor = None if gross_loss == 0 else gross_profit / gross_loss
 
@@ -207,9 +201,7 @@ def compute_metrics(
     m.expectancy_r = math.fsum(t.r_multiple for t in trades) / m.trades
     m.average_win = gross_profit / m.wins if m.wins else 0.0
     m.average_loss = gross_loss / m.losses if m.losses else 0.0
-    m.payoff_ratio = (
-        None if m.average_loss == 0 else m.average_win / m.average_loss
-    )
+    m.payoff_ratio = None if m.average_loss == 0 else m.average_win / m.average_loss
     m.largest_win = max((t.pnl for t in trades), default=0.0)
     m.largest_loss = min((t.pnl for t in trades), default=0.0)
 

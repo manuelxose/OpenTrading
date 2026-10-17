@@ -332,8 +332,14 @@ def run_backtest(
     # Mark-to-market any position still open at the end of the data.
     if position is not None and m15_bars:
         equity = _close_position(
-            position, m15_bars[-1].time, m15_bars[-1].close, ExitReason.MANUAL, equity, spec,
-            config, result,
+            position,
+            m15_bars[-1].time,
+            m15_bars[-1].close,
+            ExitReason.MANUAL,
+            equity,
+            spec,
+            config,
+            result,
         )
 
     result.final_equity = equity
@@ -480,8 +486,14 @@ def _manage_position(
         )
         if target_hit:
             equity = _close_position(
-                position, bar.time, position.target_price, ExitReason.TARGET, equity, spec,
-                config, result,
+                position,
+                bar.time,
+                position.target_price,
+                ExitReason.TARGET,
+                equity,
+                spec,
+                config,
+                result,
             )
             return True, equity
 
@@ -501,9 +513,7 @@ def _manage_position(
 
         if r_now >= p.trail_activate_r and trade.atr_at_signal > 0:
             offset = p.trail_atr_mult * trade.atr_at_signal
-            candidate = (
-                position.extreme - offset if long_side else position.extreme + offset
-            )
+            candidate = position.extreme - offset if long_side else position.extreme + offset
             if (long_side and candidate > trade.stop_price) or (
                 not long_side and candidate < trade.stop_price
             ):
@@ -514,8 +524,14 @@ def _manage_position(
     opposite = Regime.TREND_DOWN if long_side else Regime.TREND_UP
     if regime is opposite:
         equity = _close_position(
-            position, bar.time, bar.close, ExitReason.REGIME_INVALIDATION, equity, spec,
-            config, result,
+            position,
+            bar.time,
+            bar.close,
+            ExitReason.REGIME_INVALIDATION,
+            equity,
+            spec,
+            config,
+            result,
         )
         return True, equity
 

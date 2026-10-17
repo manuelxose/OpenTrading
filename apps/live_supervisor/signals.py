@@ -7,18 +7,18 @@ momentum score over one-minute bars built exclusively from broker quotes.
 from __future__ import annotations
 
 from collections import deque
+from collections.abc import Sequence
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime
 from decimal import ROUND_DOWN, Decimal
-from typing import Sequence
 
 from core.domain.enums import SignalDirection
 
 __all__ = [
-    "BaselineSignal",
     "EMA_FAST",
     "EMA_SLOW",
     "MIN_BARS",
+    "BaselineSignal",
     "MinuteBarSeries",
     "ScalpParams",
     "momentum_signal",
@@ -141,8 +141,8 @@ def scalp_signal(series: MinuteBarSeries, params: ScalpParams) -> BaselineSignal
     atr = series.atr(params.atr_period) or Decimal("0")
     if len(closes) < params.slow_ema:
         return BaselineSignal(SignalDirection.FLAT, Decimal("0"), atr)
-    fast = ema(closes[-params.slow_ema:], params.fast_ema)
-    slow = ema(closes[-params.slow_ema:], params.slow_ema)
+    fast = ema(closes[-params.slow_ema :], params.fast_ema)
+    slow = ema(closes[-params.slow_ema :], params.slow_ema)
     if slow <= 0:
         return BaselineSignal(SignalDirection.FLAT, Decimal("0"), atr)
     strength = (fast - slow) / slow

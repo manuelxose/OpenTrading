@@ -51,7 +51,9 @@ def run_config(
 ) -> PerformanceMetrics:
     """Execute one configuration and return its metrics."""
     result = run_backtest(
-        bars, config, spec,
+        bars,
+        config,
+        spec,
         initial_equity=initial_equity,
         broker_utc_offset_hours=broker_utc_offset_hours,
     )
@@ -174,7 +176,7 @@ def summarize_surface(points: Sequence[SensitivityPoint]) -> SurfaceSummary:
     pfs = [p.profit_factor for p in points if p.profit_factor is not None]
     returns = [p.metrics.net_return_pct for p in points]
     profitable = sum(1 for p in points if p.is_profitable)
-    best = max(points, key=lambda p: (p.profit_factor or -math.inf))
+    best = max(points, key=lambda p: p.profit_factor or -math.inf)
 
     return SurfaceSummary(
         evaluated=len(points),

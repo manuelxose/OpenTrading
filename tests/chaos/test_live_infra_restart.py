@@ -66,9 +66,7 @@ def _postgres_up(settings: Settings) -> bool:
 def live_chaos(settings: Settings) -> Iterator[None]:
     enabled = os.environ.get("OT_CHAOS_LIVE") == "1"
     if not (enabled and _docker_available() and _postgres_up(settings)):
-        pytest.skip(
-            "requires OT_CHAOS_LIVE=1, the docker CLI and a running stack (`make up`)"
-        )
+        pytest.skip("requires OT_CHAOS_LIVE=1, the docker CLI and a running stack (`make up`)")
     yield
 
 

@@ -11,7 +11,6 @@ import sys
 import time
 
 import zmq
-
 from adapters.mt4.protocol import Mt4MessageType, parse_message
 
 

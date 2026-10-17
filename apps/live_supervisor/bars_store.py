@@ -5,7 +5,6 @@ from __future__ import annotations
 from datetime import datetime
 from decimal import Decimal
 
-import sqlalchemy as sa
 from sqlalchemy import text
 from sqlalchemy.engine import Engine
 

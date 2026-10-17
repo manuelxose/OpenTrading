@@ -92,8 +92,9 @@ def calculate_lots(
     ticks = stop_distance / tick_size_price
     risk_per_lot = ticks * spec.tick_value
     if risk_per_lot <= 0 or not is_finite(risk_per_lot):
-        return SizingResult(0.0, risk_money, 0.0, stop_distance, 0.0,
-                            RejectReason.BROKER_SPEC_INVALID)
+        return SizingResult(
+            0.0, risk_money, 0.0, stop_distance, 0.0, RejectReason.BROKER_SPEC_INVALID
+        )
 
     lots = floor_to_step(risk_money / risk_per_lot, spec.lot_step)
 
@@ -103,13 +104,15 @@ def calculate_lots(
 
     # The mandate rule: below the minimum we do NOT trade. We never round up.
     if lots < spec.min_lot:
-        return SizingResult(0.0, risk_money, risk_per_lot, stop_distance, 0.0,
-                            RejectReason.RISK_SIZE_ZERO)
+        return SizingResult(
+            0.0, risk_money, risk_per_lot, stop_distance, 0.0, RejectReason.RISK_SIZE_ZERO
+        )
 
     actual_risk = lots * risk_per_lot
     if actual_risk > risk_money * (1.0 + 1e-9):
         # Defensive: flooring can never increase risk, so this is a broken spec.
-        return SizingResult(0.0, risk_money, risk_per_lot, stop_distance, 0.0,
-                            RejectReason.RISK_SIZE_ZERO)
+        return SizingResult(
+            0.0, risk_money, risk_per_lot, stop_distance, 0.0, RejectReason.RISK_SIZE_ZERO
+        )
 
     return SizingResult(lots, risk_money, risk_per_lot, stop_distance, actual_risk)

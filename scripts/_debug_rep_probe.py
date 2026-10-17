@@ -1,4 +1,5 @@
 """Debug: probe the QuantBridgeEA REP socket directly (raw frames)."""
+
 from __future__ import annotations
 
 import sys
@@ -7,12 +8,12 @@ from uuid import uuid4
 import zmq
 
 sys.path.insert(0, ".")
-from adapters.mt4.protocol import (  # noqa: E402
+from adapters.mt4.protocol import (
     ReconciliationRequestCommand,
     parse_message,
     serialize_message,
 )
-from core.clock.clocks import SystemClock  # noqa: E402
+from core.clock.clocks import SystemClock
 
 ctx = zmq.Context()
 sock = ctx.socket(zmq.REQ)
@@ -37,7 +38,7 @@ try:
     try:
         parsed = parse_message(reply)
         print("PARSED:", type(parsed).__name__)
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         print("PARSE ERROR:", repr(exc))
 except zmq.Again:
     print("NO REPLY within 8s (EA did not answer the REP socket)")

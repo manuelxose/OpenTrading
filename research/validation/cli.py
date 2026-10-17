@@ -50,9 +50,17 @@ from .sweeps import (
 # A DEFAULT broker profile for research runs. It is not a claim about any venue:
 # the live EA reads every value from the server (spec §10). Override with --spec.
 DEFAULT_SPEC = BrokerSpec(
-    symbol="XAUUSD", point=0.01, digits=2, tick_value=1.0, tick_size=0.01,
-    lot_size=100.0, min_lot=0.01, max_lot=50.0, lot_step=0.01,
-    stop_level_points=10.0, freeze_level_points=0.0,
+    symbol="XAUUSD",
+    point=0.01,
+    digits=2,
+    tick_value=1.0,
+    tick_size=0.01,
+    lot_size=100.0,
+    min_lot=0.01,
+    max_lot=50.0,
+    lot_step=0.01,
+    stop_level_points=10.0,
+    freeze_level_points=0.0,
 )
 
 # The research neighbourhoods of spec §14 — deliberately small and defensible.
@@ -128,9 +136,7 @@ def cmd_data_quality(args: argparse.Namespace) -> int:
 def _config_for(args: argparse.Namespace) -> StrategyConfig:
     config = StrategyConfig()
     if getattr(args, "research_reset_kill", False):
-        config = replace(
-            config, risk=replace(config.risk, research_auto_reset_hard_kill=True)
-        )
+        config = replace(config, risk=replace(config.risk, research_auto_reset_hard_kill=True))
     return config
 
 
@@ -144,8 +150,13 @@ def cmd_baseline(args: argparse.Namespace) -> int:
         print("      behaviour is unchanged: there the kill latches until an")
         print("      operator resets it.")
         print()
-    result = run_backtest(bars, config, DEFAULT_SPEC, initial_equity=args.equity,
-                          broker_utc_offset_hours=_broker_offset(args))
+    result = run_backtest(
+        bars,
+        config,
+        DEFAULT_SPEC,
+        initial_equity=args.equity,
+        broker_utc_offset_hours=_broker_offset(args),
+    )
     metrics = compute_metrics(result.trades, result.equity_curve, args.equity)
 
     print("BASELINE (unoptimized seeds, spec §14 defaults)")
@@ -163,25 +174,33 @@ def cmd_baseline(args: argparse.Namespace) -> int:
     if result.trades:
         print("\nLONG / SHORT ATTRIBUTION (mandate §39)")
         sides = side_breakdown(result.trades, result.equity_curve, args.equity)
-        for label, m in (("LONG", sides.long), ("SHORT", sides.short),
-                         ("COMBINED", sides.combined)):
+        for label, m in (
+            ("LONG", sides.long),
+            ("SHORT", sides.short),
+            ("COMBINED", sides.combined),
+        ):
             pf = "n/a" if m.profit_factor is None else f"{m.profit_factor:.3f}"
-            print(f"  {label:9s} trades={m.trades:4d} PF={pf:>6s} "
-                  f"expectancy_R={m.expectancy_r:+.4f} net={m.net_profit:+.2f}")
+            print(
+                f"  {label:9s} trades={m.trades:4d} PF={pf:>6s} "
+                f"expectancy_R={m.expectancy_r:+.4f} net={m.net_profit:+.2f}"
+            )
 
         print("\nYEAR-BY-YEAR (mandate §40)")
         for year in yearly_breakdown(result.trades):
             pf = "n/a" if year.profit_factor is None else f"{year.profit_factor:.3f}"
-            print(f"  {year.year}  trades={year.trades:4d} PF={pf:>6s} "
-                  f"net={year.net_profit:+12.2f} share={year.contribution_pct:+6.1f}%")
+            print(
+                f"  {year.year}  trades={year.trades:4d} PF={pf:>6s} "
+                f"net={year.net_profit:+12.2f} share={year.contribution_pct:+6.1f}%"
+            )
 
         print("\nEXIT REASONS")
         for group in group_by(result.trades, "exit_reason"):
-            print(f"  {group.label:24s} n={group.trades:4d} "
-                  f"net={group.net_profit:+12.2f} expectancy_R={group.expectancy_r:+.3f}")
+            print(
+                f"  {group.label:24s} n={group.trades:4d} "
+                f"net={group.net_profit:+12.2f} expectancy_R={group.expectancy_r:+.3f}"
+            )
 
-    snapshot = _snapshot(config, {"data": meta, "metrics": metrics.as_dict()},
-                         Path(args.out))
+    snapshot = _snapshot(config, {"data": meta, "metrics": metrics.as_dict()}, Path(args.out))
     print(f"\nconfig snapshot -> {snapshot}")
     return 0
 
@@ -192,14 +211,16 @@ def cmd_sensitivity(args: argparse.Namespace) -> int:
     config = StrategyConfig()
     ledger = TrialLedger(Path(args.out) / "trials.json")
 
-    points = parameter_sweep(bars, config, DEFAULT_SPEC, DEFAULT_GRID,
-                             initial_equity=args.equity)
+    points = parameter_sweep(bars, config, DEFAULT_SPEC, DEFAULT_GRID, initial_equity=args.equity)
     for point in points:
         ledger.record(
-            config_hash=point.config_hash, params=point.params,
-            profit_factor=point.profit_factor, sharpe=point.metrics.sharpe,
+            config_hash=point.config_hash,
+            params=point.params,
+            profit_factor=point.profit_factor,
+            sharpe=point.metrics.sharpe,
             net_return_pct=point.metrics.net_return_pct,
-            trades=point.metrics.trades, partition="FULL",
+            trades=point.metrics.trades,
+            partition="FULL",
         )
     ledger.flush()
 
@@ -208,11 +229,15 @@ def cmd_sensitivity(args: argparse.Namespace) -> int:
     print(surface.summary())
     print(f"\n{ledger.summary()}")
 
-    best = max((p for p in points if p.metrics.sharpe is not None),
-               key=lambda p: p.metrics.sharpe or 0.0, default=None)
+    best = max(
+        (p for p in points if p.metrics.sharpe is not None),
+        key=lambda p: p.metrics.sharpe or 0.0,
+        default=None,
+    )
     if best and best.metrics.sharpe is not None:
         dsr = deflated_sharpe_ratio(
-            best.metrics.sharpe, trials=ledger.count,
+            best.metrics.sharpe,
+            trials=ledger.count,
             variance_of_sharpes=ledger.sharpe_variance(),
             sample_length=max(2, best.metrics.trades),
         )
@@ -234,7 +259,9 @@ def cmd_walk_forward(args: argparse.Namespace) -> int:
 
     for anchored in (False, True):
         windows = walk_forward_windows(
-            bars, train_months=args.train_months, test_months=args.test_months,
+            bars,
+            train_months=args.train_months,
+            test_months=args.test_months,
             anchored=anchored,
         )
         label = "ANCHORED" if anchored else "ROLLING"
@@ -243,24 +270,33 @@ def cmd_walk_forward(args: argparse.Namespace) -> int:
             print("  insufficient history for even one window")
             continue
 
-        results = walk_forward(windows, config, DEFAULT_SPEC, DEFAULT_GRID,
-                               initial_equity=args.equity)
+        results = walk_forward(
+            windows, config, DEFAULT_SPEC, DEFAULT_GRID, initial_equity=args.equity
+        )
         for r in results:
-            is_pf = ("n/a" if r.in_sample.profit_factor is None
-                     else f"{r.in_sample.profit_factor:.2f}")
-            oos_pf = ("n/a" if r.out_of_sample.profit_factor is None
-                      else f"{r.out_of_sample.profit_factor:.2f}")
+            is_pf = (
+                "n/a" if r.in_sample.profit_factor is None else f"{r.in_sample.profit_factor:.2f}"
+            )
+            oos_pf = (
+                "n/a"
+                if r.out_of_sample.profit_factor is None
+                else f"{r.out_of_sample.profit_factor:.2f}"
+            )
             deg = "n/a" if r.degradation_pct is None else f"{r.degradation_pct:+.1f}%"
             print(f"  {r.window.describe()}")
-            print(f"      selected={r.selected_params} IS_PF={is_pf} "
-                  f"OOS_PF={oos_pf} degradation={deg}")
+            print(
+                f"      selected={r.selected_params} IS_PF={is_pf} "
+                f"OOS_PF={oos_pf} degradation={deg}"
+            )
 
         stability = parameter_stability(results)
         if stability:
             print(f"\n  PARAMETER STABILITY ({label})")
             for name, stats in stability.items():
-                print(f"    {name:24s} range=[{stats['min']:g}, {stats['max']:g}] "
-                      f"cv={stats['coefficient_of_variation']:.3f}")
+                print(
+                    f"    {name:24s} range=[{stats['min']:g}, {stats['max']:g}] "
+                    f"cv={stats['coefficient_of_variation']:.3f}"
+                )
             print("    A parameter whose selection swings across its whole research")
             print("    range is unstable even when aggregate P&L looks acceptable.")
 
@@ -272,17 +308,25 @@ def cmd_monte_carlo(args: argparse.Namespace) -> int:
     print(BANNER)
     bars, meta = _load(args.data)
     config = StrategyConfig()
-    result = run_backtest(bars, config, DEFAULT_SPEC, initial_equity=args.equity,
-                          broker_utc_offset_hours=_broker_offset(args))
+    result = run_backtest(
+        bars,
+        config,
+        DEFAULT_SPEC,
+        initial_equity=args.equity,
+        broker_utc_offset_hours=_broker_offset(args),
+    )
     if not result.trades:
         print("no trades produced; Monte Carlo needs a realized trade list")
         return 1
 
     for family in (
-        sequence_bootstrap(result.trades, initial_equity=args.equity,
-                           iterations=args.iterations),
-        block_bootstrap(result.trades, initial_equity=args.equity,
-                        iterations=args.iterations, block_size=args.block_size),
+        sequence_bootstrap(result.trades, initial_equity=args.equity, iterations=args.iterations),
+        block_bootstrap(
+            result.trades,
+            initial_equity=args.equity,
+            iterations=args.iterations,
+            block_size=args.block_size,
+        ),
     ):
         print(f"\n{family.summary()}")
 
@@ -329,14 +373,20 @@ def cmd_cost_stress(args: argparse.Namespace) -> int:
         header = f"  {'scenario':46s} {'trades':>7s} {'PF':>8s} {'net %':>10s} {'maxDD %':>9s}"
         print(header)
         print("  " + "-" * 84)
-        for scenario in execution_stress(bars, config, DEFAULT_SPEC,
-                                         commission_per_lot=args.commission,
-                                         initial_equity=args.equity,
-                                         hold_filter_constant=hold):
+        for scenario in execution_stress(
+            bars,
+            config,
+            DEFAULT_SPEC,
+            commission_per_lot=args.commission,
+            initial_equity=args.equity,
+            hold_filter_constant=hold,
+        ):
             m = scenario.metrics
             pf = "n/a" if m.profit_factor is None else f"{m.profit_factor:.3f}"
-            print(f"  {scenario.label:46s} {m.trades:7d} {pf:>8s} "
-                  f"{m.net_return_pct:>10.2f} {m.max_drawdown_pct:>9.2f}")
+            print(
+                f"  {scenario.label:46s} {m.trades:7d} {pf:>8s} "
+                f"{m.net_return_pct:>10.2f} {m.max_drawdown_pct:>9.2f}"
+            )
 
     _snapshot(config, {"data": meta}, Path(args.out))
     return 0
@@ -352,21 +402,26 @@ def cmd_full(args: argparse.Namespace) -> int:
     print("TEMPORAL PARTITIONS (mandate §33)")
     print(split.describe())
 
-    development = run_config(split.development.bars, config, DEFAULT_SPEC,
-                             initial_equity=args.equity)
-    final_oos = run_config(split.final_oos.bars, config, DEFAULT_SPEC,
-                           initial_equity=args.equity)
+    development = run_config(
+        split.development.bars, config, DEFAULT_SPEC, initial_equity=args.equity
+    )
+    final_oos = run_config(split.final_oos.bars, config, DEFAULT_SPEC, initial_equity=args.equity)
 
     # The gate asks whether the EDGE survives 1.5x costs, so the filter is held
     # constant; otherwise the strategy simply stops trading and the gate becomes
     # unmeasurable rather than informative.
-    stress = execution_stress(bars, config, DEFAULT_SPEC,
-                              spread_multipliers=(1.5,), slippage_points=(0.0,),
-                              initial_equity=args.equity, hold_filter_constant=True)
+    stress = execution_stress(
+        bars,
+        config,
+        DEFAULT_SPEC,
+        spread_multipliers=(1.5,),
+        slippage_points=(0.0,),
+        initial_equity=args.equity,
+        hold_filter_constant=True,
+    )
     stress_pf = stress[0].metrics.profit_factor if stress else None
 
-    oos_run = run_backtest(split.final_oos.bars, config, DEFAULT_SPEC,
-                           initial_equity=args.equity)
+    oos_run = run_backtest(split.final_oos.bars, config, DEFAULT_SPEC, initial_equity=args.equity)
     mc_p95 = None
     if oos_run.trades:
         mc = block_bootstrap(oos_run.trades, initial_equity=args.equity, iterations=2000)
@@ -385,8 +440,7 @@ def cmd_full(args: argparse.Namespace) -> int:
     print("\nACCEPTANCE GATES (mandate §43/§44 — frozen before results were seen)")
     print(report.summary())
 
-    _snapshot(config, {"data": meta, "qualification": report.qualification.value},
-              Path(args.out))
+    _snapshot(config, {"data": meta, "qualification": report.qualification.value}, Path(args.out))
     return 0 if report.qualification.value != "REJECTED" else 2
 
 
@@ -418,13 +472,15 @@ def build_parser() -> argparse.ArgumentParser:
         p.add_argument("--train-months", type=int, default=24)
         p.add_argument("--test-months", type=int, default=6)
         p.add_argument(
-            "--broker-offset", default="us-dst",
+            "--broker-offset",
+            default="us-dst",
             help="server UTC offset: a number, or 'us-dst' (UTC+2 winter / +3 summer)",
         )
         p.add_argument(
-            "--research-reset-kill", action="store_true",
+            "--research-reset-kill",
+            action="store_true",
             help="RESEARCH ONLY: rebase the hard-drawdown kill each year so a latched "
-                 "kill cannot truncate the sample. Production keeps the kill latched.",
+            "kill cannot truncate the sample. Production keeps the kill latched.",
         )
         p.set_defaults(handler=handler)
     return parser

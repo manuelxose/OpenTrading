@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime, time, timezone
+from datetime import UTC, datetime
 from decimal import Decimal
 
 from core.config.settings import Settings, get_settings
@@ -139,7 +139,11 @@ def build_live_policy(config: LiveSupervisorConfig, produced_at: datetime) -> Ri
         max_total_exposure=Decimal("3000"),
         max_instrument_exposure=Decimal("2000"),
         max_asset_class_exposure={AssetClass.CRYPTO: Decimal("3000")},
-        max_currency_exposure={"USD": Decimal("3000"), "BTC": Decimal("3000"), "ETH": Decimal("3000")},
+        max_currency_exposure={
+            "USD": Decimal("3000"),
+            "BTC": Decimal("3000"),
+            "ETH": Decimal("3000"),
+        },
         max_leverage=Decimal("50"),
         margin_rates={AssetClass.CRYPTO: Decimal("0.01")},
         max_positions=config.max_open_positions,
@@ -179,5 +183,5 @@ def build_strategy_configuration(
 
 def utc_now_aware(produced_at: datetime) -> datetime:
     if produced_at.tzinfo is None:
-        return produced_at.replace(tzinfo=timezone.utc)
+        return produced_at.replace(tzinfo=UTC)
     return produced_at
