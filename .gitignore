@@ -62,7 +62,6 @@ data/market/*.csv
 .codex/
 .copilot/
 .agents/
-.planning/
 .ai/
 .agentic/
 .agentic-platform-backups/
