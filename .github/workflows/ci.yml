@@ -61,7 +61,7 @@ jobs:
           enable-cache: true
 
       - name: Export locked dependency set
-        run: uv export --all-groups --format requirements-txt -o /tmp/requirements.txt
+        run: uv export --all-groups --no-emit-project --format requirements-txt -o /tmp/requirements.txt
 
       - name: Audit dependencies (INV-14 / ADR-0025)
         # PYSEC-2026-4217 (fsspec, fixed in 2026.6.0) cannot be applied yet: nautilus-trader 1.220.0 requires
